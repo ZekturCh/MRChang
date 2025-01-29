@@ -1,0 +1,7 @@
+{
+  "codes": [
+    { "code": "ABC123", "url": "/Filtro1" },
+    { "code": "XYZ789", "url": "/Filtro2" },
+    { "code": "DEF456", "url": "/Filtro3" }
+  ]
+}
