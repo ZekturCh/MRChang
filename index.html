@@ -3,27 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navegación por Cuartos</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Habitaciones 3D con Scroll</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <section class="section" id="cuarto1">
-            <h1>Cuarto 1</h1>
-            <button onclick="cambiarSeccion(1)">Siguiente</button>
-        </section>
-        <section class="section" id="cuarto2">
-            <h1>Cuarto 2</h1>
-            <button onclick="cambiarSeccion(-1)">Anterior</button>
-            <button onclick="cambiarSeccion(1)">Siguiente</button>
-        </section>
-        <section class="section" id="cuarto3">
-            <h1>Cuarto 3</h1>
-            <button onclick="cambiarSeccion(-1)">Anterior</button>
-        </section>
-    </div>
+    <script>
+        // Configurar escena, cámara y renderizador
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
 
+        // Crear habitaciones (cubos grandes)
+        const rooms = [];
+        const roomSize = 10;
+        const geometry = new THREE.BoxGeometry(roomSize, roomSize, roomSize);
+        const materials = [
+            new THREE.MeshBasicMaterial({ color: 0xff5733, side: THREE.BackSide }), // Cuarto 1
+            new THREE.MeshBasicMaterial({ color: 0x33ff57, side: THREE.BackSide }), // Cuarto 2
+            new THREE.MeshBasicMaterial({ color: 0x3357ff, side: THREE.BackSide })  // Cuarto 3
+        ];
+
+        for (let i = 0; i < materials.length; i++) {
+            const room = new THREE.Mesh(geometry, materials[i]);
+            room.position.z = -i * roomSize; // Separar habitaciones en el eje Z
+            scene.add(room);
+            rooms.push(room);
+        }
+
+        camera.position.z = 0; // Cámara en la primera habitación
+
+        // Manejo de scroll para avanzar entre habitaciones
+        let currentRoom = 0;
+        window.addEventListener("wheel", (event) => {
+            if (event.deltaY > 0 && currentRoom < rooms.length - 1) {
+                currentRoom++;
+            } else if (event.deltaY < 0 && currentRoom > 0) {
+                currentRoom--;
+            }
+
+            // Animar la transición entre habitaciones
+            gsap.to(camera.position, {
+                z: -currentRoom * roomSize,
+                duration: 1.5,
+                ease: "power2.inOut"
+            });
+        });
+
+        // Animación de renderizado
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="script.js"></script>
+
 </body>
 </html>
+
