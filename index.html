@@ -3,170 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Tienda</title>
-    <!-- Agregar estilos básicos -->
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        header {
-            background-color: #007bff;
-            color: white;
-            padding: 1rem;
-            text-align: center;
-        }
-        nav {
-            display: flex;
-            justify-content: space-around;
-            background-color: #333;
-            color: white;
-            padding: 0.5rem;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-        }
-        section {
-            padding: 1rem;
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
+    <title>Navegación por Cuartos</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="container">
+        <section class="section" id="cuarto1">
+            <h1>Cuarto 1</h1>
+            <button onclick="cambiarSeccion(1)">Siguiente</button>
+        </section>
+        <section class="section" id="cuarto2">
+            <h1>Cuarto 2</h1>
+            <button onclick="cambiarSeccion(-1)">Anterior</button>
+            <button onclick="cambiarSeccion(1)">Siguiente</button>
+        </section>
+        <section class="section" id="cuarto3">
+            <h1>Cuarto 3</h1>
+            <button onclick="cambiarSeccion(-1)">Anterior</button>
+        </section>
+    </div>
 
-<header>
-    <h1>Gestión de Tienda</h1>
-</header>
-
-<nav>
-    <a href="#" onclick="showSection('inventario')">Inventario</a>
-    <a href="#" onclick="showSection('ventas')">Ventas</a>
-    <a href="#" onclick="showSection('flujoCaja')">Flujo de Caja</a>
-    <a href="#" onclick="showSection('empleados')">Empleados</a>
-</nav>
-
-<section id="inventario" class="hidden">
-    <h2>Inventario</h2>
-    <form id="inventarioForm">
-        <label for="producto">Producto:</label>
-        <input type="text" id="producto" name="producto" required><br><br>
-        <label for="cantidad">Cantidad:</label>
-        <input type="number" id="cantidad" name="cantidad" required><br><br>
-        <label for="precio">Precio:</label>
-        <input type="number" id="precio" name="precio" step="0.01" required><br><br>
-        <button type="button" onclick="guardarInventario()">Guardar</button>
-    </form>
-</section>
-
-<section id="ventas" class="hidden">
-    <h2>Ventas</h2>
-    <form id="ventasForm">
-        <label for="productoVenta">Producto:</label>
-        <input type="text" id="productoVenta" name="productoVenta" required><br><br>
-        <label for="cantidadVenta">Cantidad:</label>
-        <input type="number" id="cantidadVenta" name="cantidadVenta" required><br><br>
-        <button type="button" onclick="registrarVenta()">Registrar Venta</button>
-    </form>
-</section>
-
-<section id="flujoCaja" class="hidden">
-    <h2>Flujo de Caja</h2>
-    <p>Total en caja: $<span id="totalCaja">0.00</span></p>
-</section>
-
-<section id="empleados" class="hidden">
-    <h2>Gestión de Empleados</h2>
-    <form id="empleadosForm">
-        <label for="nombreEmpleado">Nombre:</label>
-        <input type="text" id="nombreEmpleado" name="nombreEmpleado" required><br><br>
-        <label for="rolEmpleado">Rol:</label>
-        <select id="rolEmpleado" name="rolEmpleado">
-            <option value="admin">Administrador</option>
-            <option value="vendedor">Vendedor</option>
-        </select><br><br>
-        <button type="button" onclick="agregarEmpleado()">Agregar Empleado</button>
-    </form>
-</section>
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore.js"></script>
-
-<script>
-// Configuración inicial de Firebase
-const firebaseConfig = {
-    apiKey: "TU_API_KEY",
-    authDomain: "TU_AUTH_DOMAIN",
-    projectId: "TU_PROJECT_ID",
-    storageBucket: "TU_STORAGE_BUCKET",
-    messagingSenderId: "TU_MESSAGING_SENDER_ID",
-    appId: "TU_APP_ID"
-};
-
-// Inicializar Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-// Función para mostrar secciones
-function showSection(sectionId) {
-    const sections = document.querySelectorAll('section');
-    sections.forEach(section => section.classList.add('hidden'));
-    document.getElementById(sectionId).classList.remove('hidden');
-}
-
-// Funciones para manejar inventario
-function guardarInventario() {
-    const producto = document.getElementById('producto').value;
-    const cantidad = parseInt(document.getElementById('cantidad').value);
-    const precio = parseFloat(document.getElementById('precio').value);
-
-    db.collection("inventario").add({
-        producto,
-        cantidad,
-        precio
-    }).then(() => {
-        alert("Producto guardado en el inventario.");
-    }).catch(error => {
-        console.error("Error al guardar el producto:", error);
-    });
-}
-
-// Funciones para manejar ventas
-function registrarVenta() {
-    const producto = document.getElementById('productoVenta').value;
-    const cantidad = parseInt(document.getElementById('cantidadVenta').value);
-
-    db.collection("ventas").add({
-        producto,
-        cantidad,
-        fecha: new Date()
-    }).then(() => {
-        alert("Venta registrada.");
-    }).catch(error => {
-        console.error("Error al registrar la venta:", error);
-    });
-}
-
-// Función para agregar empleados
-function agregarEmpleado() {
-    const nombre = document.getElementById('nombreEmpleado').value;
-    const rol = document.getElementById('rolEmpleado').value;
-
-    db.collection("empleados").add({
-        nombre,
-        rol
-    }).then(() => {
-        alert("Empleado agregado.");
-    }).catch(error => {
-        console.error("Error al agregar empleado:", error);
-    });
-}
-</script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
