@@ -1,47 +1,52 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js';
-
-// Configurar escena
+// Crear la escena, cámara y renderizador
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 1.6, 5);
-
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Crear habitaciones
-const roomGeometry = new THREE.BoxGeometry(5, 3, 5);
-const materials = [
-    new THREE.MeshBasicMaterial({ color: 0xff5733, side: THREE.BackSide }), // Cuarto 1
-    new THREE.MeshBasicMaterial({ color: 0x33ff57, side: THREE.BackSide }), // Cuarto 2
-    new THREE.MeshBasicMaterial({ color: 0x3357ff, side: THREE.BackSide })  // Cuarto 3
-];
+// Crear un cubo 3D
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
 
-const rooms = [];
-for (let i = 0; i < materials.length; i++) {
-    const room = new THREE.Mesh(roomGeometry, materials[i]);
-    room.position.set(0, 1.5, -i * 6);
-    scene.add(room);
-    rooms.push(room);
-}
+// Colocar la cámara
+camera.position.z = 5;
 
-// Movimiento con scroll
-let scrollY = 0;
-window.addEventListener('scroll', () => {
-    scrollY = window.scrollY / window.innerHeight;
-    camera.position.z = 5 - scrollY * 6;
+// Variables para manejar la rotación con el ratón
+let mouseX = 0;
+let mouseY = 0;
+
+// Event listener para mover la cámara con el ratón
+document.addEventListener('mousemove', (event) => {
+    mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+    mouseY = - (event.clientY / window.innerHeight) * 2 + 1;
 });
 
-// Animación
+// Función de animación
 function animate() {
     requestAnimationFrame(animate);
+
+    // Rotar el cubo de acuerdo al movimiento del ratón
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+
+    // Mover la cámara para crear el efecto de que sigue al ratón
+    camera.position.x = mouseX * 5;
+    camera.position.y = -mouseY * 5;
+
+    camera.lookAt(scene.position);
+
     renderer.render(scene, camera);
 }
+
+// Iniciar la animación
 animate();
 
-// Ajustar tamaño de pantalla
+// Ajustar el tamaño del canvas si se redimensiona la ventana
 window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
 });
