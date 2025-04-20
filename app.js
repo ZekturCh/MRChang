@@ -7,12 +7,12 @@ document.body.appendChild(renderer.domElement);
 
 // Crear un cubo 3D
 const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Material verde sin luz
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
 // Colocar la cámara
-camera.position.z = 5;
+camera.position.z = 5; // Asegúrate de que la cámara no esté demasiado cerca ni lejos
 
 // Variables para manejar la posición de la cámara con el ratón
 let mouseX = 0;
@@ -69,4 +69,3 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 });
-
