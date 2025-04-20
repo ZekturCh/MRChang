@@ -14,7 +14,7 @@ scene.add(cube);
 // Colocar la cámara
 camera.position.z = 5;
 
-// Variables para manejar la rotación con el ratón
+// Variables para manejar la posición de la cámara con el ratón
 let mouseX = 0;
 let mouseY = 0;
 
@@ -22,6 +22,13 @@ let mouseY = 0;
 document.addEventListener('mousemove', (event) => {
     mouseX = (event.clientX / window.innerWidth) * 2 - 1;
     mouseY = - (event.clientY / window.innerHeight) * 2 + 1;
+
+    // Mover la cámara para crear el efecto de que sigue al ratón
+    camera.position.x = mouseX * 5;
+    camera.position.y = -mouseY * 5;
+
+    // Hacer que la cámara siempre mire al centro de la escena (el cubo)
+    camera.lookAt(scene.position);
 });
 
 // Variable para controlar el zoom de la cámara con el scroll
@@ -46,6 +53,16 @@ document.addEventListener('wheel', (event) => {
 });
 
 // Función de animación
+function animate() {
+    requestAnimationFrame(animate);
+
+    // Renderizar la escena y la cámara
+    renderer.render(scene, camera);
+}
+
+// Iniciar la animación
+animate();
+
 // Ajustar el tamaño del canvas si se redimensiona la ventana
 window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
