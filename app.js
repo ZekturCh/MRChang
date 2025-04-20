@@ -6,13 +6,28 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // Crear un cubo 3D
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Material verde sin luz
-const cube = new THREE.Mesh(geometry, material);
+const cubeGeometry = new THREE.BoxGeometry();
+const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Material verde
+const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+cube.position.set(-3, 2, 0); // Colocamos el cubo arriba a la izquierda
 scene.add(cube);
 
+// Crear un cono 3D
+const coneGeometry = new THREE.ConeGeometry(1, 2, 32);
+const coneMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 }); // Material rojo
+const cone = new THREE.Mesh(coneGeometry, coneMaterial);
+cone.position.set(3, 0, 0); // Colocamos el cono al centro a la derecha
+scene.add(cone);
+
+// Crear una esfera 3D
+const sphereGeometry = new THREE.SphereGeometry(1);
+const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff }); // Material azul
+const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+sphere.position.set(0, -2, 0); // Colocamos la esfera en el centro abajo
+scene.add(sphere);
+
 // Colocar la cámara
-camera.position.z = 5; // Asegúrate de que la cámara no esté demasiado cerca ni lejos
+camera.position.z = 5;
 
 // Variables para manejar la posición de la cámara con el ratón
 let mouseX = 0;
@@ -69,3 +84,4 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 });
+
