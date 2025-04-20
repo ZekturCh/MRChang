@@ -46,25 +46,6 @@ document.addEventListener('wheel', (event) => {
 });
 
 // Función de animación
-function animate() {
-    requestAnimationFrame(animate);
-
-    // Rotar el cubo de acuerdo al movimiento del ratón
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
-
-    // Mover la cámara para crear el efecto de que sigue al ratón
-    camera.position.x = mouseX * 5;
-    camera.position.y = -mouseY * 5;
-
-    camera.lookAt(scene.position);
-
-    renderer.render(scene, camera);
-}
-
-// Iniciar la animación
-animate();
-
 // Ajustar el tamaño del canvas si se redimensiona la ventana
 window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
