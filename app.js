@@ -15,6 +15,9 @@ const floorMaterial = new THREE.MeshStandardMaterial({
   metalness: 0.2,
   color: new THREE.Color(0x1e3a5f), // Azul oscuro
 });
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+directionalLight.position.set(0, 10, 0); // Posicionar arriba
+scene.add(directionalLight);
 
 // Crear la geometría del suelo
 const floorGeometry = new THREE.PlaneGeometry(100, 100);
