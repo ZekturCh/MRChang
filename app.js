@@ -1,3 +1,7 @@
+
+import { FontLoader } from 'three';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
+
 // Crear la escena, cámara y renderizador
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -7,6 +11,34 @@ document.body.appendChild(renderer.domElement);
 
 const textureLoader = new THREE.TextureLoader();
 const floorTexture = textureLoader.load('piso.jpg'); // Reemplaza con la ruta de tu textura
+
+// Cargar la fuente
+const loader = new FontLoader();
+loader.load('ruta/a/tu/fuente.json', (font) => {
+  const textGeometry = new TextGeometry('CAMBIO', {
+    font: font,
+    size: 5,
+    height: 1,
+    curveSegments: 12,
+    bevelEnabled: true,
+    bevelThickness: 0.1,
+    bevelSize: 0.1,
+    bevelOffset: 0,
+    bevelSegments: 5,
+  });
+
+  const textMaterial = new THREE.MeshStandardMaterial({
+    color: 0xffffff, // Blanco
+    emissive: 0xaaaaaa,
+    roughness: 0.5,
+    metalness: 0.2,
+  });
+
+  const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+  textMesh.position.set(-15, 5, 0);
+  scene.add(textMesh);
+});
+
 
 // Crear el material con la textura cargada
 const floorMaterial = new THREE.MeshStandardMaterial({
