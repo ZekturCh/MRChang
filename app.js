@@ -1,6 +1,7 @@
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
+import { FontLoader } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/FontLoader.js';
+import { TextGeometry } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/geometries/TextGeometry.js';
 
-import { FontLoader } from 'three';
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 
 // Crear la escena, cámara y renderizador
 const scene = new THREE.Scene();
