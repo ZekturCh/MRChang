@@ -5,6 +5,23 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+const textureLoader = new THREE.TextureLoader();
+const floorTexture = textureLoader.load('piso.jpg'); // Reemplaza con la ruta de tu textura
+
+// Crear el material con la textura cargada
+const floorMaterial = new THREE.MeshStandardMaterial({
+  map: floorTexture,
+  roughness: 0.5,
+  metalness: 0.2,
+  color: new THREE.Color(0x1e3a5f), // Azul oscuro
+});
+
+// Crear la geometría del suelo
+const floorGeometry = new THREE.PlaneGeometry(100, 100);
+const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+floor.rotation.x = -Math.PI / 2; // Rotar para que quede horizontal
+scene.add(floor);
+
 // Crear un cubo 3D
 const cubeGeometry = new THREE.BoxGeometry();
 const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Material verde
