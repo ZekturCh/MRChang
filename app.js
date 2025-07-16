@@ -1,5 +1,6 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
 
+
 // Crear la escena, cámara y renderizador
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000); // Fondo negro
