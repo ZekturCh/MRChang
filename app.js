@@ -1,6 +1,7 @@
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js';
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
 import { FontLoader } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/geometries/TextGeometry.js';
+
 
 // Crear la escena, cámara y renderizador
 const scene = new THREE.Scene();
@@ -31,8 +32,8 @@ scene.add(ceilingGrid);
 // ==========================
 
 const loader = new FontLoader();
-loader.load('ruta/a/tu/fuente.json', (font) => {
-  const textGeometry = new TextGeometry('CAMBIO', {
+loader.load('Impact_Regular.json', (font) => {
+  const textGeometry = new TextGeometry('PARALEL VR', {
     font: font,
     size: 5,
     height: 1,
