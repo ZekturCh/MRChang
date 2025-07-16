@@ -37,7 +37,7 @@ export function createCorridor(scene, textureLoader) {
   const width = 4;
 
   const mat = new THREE.MeshBasicMaterial({
-    map: textureLoader.load("assets/textures/grid.png"),
+    map: textureLoader.load("assets/textures/grid.webp"),
     side: THREE.BackSide
   });
 
