@@ -1,0 +1,20 @@
+[
+  {
+    "id": "muro",
+    "title": "Muro de Escalada VR",
+    "tagline": "Escala con tu marca en cada bloque.",
+    "image": "assets/textures/panel_placeholder.jpg"
+  },
+  {
+    "id": "paraca",
+    "title": "Salto en Paracaídas",
+    "tagline": "Cae sobre tu ciudad, aterriza en tu stand.",
+    "image": "assets/textures/panel_placeholder.jpg"
+  },
+  {
+    "id": "tiro",
+    "title": "Tiro al Blanco",
+    "tagline": "Dispara a tus productos.",
+    "image": "assets/textures/panel_placeholder.jpg"
+  }
+]
