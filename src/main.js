@@ -33,17 +33,14 @@ let targetY = 1.5; // altura inicial
 const corridorLength = 25;
 const fallStart = 0.8;
 
-initScroll({
-  onProgress: (p) => {
-    // Calculamos posiciones objetivo según el progreso
-    targetZ = -corridorLength * p;
-    targetY = (p > fallStart)
-      ? 1.5 - 8 * ((p - fallStart) / (1 - fallStart))
-      : 1.5;
+initScroll();
 
-    uiProgress(p);
-  }
-});
+function render() {
+  requestAnimationFrame(render);
+  updateScroll(); // importante para animación suave
+  renderer.render(scene, camera);
+}
+render();
 
 // Animación con interpolación suave
 function animate() {
