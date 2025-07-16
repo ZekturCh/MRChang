@@ -1,21 +1,52 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Paralel VR</title>
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      background: #000;
-    }
-    canvas {
-      display: block;
-    }
-  </style>
+  <meta charset="utf-8" />
+  <title>Paralel VR – Virtual / Realidad</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Paralel VR: experiencias de realidad virtual personalizadas para eventos en Perú. Alquiler con instalación y operación.">
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <script type="module" src="app.js"></script>
+
+  <!-- HERO OVERLAY -->
+  <header id="hero">
+    <div class="hero-text hero-top">Virtual</div>
+    <h1 class="hero-text hero-mid">Paralel VR</h1>
+    <div class="hero-text hero-bottom">Realidad</div>
+    <div id="scroll-hint">↓ Scroll</div>
+  </header>
+
+  <!-- THREE CANVAS (sticky) -->
+  <div id="three-wrapper">
+    <canvas id="three-canvas"></canvas>
+  </div>
+
+  <!-- Spacer scroll area to drive camera -->
+  <div id="scroll-spacer"></div>
+
+  <!-- REALIDAD SECTION (revealed at ~85% scroll) -->
+  <section id="realidad">
+    <h2>Somos Paralel VR</h2>
+    <p>Empresa peruana que crea <strong>juegos VR personalizados para marca</strong>. No entregamos el ejecutable; llevamos, instalamos, operamos y retiramos en tu evento.</p>
+
+    <h3>Paquetes (4 horas)</h3>
+    <div id="pricing-table"></div>
+
+    <h3>Add-ons</h3>
+    <ul>
+      <li>Personalización express (logos, colores, mensajes): +S/ 500.</li>
+      <li>Desarrollo de juego 100% nuevo: cotización según brief.</li>
+      <li>Oculus adicional: +S/ 250.</li>
+      <li>Horas extra de operación disponibles.</li>
+    </ul>
+
+    <h3>Contacto</h3>
+    <p>WhatsApp: <a href="https://wa.me/51999999999" target="_blank" rel="noopener">+51 999 999 999</a></p>
+    <p>Email: <a href="mailto:contacto@paralelvr.pe">contacto@paralelvr.pe</a></p>
+  </section>
+
+  <!-- Three.js + App -->
+  <script type="module" src="src/main.js"></script>
 </body>
 </html>
