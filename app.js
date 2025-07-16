@@ -79,7 +79,8 @@ scene.add(sphere);
 // ==========================
 // POSICIÓN INICIAL DE LA CÁMARA
 // ==========================
-camera.position.z = 5;
+camera.position.set(0, 5, 10); // Cámara un poco elevada y atrás
+camera.lookAt(0, 0, 0); // Mira hacia el centro de la escena
 
 // ==========================
 // CONTROL DE CÁMARA CON MOUSE
