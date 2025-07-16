@@ -1,42 +1,34 @@
-// Scroll mapping and camera animation
-export function initScroll(camera, {onProgress}) {
-  function handleScroll() {
-    const max = document.body.scrollHeight - window.innerHeight;
-    const progress = max <= 0 ? 0 : window.scrollY / max;
-    onProgress(progress, camera);
-  }
-  window.addEventListener("scroll", handleScroll, { passive: true });
-  handleScroll(); // initial
+import { camera } from './scene.js';
+
+let targetZ = 0;
+let targetY = 1.5; // Altura normal de la cámara
+const corridorLength = 25; // mismo largo del pasillo
+const fallStart = 0.8; // cuando empieza a bajar en Y
+
+export function initScroll() {
+  document.body.style.height = '300vh'; // 3 pantallas para forzar scroll
+
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    const progress = scrollY / maxScroll;
+
+    // Movimiento hacia el fondo
+    targetZ = -corridorLength * progress;
+
+    // Movimiento hacia abajo cuando pasas 80%
+    if (progress > fallStart) {
+      const extra = (progress - fallStart) / (1 - fallStart);
+      targetY = 1.5 - 8 * extra; // baja hasta Y = -6.5
+    } else {
+      targetY = 1.5;
+    }
+  });
 }
-export function updateCameraFromProgress(progress, camera) {
-  // key positions
-  const heroPos = { x:0, y:1.6, z:5 };
-  const hallPos = { x:0, y:1.6, z:-20 };
-  const dropPos = { x:0, y:-5,  z:-20 };
-  const realPos = { x:0, y:-5,  z:-22 };
 
-  function lerp(a,b,t){ return a + (b-a)*t; }
-  let x,y,z;
-
-  if (progress < 0.6){
-    const t = progress/0.6;
-    x = lerp(heroPos.x, hallPos.x, t);
-    y = lerp(heroPos.y, hallPos.y, t);
-    z = lerp(heroPos.z, hallPos.z, t);
-  } else if (progress < 0.85){
-    const t = (progress-0.6)/0.25;
-    x = lerp(hallPos.x, dropPos.x, t);
-    y = lerp(hallPos.y, dropPos.y, t);
-    z = lerp(hallPos.z, dropPos.z, t);
-  } else {
-    const t = (progress-0.85)/0.15;
-    x = lerp(dropPos.x, realPos.x, t);
-    y = lerp(dropPos.y, realPos.y, t);
-    z = lerp(dropPos.z, realPos.z, t);
-  }
-
-  camera.position.set(x,y,z);
-  camera.lookAt(0,1.6,-25);
-
-  return progress;
+// Animación suave
+export function updateScroll() {
+  camera.position.z += (targetZ - camera.position.z) * 0.05; // interpolación suave
+  camera.position.y += (targetY - camera.position.y) * 0.05;
 }
+
