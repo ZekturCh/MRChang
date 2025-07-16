@@ -32,7 +32,7 @@ scene.add(ceilingGrid);
 // ==========================
 
 const loader = new FontLoader();
-loader.load('Impact_Regular.json', (font) => {
+loader.load('./Impact_Regular.json', (font) => {
   const textGeometry = new TextGeometry('PARALEL VR', {
     font: font,
     size: 5,
