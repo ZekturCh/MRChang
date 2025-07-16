@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Básico",
+    "includes": "1 Oculus + juego VR personalizado (branding express)",
+    "price": 2500
+  },
+  {
+    "name": "Con Impacto",
+    "includes": "1 Oculus + juego + TV 55\" + rack + streaming",
+    "price": 3000
+  },
+  {
+    "name": "Competitivo",
+    "includes": "2 Oculus (LAN) + juego + TV 55\" + rack",
+    "price": 4000
+  }
+]
