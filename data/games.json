@@ -3,18 +3,18 @@
     "id": "muro",
     "title": "Muro de Escalada VR",
     "tagline": "Escala con tu marca en cada bloque.",
-    "image": "assets/textures/panel_placeholder.jpg"
+    "image": "assets/textures/muro.webp"
   },
   {
     "id": "paraca",
     "title": "Salto en Paracaídas",
     "tagline": "Cae sobre tu ciudad, aterriza en tu stand.",
-    "image": "assets/textures/panel_placeholder.jpg"
+    "image": "assets/textures/paraca.webp"
   },
   {
     "id": "tiro",
     "title": "Tiro al Blanco",
     "tagline": "Dispara a tus productos.",
-    "image": "assets/textures/panel_placeholder.jpg"
+    "image": "assets/textures/tiro.webp"
   }
 ]
