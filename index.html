@@ -87,7 +87,7 @@ scene.add(logoMesh);
     loader.load(modelPath, (gltf) => {
       const model = gltf.scene;
       model.scale.set(1.5, 1.5, 1.5);
-      model.position.y = 1.5;
+      model.position.y = 0.5;
       group.add(model);
 
       // Rotación animada
