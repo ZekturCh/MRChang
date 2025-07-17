@@ -1,17 +1,3 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PARALEL VR</title>
-  <style>
-    body { margin: 0; background: #111; }
-    html, body { height: 300vh; }
-    canvas { display: block; position: fixed; top: 0; left: 0; }
-  </style>
-</head>
-<body>
-<script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
 
 const scene = new THREE.Scene();
@@ -42,7 +28,6 @@ scene.add(gridCeiling);
 
 // Loader
 const textureLoader = new THREE.TextureLoader();
-const loader = new GLTFLoader();
 
 // Logo
 const logoTexture = textureLoader.load('PARALEL.png'); // ajusta ruta si está en assets/
@@ -51,87 +36,80 @@ const logoMesh = new THREE.Mesh(new THREE.PlaneGeometry(10, 6), logoMaterial);
 logoMesh.position.set(0, 2, 0);
 scene.add(logoMesh);
 
-// Cargar Modelos
-
-  function loadModel(url, scale=1) {
-  return new Promise((resolve, reject) => {
-    gltfLoader.load(
-      url,
-      (gltf) => {
-        const root = gltf.scene || gltf.scenes[0];
-        root.scale.setScalar(scale);
-        // centra opcionalmente
-        root.traverse(obj => {
-          if (obj.isMesh) {
-            obj.castShadow = false;
-            obj.receiveShadow = false;
-          }
-        });
-        resolve(root);
-      },
-      undefined,
-      reject
-    );
-  });
-}
-
 // ---- createPanel -------------------------------------------------
-async function createPanel3D(modelURL, text, side, zPos, modelScale=1) {
+function createPanel(imageURL, text, side, zPos) {
   const group = new THREE.Group();
+
+  // Bandeja
+  const trayGeometry = new THREE.PlaneGeometry(5, 4.5);
+  const trayMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 });
+  const tray = new THREE.Mesh(trayGeometry, trayMaterial);
+  tray.position.set(0, 0.25, -0.01);
+  group.add(tray);
+
+  // Imagen
+  const imgTexture = textureLoader.load(imageURL);
+  const imgMaterial = new THREE.MeshBasicMaterial({ map: imgTexture, transparent: true, opacity: 0 });
+  const imgMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 2.5), imgMaterial);
+  imgMesh.position.set(0, 1.25, 0);
+  group.add(imgMesh);
 
   // Texto canvas
   const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 160;
   const ctx = canvas.getContext('2d');
+
   ctx.fillStyle = 'rgba(0,0,0,0)';
-  ctx.fillRect(0, 0, 512, 160);
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
   ctx.fillStyle = '#fff';
   ctx.font = 'bold 34px Arial';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  wrapText(ctx, text, 256, 80, 460, 38);
+
+  function wrapText(context, str, x, y, maxWidth, lineHeight) {
+    const words = str.split(' ');
+    let line = '';
+    for (let i = 0; i < words.length; i++) {
+      const testLine = line + words[i] + ' ';
+      if (context.measureText(testLine).width > maxWidth && i > 0) {
+        context.fillText(line, x, y);
+        line = words[i] + ' ';
+        y += lineHeight;
+      } else {
+        line = testLine;
+      }
+    }
+    context.fillText(line, x, y);
+  }
+  wrapText(ctx, text, canvas.width / 2, canvas.height / 2, 460, 38);
+
   const textTexture = new THREE.CanvasTexture(canvas);
   const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture, transparent: true, opacity: 0 });
-  const textMesh = new THREE.Mesh(new THREE.PlaneGeometry(4.5, 1.3), textMaterial);
-  textMesh.position.set(0, -1.2, 0);
+  const textMesh = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 1.3), textMaterial);
+  textMesh.position.set(0, -0.9, 0);
   group.add(textMesh);
 
-  // Bandeja detrás del texto
-  const trayMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 });
-  const trayMesh = new THREE.Mesh(new THREE.PlaneGeometry(5, 1.8), trayMaterial);
-  trayMesh.position.set(0, -1.2, -0.01);
-  group.add(trayMesh);
-
-  // Modelo 3D
-  loader.load(modelURL, (gltf) => {
-    const model = gltf.scene;
-    model.scale.set(1.5, 1.5, 1.5);
-    model.position.set(0, 1, 0); // arriba del texto
-    group.add(model);
-    group.userData.model = model; // guardamos referencia para animar
-  });
-
-  // Colocar panel en el pasillo
+  // Posición e inclinación
   group.position.set(side, 2, zPos);
-  group.rotation.y = side < 0 ? Math.PI / 16 : -Math.PI / 16;
+  group.rotation.y = side < 0 ? Math.PI / 8 : -Math.PI / 8;
 
- return { group, trayMaterial: tray.material, textMaterial, modelRef: null };
+  return { group, trayMaterial, imgMaterial, textMaterial };
 }
-
 // ------------------------------------------------------------------
 
 // Datos paneles (ajusta rutas)
 const panelsData = [
-  { img: 'exp.glb', text: 'Experiencias de realidad virtual inmersivas' },
-  { img: 'bus.glb', text: 'Contenido adaptado a tu marca' },
-  { img: 'eco.glb', text: 'Inversión adaptada a tu presupuesto' },
-  { img: 'par.glb', text: 'Atrévete a saltar al mundo paralelo' }
+  { img: 'exp.png', text: 'Experiencias de realidad virtual inmersivas' },
+  { img: 'bus.png', text: 'Contenido adaptado a tu marca' },
+  { img: 'eco.png', text: 'Inversión adaptada a tu presupuesto' },
+  { img: 'par.png', text: 'Atrévete a saltar al mundo paralelo' }
 ];
 
 const panels = [];
 panelsData.forEach((panel, i) => {
-  const side = i % 2 === 0 ? -3 : 3;
+  const side = i % 2 === 0 ? -5 : 5;
   const { group, trayMaterial, imgMaterial, textMaterial } = createPanel(panel.img, panel.text, side, -i * 15 - 15);
   scene.add(group);
   panels.push({ group, trayMaterial, imgMaterial, textMaterial });
@@ -158,10 +136,6 @@ function animate() {
     panel.trayMaterial.opacity = opacity * 0.6;
     panel.imgMaterial.opacity = opacity;
     panel.textMaterial.opacity = opacity;
-     // Rotación del modelo si existe
-    if (panel.group.userData.model) {
-      panel.group.userData.model.rotation.y += 0.01; // giro lento
-    }
   });
 
   renderer.render(scene, camera);
@@ -174,8 +148,4 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
-
-</script>
-</body>
-</html>
 
