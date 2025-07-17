@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Texto + Malla Infinita</title>
+  <title>Piso y Techo con Texto</title>
   <style>
     body { margin: 0; overflow: hidden; background: #111; }
     canvas { display: block; }
@@ -12,59 +12,43 @@
 <body>
   <script type="module">
     import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
-    import { FontLoader } from 'https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/FontLoader.js';
-    import { TextGeometry } from 'https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/geometries/TextGeometry.js';
 
     // Escena
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x111111);
 
-    // Cámara
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-    camera.position.set(0, 2, 20);
-    camera.lookAt(0, 2, 0);
+    // Cámara (perspectiva fuerte hacia adelante)
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 200);
+    camera.position.set(0, 2, 10); // un poco levantada
+    camera.lookAt(0, 2, 0); // mirada hacia adelante
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    // Luz básica
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(5, 10, 7);
-    scene.add(light);
-    const ambient = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambient);
-
-    // Grid inferior
-    const gridFloor = new THREE.GridHelper(1000, 200, 0xffffff, 0xffffff);
+    // Piso (más largo para simular infinito)
+    const gridFloor = new THREE.GridHelper(200, 100, 0xffffff, 0xffffff);
     gridFloor.material.opacity = 0.2;
     gridFloor.material.transparent = true;
     gridFloor.position.y = 0;
     scene.add(gridFloor);
 
-    // Grid superior
-    const gridCeiling = new THREE.GridHelper(1000, 200, 0xffffff, 0xffffff);
+    // Techo (misma lógica, arriba)
+    const gridCeiling = new THREE.GridHelper(200, 100, 0xffffff, 0xffffff);
     gridCeiling.material.opacity = 0.2;
     gridCeiling.material.transparent = true;
-    gridCeiling.position.y = 50; // techo alto
-    gridCeiling.rotation.x = Math.PI; 
+    gridCeiling.position.y = 4; // techo bajo para efecto túnel
+    gridCeiling.rotation.x = Math.PI;
     scene.add(gridCeiling);
 
-    // Texto 3D
-    const loader = new FontLoader();
-    loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
-      const textGeo = new TextGeometry('PARALEL VR', {
-        font: font,
-        size: 2,
-        height: 0.5,
-        curveSegments: 12,
-      });
-      const textMat = new THREE.MeshStandardMaterial({ color: 0x00ff88 });
-      const textMesh = new THREE.Mesh(textGeo, textMat);
-      textMesh.position.set(-8, 2, 0);
-      scene.add(textMesh);
-    });
+    // Texto con imagen PNG
+    const textureLoader = new THREE.TextureLoader();
+    const textTexture = textureLoader.load('https://threejs.org/examples/textures/sprites/disc.png'); // ejemplo, reemplázalo con tu PNG
+    const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture, transparent: true });
+    const textPlane = new THREE.Mesh(new THREE.PlaneGeometry(4, 4), textMaterial);
+    textPlane.position.set(0, 2, 0); // al centro
+    scene.add(textPlane);
 
     // Animación
     function animate() {
@@ -82,4 +66,3 @@
   </script>
 </body>
 </html>
-
