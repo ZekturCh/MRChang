@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Piso y Techo con Texto</title>
+  <title>Scroll Pasillo 3D</title>
   <style>
-    body { margin: 0; overflow: hidden; background: #111; }
-    canvas { display: block; }
+    body { margin: 0; background: #111; }
+    html, body { height: 300vh; } /* forzamos scroll */
+    canvas { display: block; position: fixed; top: 0; left: 0; }
   </style>
 </head>
 <body>
@@ -17,45 +18,58 @@
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x111111);
 
-    // Cámara (perspectiva fuerte hacia adelante)
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 200);
-    camera.position.set(0, 2, 10); // un poco levantada
-    camera.lookAt(0, 2, 0); // mirada hacia adelante
+    // Cámara
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
+    camera.position.set(0, 2, 30); // más lejos para comenzar
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    // Piso (más largo para simular infinito)
+    // Piso
     const gridFloor = new THREE.GridHelper(200, 100, 0xffffff, 0xffffff);
     gridFloor.material.opacity = 0.2;
     gridFloor.material.transparent = true;
     gridFloor.position.y = 0;
     scene.add(gridFloor);
 
-    // Techo (misma lógica, arriba)
+    // Techo
     const gridCeiling = new THREE.GridHelper(200, 100, 0xffffff, 0xffffff);
     gridCeiling.material.opacity = 0.2;
     gridCeiling.material.transparent = true;
-    gridCeiling.position.y = 4; // techo bajo para efecto túnel
+    gridCeiling.position.y = 4;
     gridCeiling.rotation.x = Math.PI;
     scene.add(gridCeiling);
 
-    // Texto con imagen PNG
+    // Paneles (rectángulos en el corredor)
     const textureLoader = new THREE.TextureLoader();
-    const textTexture = textureLoader.load('PARALEL.png'); // ejemplo, reemplázalo con tu PNG
-    const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture, transparent: true });
-    const textPlane = new THREE.Mesh(new THREE.PlaneGeometry(10, 6), textMaterial);
-    textPlane.position.set(0, 2, 0); // al centro
-    scene.add(textPlane);
+    const panelGeometry = new THREE.PlaneGeometry(4, 2.5);
+    for (let i = 0; i < 5; i++) {
+      const mat = new THREE.MeshBasicMaterial({ color: 0xffffff, map: textureLoader.load('https://picsum.photos/600/400?random=' + i) });
+      const panel = new THREE.Mesh(panelGeometry, mat);
+      panel.position.set(0, 2, -i * 10); // alineados en Z
+      scene.add(panel);
+    }
 
     // Animación
+    let scrollProgress = 0;
     function animate() {
       requestAnimationFrame(animate);
+
+      // Movimiento suave de cámara según scroll
+      const targetZ = 30 - scrollProgress * 50; // avanza hasta -20
+      camera.position.z += (targetZ - camera.position.z) * 0.1;
+
       renderer.render(scene, camera);
     }
     animate();
+
+    // Scroll handler
+    window.addEventListener('scroll', () => {
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      scrollProgress = window.scrollY / maxScroll; // 0 a 1
+    });
 
     // Resize
     window.addEventListener('resize', () => {
@@ -66,3 +80,4 @@
   </script>
 </body>
 </html>
+
