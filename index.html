@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Three.js Cubo</title>
+  <title>Cubo + Piso Malla</title>
   <style>
     body { margin: 0; overflow: hidden; background: #111; }
     canvas { display: block; }
@@ -19,7 +19,8 @@
 
     // Cámara
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-    camera.position.z = 5;
+    camera.position.set(2, 2, 5); // un poco elevado para ver el piso
+    camera.lookAt(0, 0, 0);
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -30,7 +31,14 @@
     const geometry = new THREE.BoxGeometry();
     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     const cube = new THREE.Mesh(geometry, material);
+    cube.position.y = 0.5; // para que no quede dentro del piso
     scene.add(cube);
+
+    // Piso con GridHelper
+    const gridHelper = new THREE.GridHelper(100, 100, 0xffffff, 0xffffff);
+    gridHelper.material.opacity = 0.2; // baja la opacidad
+    gridHelper.material.transparent = true;
+    scene.add(gridHelper);
 
     // Animación
     function animate() {
