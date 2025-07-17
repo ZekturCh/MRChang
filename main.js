@@ -29,7 +29,7 @@ scene.add(gridCeiling);
 
 // Logo
 const textureLoader = new THREE.TextureLoader();
-const logoTexture = textureLoader.load('./assets/PARALEL.png');
+const logoTexture = textureLoader.load('PARALEL.png');
 const logoMaterial = new THREE.MeshBasicMaterial({ map: logoTexture, transparent: true });
 const logoMesh = new THREE.Mesh(new THREE.PlaneGeometry(10, 6), logoMaterial);
 logoMesh.position.set(0, 2, 0);
@@ -87,10 +87,10 @@ function createPanel(text, side, zPos) {
 
 // Paneles (texto + modelo)
 const panelsData = [
-  { text: 'Experiencias de realidad virtual inmersivas', model: './assets/model1.glb' },
-  { text: 'Contenido adaptado a tu marca', model: './assets/model2.glb' },
-  { text: 'Inversión adaptada a tu presupuesto', model: './assets/model3.glb' },
-  { text: 'Atrévete a saltar al mundo paralelo', model: './assets/model4.glb' }
+  { text: 'Experiencias de realidad virtual inmersivas', model: 'exp.glb' },
+  { text: 'Contenido adaptado a tu marca', model: 'bus.glb' },
+  { text: 'Inversión adaptada a tu presupuesto', model: 'eco.glb' },
+  { text: 'Atrévete a saltar al mundo paralelo', model: 'par.glb' }
 ];
 
 const panels = [];
