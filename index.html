@@ -107,7 +107,7 @@ function createPanel(imageURL, text, side, zPos) {
 
   // Posición e inclinación
   group.position.set(side, 2, zPos);
-  group.rotation.y = side < 0 ? Math.PI / 8 : -Math.PI / 8;
+  group.rotation.y = side < 0 ? Math.PI / 16 : -Math.PI / 16;
 
   return { group, trayMaterial, imgMaterial, textMaterial };
 }
@@ -123,7 +123,7 @@ const panelsData = [
 
 const panels = [];
 panelsData.forEach((panel, i) => {
-  const side = i % 2 === 0 ? -5 : 5;
+  const side = i % 2 === 0 ? -3 : 3;
   const { group, trayMaterial, imgMaterial, textMaterial } = createPanel(panel.img, panel.text, side, -i * 15 - 15);
   scene.add(group);
   panels.push({ group, trayMaterial, imgMaterial, textMaterial });
