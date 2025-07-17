@@ -43,7 +43,7 @@ scene.add(gridCeiling);
 const textureLoader = new THREE.TextureLoader();
 
 // ✅ Logo inicial
-const logoTexture = textureLoader.load('https://threejs.org/examples/textures/sprites/disc.png'); // Cambia por tu logo
+const logoTexture = textureLoader.load('PARALEL.png'); // Cambia por tu logo
 const logoMaterial = new THREE.MeshBasicMaterial({ map: logoTexture, transparent: true });
 const logoMesh = new THREE.Mesh(new THREE.PlaneGeometry(6, 6), logoMaterial);
 logoMesh.position.set(0, 2, 0);
