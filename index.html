@@ -3,15 +3,139 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PARALEL VR</title>
+  <title>Paneles 3D con Modelos</title>
   <style>
     body { margin: 0; background: #111; }
     html, body { height: 300vh; }
     canvas { display: block; position: fixed; top: 0; left: 0; }
   </style>
+  <script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js"
+  }
+}
+</script>
 </head>
 <body>
-  <!-- Importamos el script principal como módulo -->
-  <script type="module" src="main.js"></script>
+<script type="module">
+  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
+  import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js';
+
+  // Escena
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x111111);
+
+  // Cámara
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
+  camera.position.set(0, 2, 12);
+
+  // Renderer
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  // Luz
+  const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
+  light.position.set(0, 10, 0);
+  scene.add(light);
+
+  // Piso
+  const gridFloor = new THREE.GridHelper(500, 100, 0xffffff, 0xffffff);
+  gridFloor.material.opacity = 0.15;
+  gridFloor.material.transparent = true;
+  scene.add(gridFloor);
+
+  // Loader para modelos
+  const loader = new GLTFLoader();
+
+  function createPanel(modelPath, text, side, zPos) {
+    const group = new THREE.Group();
+
+    // Texto (Canvas)
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 160;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 34px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+
+    const textTexture = new THREE.CanvasTexture(canvas);
+    const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture, transparent: true, opacity: 0 });
+    const textMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 1), textMaterial);
+    textMesh.position.set(0, -1, 0);
+    group.add(textMesh);
+
+    // Modelo 3D
+    loader.load(modelPath, (gltf) => {
+      const model = gltf.scene;
+      model.scale.set(1.5, 1.5, 1.5);
+      model.position.y = 1.5;
+      group.add(model);
+
+      // Rotación animada
+      model.userData.rotate = true;
+    });
+
+    // Posición e inclinación
+    group.position.set(side, 2, zPos);
+    group.rotation.y = side < 0 ? Math.PI / 8 : -Math.PI / 8;
+
+    scene.add(group);
+    return { group, textMaterial };
+  }
+
+  const panelsData = [
+    { model: 'exp.glb', text: 'Experiencias VR' },
+    { model: 'bus.glb', text: 'Contenido Marca' },
+    { model: 'eco.glb', text: 'Económico' },
+    { model: 'par.glb', text: 'Mundo Paralelo' }
+  ];
+
+  const panels = [];
+  panelsData.forEach((panel, i) => {
+    const side = i % 2 === 0 ? -5 : 5;
+    const { group, textMaterial } = createPanel(panel.model, panel.text, side, -i * 15 - 15);
+    panels.push({ group, textMaterial });
+  });
+
+  // Scroll
+  let scrollProgress = 0;
+  window.addEventListener('scroll', () => {
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    scrollProgress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+  });
+
+  // Animación
+  function animate() {
+    requestAnimationFrame(animate);
+    const targetZ = 12 - scrollProgress * 100;
+    camera.position.z += (targetZ - camera.position.z) * 0.08;
+
+    panels.forEach(panel => {
+      const distance = Math.abs(camera.position.z - panel.group.position.z);
+      const opacity = THREE.MathUtils.clamp(1 - distance / 45, 0, 1);
+      panel.textMaterial.opacity = opacity;
+
+      // Rotación de modelos si están cerca
+      panel.group.children.forEach(child => {
+        if (child.userData.rotate) child.rotation.y += 0.01;
+      });
+    });
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // Resize
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
 </body>
 </html>
