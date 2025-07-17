@@ -103,15 +103,15 @@ scene.add(logoMesh);
   }
 
   const panelsData = [
-    { model: 'exp.glb', text: 'Experiencias VR' },
-    { model: 'bus.glb', text: 'Contenido Marca' },
-    { model: 'eco.glb', text: 'Económico' },
-    { model: 'par.glb', text: 'Mundo Paralelo' }
+    { model: 'exp.glb', text: 'Experiencia inmersiva' },
+    { model: 'bus.glb', text: 'Contenido personalizable' },
+    { model: 'eco.glb', text: 'Inversión sin riesgos' },
+    { model: 'par.glb', text: 'atrévete a ver el mundo virutal' }
   ];
 
   const panels = [];
   panelsData.forEach((panel, i) => {
-    const side = i % 2 === 0 ? -5 : 5;
+    const side = i % 2 === 0 ? -2 : 2;
     const { group, textMaterial } = createPanel(panel.model, panel.text, side, -i * 15 - 15);
     panels.push({ group, textMaterial });
   });
