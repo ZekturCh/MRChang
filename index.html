@@ -49,6 +49,7 @@ gridCeiling.position.y = 4;
 gridCeiling.rotation.x = Math.PI;
 scene.add(gridCeiling);
 
+const textureLoader = new THREE.TextureLoader();
 // Logo
 const logoTexture = textureLoader.load('PARALEL.png'); // ajusta ruta si está en assets/
 const logoMaterial = new THREE.MeshBasicMaterial({ map: logoTexture, transparent: true });
@@ -57,7 +58,6 @@ logoMesh.position.set(0, 2, 0);
 scene.add(logoMesh);
   // Loader para modelos
   const loader = new GLTFLoader();
-const textureLoader = new THREE.TextureLoader();
 
   function createPanel(modelPath, text, side, zPos) {
     const group = new THREE.Group();
