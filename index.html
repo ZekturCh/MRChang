@@ -53,20 +53,19 @@ scene.add(logoMesh);
 function createPanel(imageURL, text, side, zPos) {
   const group = new THREE.Group();
 
-  // Bandeja negra semitransparente
-  const trayGeometry = new THREE.PlaneGeometry(4.5, 4);
-  const trayMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.6 });
-  const tray = new THREE.Mesh(trayGeometry, trayMaterial);
-  tray.position.set(0, 0.2, -0.01); // ligeramente atrás para no tapar imagen
+  // Bandeja
+  const trayMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 });
+  const tray = new THREE.Mesh(new THREE.PlaneGeometry(4.5, 4), trayMaterial);
+  tray.position.set(0, 0.2, -0.01);
   group.add(tray);
 
-  // Imagen principal
-  const imgMaterial = new THREE.MeshBasicMaterial({ map: textureLoader.load(imageURL) });
+  // Imagen
+  const imgMaterial = new THREE.MeshBasicMaterial({ map: textureLoader.load(imageURL), transparent: true, opacity: 0 });
   const imgMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 2.5), imgMaterial);
   imgMesh.position.set(0, 1, 0);
   group.add(imgMesh);
 
-  // Texto (canvas → textura)
+  // Texto
   const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 128;
@@ -76,7 +75,7 @@ function createPanel(imageURL, text, side, zPos) {
   ctx.textAlign = 'center';
   ctx.fillText(text, canvas.width / 2, canvas.height / 2);
   const textTexture = new THREE.CanvasTexture(canvas);
-  const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture, transparent: true });
+  const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture, transparent: true, opacity: 0 });
   const textMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 1), textMaterial);
   textMesh.position.set(0, -1, 0);
   group.add(textMesh);
@@ -85,10 +84,10 @@ function createPanel(imageURL, text, side, zPos) {
   group.position.set(side, 2, zPos);
   group.rotation.y = side < 0 ? Math.PI / 8 : -Math.PI / 8;
 
-  return group;
+  return { group, trayMaterial, imgMaterial, textMaterial };
 }
 
-// Paneles con datos
+// Paneles
 const panelsData = [
   { img: 'https://picsum.photos/600/400?random=1', text: 'Muro de Escalada' },
   { img: 'https://picsum.photos/600/400?random=2', text: 'Salto en Paracaídas' },
@@ -96,26 +95,40 @@ const panelsData = [
   { img: 'https://picsum.photos/600/400?random=4', text: 'Simulador VR' }
 ];
 
+const panels = [];
 panelsData.forEach((panel, i) => {
   const side = i % 2 === 0 ? -5 : 5;
-  const group = createPanel(panel.img, panel.text, side, -i * 15 - 15);
+  const { group, trayMaterial, imgMaterial, textMaterial } = createPanel(panel.img, panel.text, side, -i * 15 - 15);
   scene.add(group);
+  panels.push({ group, trayMaterial, imgMaterial, textMaterial });
 });
 
-// Scroll control
+// Scroll
 let scrollProgress = 0;
-function animate() {
-  requestAnimationFrame(animate);
-  const targetZ = 10 - scrollProgress * 100; // Ajuste para moverse entre paneles
-  camera.position.z += (targetZ - camera.position.z) * 0.08;
-  renderer.render(scene, camera);
-}
-animate();
-
 window.addEventListener('scroll', () => {
   const maxScroll = document.body.scrollHeight - window.innerHeight;
   scrollProgress = window.scrollY / maxScroll;
 });
+
+// Animación con fade
+function animate() {
+  requestAnimationFrame(animate);
+
+  const targetZ = 10 - scrollProgress * 100;
+  camera.position.z += (targetZ - camera.position.z) * 0.08;
+
+  // Fade en paneles según distancia
+  panels.forEach(panel => {
+    const distance = Math.abs(camera.position.z - panel.group.position.z);
+    const opacity = THREE.MathUtils.clamp(1 - distance / 30, 0, 1); // visible si < 30
+    panel.trayMaterial.opacity = opacity * 0.6;
+    panel.imgMaterial.opacity = opacity;
+    panel.textMaterial.opacity = opacity;
+  });
+
+  renderer.render(scene, camera);
+}
+animate();
 
 // Resize
 window.addEventListener('resize', () => {
