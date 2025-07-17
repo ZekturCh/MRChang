@@ -66,19 +66,42 @@ function createPanel(imageURL, text, side, zPos) {
   group.add(imgMesh);
 
   // Texto
-  const canvas = document.createElement('canvas');
-  canvas.width = 512;
-  canvas.height = 128;
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#fff';
-  ctx.font = '40px Arial';
-  ctx.textAlign = 'center';
-  ctx.fillText(text, canvas.width / 2, canvas.height / 2);
-  const textTexture = new THREE.CanvasTexture(canvas);
-  const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture, transparent: true, opacity: 0 });
-  const textMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 1), textMaterial);
-  textMesh.position.set(0, -1, 0);
-  group.add(textMesh);
+const canvas = document.createElement('canvas');
+canvas.width = 512;
+canvas.height = 128;
+const ctx = canvas.getContext('2d');
+
+// Fondo opcional
+ctx.fillStyle = 'rgba(0,0,0,0)';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+// Configuración de texto
+ctx.fillStyle = '#fff';
+ctx.font = 'bold 34px Arial'; // Baja tamaño
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+
+// Función para dividir texto en varias líneas si es muy largo
+function wrapText(context, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(' ');
+  let line = '';
+  for (let i = 0; i < words.length; i++) {
+    const testLine = line + words[i] + ' ';
+    const metrics = context.measureText(testLine);
+    const testWidth = metrics.width;
+    if (testWidth > maxWidth && i > 0) {
+      context.fillText(line, x, y);
+      line = words[i] + ' ';
+      y += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  context.fillText(line, x, y);
+}
+
+// Llamar a la función para dibujar texto con ajuste
+wrapText(ctx, text, canvas.width / 2, canvas.height / 2, 450, 40);
 
   // Posición e inclinación
   group.position.set(side, 2, zPos);
