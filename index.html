@@ -44,7 +44,7 @@
 
     // Texto con imagen PNG
     const textureLoader = new THREE.TextureLoader();
-    const textTexture = textureLoader.load('https://threejs.org/examples/textures/sprites/disc.png'); // ejemplo, reemplázalo con tu PNG
+    const textTexture = textureLoader.load('PARALEL.png'); // ejemplo, reemplázalo con tu PNG
     const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture, transparent: true });
     const textPlane = new THREE.Mesh(new THREE.PlaneGeometry(4, 4), textMaterial);
     textPlane.position.set(0, 2, 0); // al centro
