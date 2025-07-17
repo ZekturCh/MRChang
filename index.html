@@ -120,7 +120,7 @@ function animate() {
   // Fade en paneles según distancia
   panels.forEach(panel => {
     const distance = Math.abs(camera.position.z - panel.group.position.z);
-    const opacity = THREE.MathUtils.clamp(1 - distance / 30, 0, 1); // visible si < 30
+    const opacity = THREE.MathUtils.clamp(1 - distance / 45, 0, 1); // visible si < 30
     panel.trayMaterial.opacity = opacity * 0.6;
     panel.imgMaterial.opacity = opacity;
     panel.textMaterial.opacity = opacity;
