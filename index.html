@@ -13,6 +13,7 @@
 <body>
 <script type="module">
   import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
+  import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js';
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x111111);
@@ -20,7 +21,6 @@ scene.background = new THREE.Color(0x111111);
 // Cámara
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
 camera.position.set(0, 2, 12);
-camera.lookAt(0, 2, 0);
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -40,33 +40,20 @@ gridCeiling.position.y = 4;
 gridCeiling.rotation.x = Math.PI;
 scene.add(gridCeiling);
 
-// Loader
-const textureLoader = new THREE.TextureLoader();
-
 // Logo
-const logoTexture = textureLoader.load('PARALEL.png'); // ajusta ruta si está en assets/
+const textureLoader = new THREE.TextureLoader();
+const logoTexture = textureLoader.load('PARALEL.png');
 const logoMaterial = new THREE.MeshBasicMaterial({ map: logoTexture, transparent: true });
 const logoMesh = new THREE.Mesh(new THREE.PlaneGeometry(10, 6), logoMaterial);
 logoMesh.position.set(0, 2, 0);
 scene.add(logoMesh);
 
+// Loader para modelos 3D
+const gltfLoader = new GLTFLoader();
+
 // ---- createPanel -------------------------------------------------
-function createPanel(imageURL, text, side, zPos) {
+function createPanel(modelURL, text, side, zPos) {
   const group = new THREE.Group();
-
-  // Bandeja
-  const trayGeometry = new THREE.PlaneGeometry(5, 4.5);
-  const trayMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 });
-  const tray = new THREE.Mesh(trayGeometry, trayMaterial);
-  tray.position.set(0, 0.25, -0.01);
-  group.add(tray);
-
-  // Imagen
-  const imgTexture = textureLoader.load(imageURL);
-  const imgMaterial = new THREE.MeshBasicMaterial({ map: imgTexture, transparent: true, opacity: 0 });
-  const imgMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 2.5), imgMaterial);
-  imgMesh.position.set(0, 1.25, 0);
-  group.add(imgMesh);
 
   // Texto canvas
   const canvas = document.createElement('canvas');
@@ -74,59 +61,53 @@ function createPanel(imageURL, text, side, zPos) {
   canvas.height = 160;
   const ctx = canvas.getContext('2d');
 
-  ctx.fillStyle = 'rgba(0,0,0,0)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
   ctx.fillStyle = '#fff';
   ctx.font = 'bold 34px Arial';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-
-  function wrapText(context, str, x, y, maxWidth, lineHeight) {
-    const words = str.split(' ');
-    let line = '';
-    for (let i = 0; i < words.length; i++) {
-      const testLine = line + words[i] + ' ';
-      if (context.measureText(testLine).width > maxWidth && i > 0) {
-        context.fillText(line, x, y);
-        line = words[i] + ' ';
-        y += lineHeight;
-      } else {
-        line = testLine;
-      }
-    }
-    context.fillText(line, x, y);
-  }
-  wrapText(ctx, text, canvas.width / 2, canvas.height / 2, 460, 38);
+  ctx.fillText(text, canvas.width / 2, canvas.height / 2);
 
   const textTexture = new THREE.CanvasTexture(canvas);
   const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture, transparent: true, opacity: 0 });
-  const textMesh = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 1.3), textMaterial);
-  textMesh.position.set(0, -0.9, 0);
+  const textMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 1), textMaterial);
+  textMesh.position.set(0, -1.2, 0);
   group.add(textMesh);
 
-  // Posición e inclinación
-  group.position.set(side, 2, zPos);
-  group.rotation.y = side < 0 ? Math.PI / 8 : -Math.PI / 8;
+  // Bandeja negra detrás del texto
+  const tray = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 1.2), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 }));
+  tray.position.set(0, -1.2, -0.01);
+  group.add(tray);
 
-  return { group, trayMaterial, imgMaterial, textMaterial };
+  // Modelo 3D
+  gltfLoader.load(modelURL, (gltf) => {
+    const model = gltf.scene;
+    model.scale.set(1.2, 1.2, 1.2);
+    model.position.set(0, 1, 0);
+    group.add(model);
+    group.userData.model = model; // guardamos para animar
+  });
+
+  group.position.set(side, 2, zPos);
+  group.rotation.y = side < 0 ? Math.PI / 16 : -Math.PI / 16;
+
+  return { group, trayMaterial: tray.material, textMaterial };
 }
 // ------------------------------------------------------------------
 
-// Datos paneles (ajusta rutas)
+// Datos paneles con modelos GLB
 const panelsData = [
-  { img: 'exp.png', text: 'Experiencias de realidad virtual inmersivas' },
-  { img: 'bus.png', text: 'Contenido adaptado a tu marca' },
-  { img: 'eco.png', text: 'Inversión adaptada a tu presupuesto' },
-  { img: 'par.png', text: 'Atrévete a saltar al mundo paralelo' }
+  { model: 'exp.glb', text: 'Experiencias VR inmersivas' },
+  { model: 'bus.glb', text: 'Contenido adaptado a tu marca' },
+  { model: 'eco.glb', text: 'Inversión accesible' },
+  { model: 'par.glb', text: 'Atrévete al mundo paralelo' }
 ];
 
 const panels = [];
 panelsData.forEach((panel, i) => {
-  const side = i % 2 === 0 ? -5 : 5;
-  const { group, trayMaterial, imgMaterial, textMaterial } = createPanel(panel.img, panel.text, side, -i * 15 - 15);
+  const side = i % 2 === 0 ? -4 : 4;
+  const { group, trayMaterial, textMaterial } = createPanel(panel.model, panel.text, side, -i * 15 - 15);
   scene.add(group);
-  panels.push({ group, trayMaterial, imgMaterial, textMaterial });
+  panels.push({ group, trayMaterial, textMaterial });
 });
 
 // Scroll
@@ -143,13 +124,16 @@ function animate() {
   const targetZ = 12 - scrollProgress * 100;
   camera.position.z += (targetZ - camera.position.z) * 0.08;
 
-  // Fade según distancia
   panels.forEach(panel => {
     const distance = Math.abs(camera.position.z - panel.group.position.z);
     const opacity = THREE.MathUtils.clamp(1 - distance / 45, 0, 1);
     panel.trayMaterial.opacity = opacity * 0.6;
-    panel.imgMaterial.opacity = opacity;
     panel.textMaterial.opacity = opacity;
+
+    // Animar rotación del modelo
+    if (panel.group.userData.model) {
+      panel.group.userData.model.rotation.y += 0.01;
+    }
   });
 
   renderer.render(scene, camera);
@@ -163,5 +147,7 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 </script>
-  </body>
+</body>
+</html>
+
 
