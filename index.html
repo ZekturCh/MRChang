@@ -46,7 +46,7 @@
     const textureLoader = new THREE.TextureLoader();
     const textTexture = textureLoader.load('PARALEL.png'); // ejemplo, reemplázalo con tu PNG
     const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture, transparent: true });
-    const textPlane = new THREE.Mesh(new THREE.PlaneGeometry(4, 4), textMaterial);
+    const textPlane = new THREE.Mesh(new THREE.PlaneGeometry(8, 2), textMaterial);
     textPlane.position.set(0, 2, 0); // al centro
     scene.add(textPlane);
 
