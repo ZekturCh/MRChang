@@ -17,9 +17,10 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.m
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x111111);
 
-// Cámara (más cerca del logo)
+// Cámara
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
 camera.position.set(0, 2, 12);
+camera.lookAt(0, 2, 0);
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -42,66 +43,67 @@ scene.add(gridCeiling);
 // Loader
 const textureLoader = new THREE.TextureLoader();
 
-// ✅ Logo inicial
-const logoTexture = textureLoader.load('PARALEL.png'); // Cambia por tu logo
+// Logo
+const logoTexture = textureLoader.load('PARALEL.png'); // ajusta ruta si está en assets/
 const logoMaterial = new THREE.MeshBasicMaterial({ map: logoTexture, transparent: true });
 const logoMesh = new THREE.Mesh(new THREE.PlaneGeometry(10, 6), logoMaterial);
 logoMesh.position.set(0, 2, 0);
 scene.add(logoMesh);
 
-// ✅ Función para crear panel con bandeja, imagen y texto
+// ---- createPanel -------------------------------------------------
 function createPanel(imageURL, text, side, zPos) {
   const group = new THREE.Group();
 
   // Bandeja
+  const trayGeometry = new THREE.PlaneGeometry(5, 4.5);
   const trayMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 });
-  const tray = new THREE.Mesh(new THREE.PlaneGeometry(4.5, 4), trayMaterial);
-  tray.position.set(0, 0.2, -0.01);
+  const tray = new THREE.Mesh(trayGeometry, trayMaterial);
+  tray.position.set(0, 0.25, -0.01);
   group.add(tray);
 
   // Imagen
-  const imgMaterial = new THREE.MeshBasicMaterial({ map: textureLoader.load(imageURL), transparent: true, opacity: 0 });
+  const imgTexture = textureLoader.load(imageURL);
+  const imgMaterial = new THREE.MeshBasicMaterial({ map: imgTexture, transparent: true, opacity: 0 });
   const imgMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 2.5), imgMaterial);
-  imgMesh.position.set(0, 1, 0);
+  imgMesh.position.set(0, 1.25, 0);
   group.add(imgMesh);
 
-  // Texto
-const canvas = document.createElement('canvas');
-canvas.width = 512;
-canvas.height = 128;
-const ctx = canvas.getContext('2d');
+  // Texto canvas
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 160;
+  const ctx = canvas.getContext('2d');
 
-// Fondo opcional
-ctx.fillStyle = 'rgba(0,0,0,0)';
-ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'rgba(0,0,0,0)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-// Configuración de texto
-ctx.fillStyle = '#fff';
-ctx.font = 'bold 34px Arial'; // Baja tamaño
-ctx.textAlign = 'center';
-ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 34px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
 
-// Función para dividir texto en varias líneas si es muy largo
-function wrapText(context, text, x, y, maxWidth, lineHeight) {
-  const words = text.split(' ');
-  let line = '';
-  for (let i = 0; i < words.length; i++) {
-    const testLine = line + words[i] + ' ';
-    const metrics = context.measureText(testLine);
-    const testWidth = metrics.width;
-    if (testWidth > maxWidth && i > 0) {
-      context.fillText(line, x, y);
-      line = words[i] + ' ';
-      y += lineHeight;
-    } else {
-      line = testLine;
+  function wrapText(context, str, x, y, maxWidth, lineHeight) {
+    const words = str.split(' ');
+    let line = '';
+    for (let i = 0; i < words.length; i++) {
+      const testLine = line + words[i] + ' ';
+      if (context.measureText(testLine).width > maxWidth && i > 0) {
+        context.fillText(line, x, y);
+        line = words[i] + ' ';
+        y += lineHeight;
+      } else {
+        line = testLine;
+      }
     }
+    context.fillText(line, x, y);
   }
-  context.fillText(line, x, y);
-}
+  wrapText(ctx, text, canvas.width / 2, canvas.height / 2, 460, 38);
 
-// Llamar a la función para dibujar texto con ajuste
-wrapText(ctx, text, canvas.width / 2, canvas.height / 2, 450, 40);
+  const textTexture = new THREE.CanvasTexture(canvas);
+  const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture, transparent: true, opacity: 0 });
+  const textMesh = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 1.3), textMaterial);
+  textMesh.position.set(0, -0.9, 0);
+  group.add(textMesh);
 
   // Posición e inclinación
   group.position.set(side, 2, zPos);
@@ -109,8 +111,9 @@ wrapText(ctx, text, canvas.width / 2, canvas.height / 2, 450, 40);
 
   return { group, trayMaterial, imgMaterial, textMaterial };
 }
+// ------------------------------------------------------------------
 
-// Paneles
+// Datos paneles (ajusta rutas)
 const panelsData = [
   { img: 'exp.png', text: 'Experiencias de realidad virtual inmersivas' },
   { img: 'bus.png', text: 'Contenido adaptado a tu marca' },
@@ -130,20 +133,20 @@ panelsData.forEach((panel, i) => {
 let scrollProgress = 0;
 window.addEventListener('scroll', () => {
   const maxScroll = document.body.scrollHeight - window.innerHeight;
-  scrollProgress = window.scrollY / maxScroll;
+  scrollProgress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
 });
 
-// Animación con fade
+// Animación
 function animate() {
   requestAnimationFrame(animate);
 
-  const targetZ = 10 - scrollProgress * 100;
+  const targetZ = 12 - scrollProgress * 100;
   camera.position.z += (targetZ - camera.position.z) * 0.08;
 
-  // Fade en paneles según distancia
+  // Fade según distancia
   panels.forEach(panel => {
     const distance = Math.abs(camera.position.z - panel.group.position.z);
-    const opacity = THREE.MathUtils.clamp(1 - distance / 45, 0, 1); // visible si < 30
+    const opacity = THREE.MathUtils.clamp(1 - distance / 45, 0, 1);
     panel.trayMaterial.opacity = opacity * 0.6;
     panel.imgMaterial.opacity = opacity;
     panel.textMaterial.opacity = opacity;
@@ -159,6 +162,7 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
 </script>
 </body>
 </html>
