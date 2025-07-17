@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pasillo VR con Logo</title>
+  <title>Pasillo VR con Logo y Paneles</title>
   <style>
     body { margin: 0; background: #111; }
     html, body { height: 300vh; }
@@ -14,11 +14,10 @@
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
 
-// Escena
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x111111);
 
-// Cámara
+// Cámara (más cerca del logo)
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
 camera.position.set(0, 2, 10);
 
@@ -27,7 +26,7 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Piso y techo (efecto túnel)
+// Piso y techo
 const gridFloor = new THREE.GridHelper(500, 100, 0xffffff, 0xffffff);
 gridFloor.material.opacity = 0.15;
 gridFloor.material.transparent = true;
@@ -43,24 +42,31 @@ scene.add(gridCeiling);
 // Loader
 const textureLoader = new THREE.TextureLoader();
 
-// ✅ LOGO inicial
-const logoTexture = textureLoader.load('PARALEL.png'); // reemplaza con tu logo
+// ✅ Logo inicial
+const logoTexture = textureLoader.load('https://threejs.org/examples/textures/sprites/disc.png'); // Cambia por tu logo
 const logoMaterial = new THREE.MeshBasicMaterial({ map: logoTexture, transparent: true });
-const logoMesh = new THREE.Mesh(new THREE.PlaneGeometry(10, 6), logoMaterial);
+const logoMesh = new THREE.Mesh(new THREE.PlaneGeometry(6, 6), logoMaterial);
 logoMesh.position.set(0, 2, 0);
 scene.add(logoMesh);
 
-// ✅ Función para crear panel con imagen y texto
+// ✅ Función para crear panel con bandeja, imagen y texto
 function createPanel(imageURL, text, side, zPos) {
   const group = new THREE.Group();
+
+  // Bandeja negra semitransparente
+  const trayGeometry = new THREE.PlaneGeometry(4.5, 4);
+  const trayMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.6 });
+  const tray = new THREE.Mesh(trayGeometry, trayMaterial);
+  tray.position.set(0, 0.2, -0.01); // ligeramente atrás para no tapar imagen
+  group.add(tray);
 
   // Imagen principal
   const imgMaterial = new THREE.MeshBasicMaterial({ map: textureLoader.load(imageURL) });
   const imgMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 2.5), imgMaterial);
-  imgMesh.position.set(0, 1.5, 0);
+  imgMesh.position.set(0, 1, 0);
   group.add(imgMesh);
 
-  // Texto generado con canvas
+  // Texto (canvas → textura)
   const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 128;
@@ -72,17 +78,17 @@ function createPanel(imageURL, text, side, zPos) {
   const textTexture = new THREE.CanvasTexture(canvas);
   const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture, transparent: true });
   const textMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 1), textMaterial);
-  textMesh.position.set(0, -1.2, 0);
+  textMesh.position.set(0, -1, 0);
   group.add(textMesh);
 
-  // Posición e inclinación del panel
+  // Posición e inclinación
   group.position.set(side, 2, zPos);
   group.rotation.y = side < 0 ? Math.PI / 8 : -Math.PI / 8;
 
   return group;
 }
 
-// Paneles con imágenes y texto
+// Paneles con datos
 const panelsData = [
   { img: 'https://picsum.photos/600/400?random=1', text: 'Muro de Escalada' },
   { img: 'https://picsum.photos/600/400?random=2', text: 'Salto en Paracaídas' },
@@ -92,7 +98,7 @@ const panelsData = [
 
 panelsData.forEach((panel, i) => {
   const side = i % 2 === 0 ? -5 : 5;
-  const group = createPanel(panel.img, panel.text, side, -i * 15 - 20); // -20 para dejar espacio después del logo
+  const group = createPanel(panel.img, panel.text, side, -i * 15 - 15);
   scene.add(group);
 });
 
@@ -100,7 +106,7 @@ panelsData.forEach((panel, i) => {
 let scrollProgress = 0;
 function animate() {
   requestAnimationFrame(animate);
-  const targetZ = 30 - scrollProgress * 140; // avanza más para ver todos los paneles
+  const targetZ = 10 - scrollProgress * 100; // Ajuste para moverse entre paneles
   camera.position.z += (targetZ - camera.position.z) * 0.08;
   renderer.render(scene, camera);
 }
