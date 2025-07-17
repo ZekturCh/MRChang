@@ -3,81 +3,121 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Scroll Pasillo 3D</title>
+  <title>Pasillo VR con Logo</title>
   <style>
     body { margin: 0; background: #111; }
-    html, body { height: 300vh; } /* forzamos scroll */
+    html, body { height: 300vh; }
     canvas { display: block; position: fixed; top: 0; left: 0; }
   </style>
 </head>
 <body>
-  <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
 
-    // Escena
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x111111);
+// Escena
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x111111);
 
-    // Cámara
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
-    camera.position.set(0, 2, 30); // más lejos para comenzar
+// Cámara
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
+camera.position.set(0, 2, 30);
 
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+// Renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-    // Piso
-    const gridFloor = new THREE.GridHelper(200, 100, 0xffffff, 0xffffff);
-    gridFloor.material.opacity = 0.2;
-    gridFloor.material.transparent = true;
-    gridFloor.position.y = 0;
-    scene.add(gridFloor);
+// Piso y techo (efecto túnel)
+const gridFloor = new THREE.GridHelper(500, 100, 0xffffff, 0xffffff);
+gridFloor.material.opacity = 0.15;
+gridFloor.material.transparent = true;
+scene.add(gridFloor);
 
-    // Techo
-    const gridCeiling = new THREE.GridHelper(200, 100, 0xffffff, 0xffffff);
-    gridCeiling.material.opacity = 0.2;
-    gridCeiling.material.transparent = true;
-    gridCeiling.position.y = 4;
-    gridCeiling.rotation.x = Math.PI;
-    scene.add(gridCeiling);
+const gridCeiling = new THREE.GridHelper(500, 100, 0xffffff, 0xffffff);
+gridCeiling.material.opacity = 0.15;
+gridCeiling.material.transparent = true;
+gridCeiling.position.y = 4;
+gridCeiling.rotation.x = Math.PI;
+scene.add(gridCeiling);
 
-    // Paneles (rectángulos en el corredor)
-    const textureLoader = new THREE.TextureLoader();
-    const panelGeometry = new THREE.PlaneGeometry(4, 2.5);
-    for (let i = 0; i < 5; i++) {
-      const mat = new THREE.MeshBasicMaterial({ color: 0xffffff, map: textureLoader.load('https://picsum.photos/600/400?random=' + i) });
-      const panel = new THREE.Mesh(panelGeometry, mat);
-      panel.position.set(0, 2, -i * 10); // alineados en Z
-      scene.add(panel);
-    }
+// Loader
+const textureLoader = new THREE.TextureLoader();
 
-    // Animación
-    let scrollProgress = 0;
-    function animate() {
-      requestAnimationFrame(animate);
+// ✅ LOGO inicial
+const logoTexture = textureLoader.load('PARALEL.png'); // reemplaza con tu logo
+const logoMaterial = new THREE.MeshBasicMaterial({ map: logoTexture, transparent: true });
+const logoMesh = new THREE.Mesh(new THREE.PlaneGeometry(10, 6), logoMaterial);
+logoMesh.position.set(0, 2, 0);
+scene.add(logoMesh);
 
-      // Movimiento suave de cámara según scroll
-      const targetZ = 30 - scrollProgress * 50; // avanza hasta -20
-      camera.position.z += (targetZ - camera.position.z) * 0.1;
+// ✅ Función para crear panel con imagen y texto
+function createPanel(imageURL, text, side, zPos) {
+  const group = new THREE.Group();
 
-      renderer.render(scene, camera);
-    }
-    animate();
+  // Imagen principal
+  const imgMaterial = new THREE.MeshBasicMaterial({ map: textureLoader.load(imageURL) });
+  const imgMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 2.5), imgMaterial);
+  imgMesh.position.set(0, 1.5, 0);
+  group.add(imgMesh);
 
-    // Scroll handler
-    window.addEventListener('scroll', () => {
-      const maxScroll = document.body.scrollHeight - window.innerHeight;
-      scrollProgress = window.scrollY / maxScroll; // 0 a 1
-    });
+  // Texto generado con canvas
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 128;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff';
+  ctx.font = '40px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+  const textTexture = new THREE.CanvasTexture(canvas);
+  const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture, transparent: true });
+  const textMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 1), textMaterial);
+  textMesh.position.set(0, -1.2, 0);
+  group.add(textMesh);
 
-    // Resize
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-  </script>
+  // Posición e inclinación del panel
+  group.position.set(side, 2, zPos);
+  group.rotation.y = side < 0 ? Math.PI / 8 : -Math.PI / 8;
+
+  return group;
+}
+
+// Paneles con imágenes y texto
+const panelsData = [
+  { img: 'https://picsum.photos/600/400?random=1', text: 'Muro de Escalada' },
+  { img: 'https://picsum.photos/600/400?random=2', text: 'Salto en Paracaídas' },
+  { img: 'https://picsum.photos/600/400?random=3', text: 'Tiro al Blanco' },
+  { img: 'https://picsum.photos/600/400?random=4', text: 'Simulador VR' }
+];
+
+panelsData.forEach((panel, i) => {
+  const side = i % 2 === 0 ? -5 : 5;
+  const group = createPanel(panel.img, panel.text, side, -i * 15 - 20); // -20 para dejar espacio después del logo
+  scene.add(group);
+});
+
+// Scroll control
+let scrollProgress = 0;
+function animate() {
+  requestAnimationFrame(animate);
+  const targetZ = 30 - scrollProgress * 140; // avanza más para ver todos los paneles
+  camera.position.z += (targetZ - camera.position.z) * 0.08;
+  renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('scroll', () => {
+  const maxScroll = document.body.scrollHeight - window.innerHeight;
+  scrollProgress = window.scrollY / maxScroll;
+});
+
+// Resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
 </body>
 </html>
 
