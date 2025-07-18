@@ -2,174 +2,187 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"/>
   <title>PARALEL VR</title>
+
+  <!-- SEO META -->
+  <meta name="description" content="PARALEL VR: Alquiler de realidad virtual para eventos en Perú. Oculus / Meta Quest, experiencias inmersivas, activaciones BTL, contenido VR personalizado en Lima y todo el país.">
+  <meta name="keywords" content="realidad virtual Perú, VR Perú, alquiler VR eventos, Oculus Perú, Meta Quest eventos, realidad virtual Lima, activaciones VR, realidad aumentada, simuladores VR, eventos tecnología">
+
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
   <style>
+    :root {
+      --scroll-height-mult: 3; /* multiplica altura de viewport x3 para scroll 3D */
+    }
+
     body {
-  margin: 0;
-  background: #111;
-}
-html, body {
-  height: 300vh; /* ✅ Mantener scroll para animación */
-}
-canvas {
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-    
-  canvas.webgl-fade {
-    transition: opacity 0.8s ease;
-  }
+      margin: 0;
+      background: #111;
+      font-family: Arial, sans-serif;
+    }
 
-#html-wrapper {
-  position: relative;
-  z-index: 1;          /* Aparece sobre canvas cuando está visible */
-}
+    /* Altura para scroll 3D inicial */
+    html, body {
+      height: calc(100vh * var(--scroll-height-mult));
+    }
 
-#html-section {
-  display: none;       /* Oculto al inicio */
-  background: #fff;
-  color: #111;
-  padding: 50px;
-  text-align: center;
-  font-family: Arial, sans-serif;
-  min-height: 100vh;   /* Ocupa la pantalla completa */
-}
-#html-wrapper {
-  position: relative;
-  z-index: 1;
-}
+    canvas {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+    canvas.webgl-fade {
+      transition: opacity 0.8s ease;
+    }
 
-.seo-hero {
-  display: none; /* oculto al inicio, JS lo muestra */
-  position: relative;
-  min-height: 100vh;
-  padding: 80px 20px 120px;
-  box-sizing: border-box;
-  background: #0b0b0b;
-  color: #f5f5f5;
-  font-family: Arial, sans-serif;
+    /* HTML overlay que aparece al final */
+    #html-wrapper {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      display: none;   /* se habilita vía JS */
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      overflow-y: auto; /* scroll interno si el contenido crece */
+    }
 
-  /* Borde metálico con gradiente */
-  border: 4px solid transparent;
-  border-radius: 16px;
-  background-clip: padding-box;
-}
-.seo-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 16px;
-  padding: 4px;
-  background: linear-gradient(135deg, #cfcfcf, #666, #d4d4d4);
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: destination-out;
-  mask-composite: exclude;
-  pointer-events: none;
-}
+    /* Panel metálico */
+    .seo-hero {
+      position: relative;
+      min-height: 100%;
+      padding: 80px 20px 120px;
+      box-sizing: border-box;
+      background: #0b0b0b;
+      color: #f5f5f5;
+      border: 4px solid transparent;
+      border-radius: 16px;
+      background-clip: padding-box;
 
-/* Logo chico esquina */
-.seo-hero-logo {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  max-width: 160px;
-  height: auto;
-  z-index: 2;
-}
+      /* Logo grande de fondo */
+      background-image: url('paralelogo.png');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: contain;
+    }
+    .seo-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      padding: 4px;
+      background: linear-gradient(135deg, #cfcfcf, #666, #d4d4d4);
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
 
-/* Fondo logo grande */
-.seo-hero {
-  background-image: url('paralelogo.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: contain;
-  opacity: 0;                 /* fade-in controlado por JS si quieres */
-  transition: opacity 0.8s ease;
-}
+    /* Logo chico esquina */
+    .seo-hero-logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      max-width: 160px;
+      height: auto;
+      z-index: 2;
+    }
 
-.seo-hero-content {
-  max-width: 700px;
-  margin: 0 auto;
-  text-align: center;
-  position: relative;
-  z-index: 3;
-}
-
-.seo-hero-content h1 {
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  margin-bottom: 1rem;
-  color: #ffffff;
-}
-
-.seo-hero-content p {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin: 1.2rem auto;
-  max-width: 60ch;
-  color: #e0e0e0;
-}
-
-.seo-cta {
-  display: inline-block;
-  margin-top: 2rem;
-  padding: 16px 32px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #111;
-  background: linear-gradient(135deg, #ffffff, #cfcfcf);
-  border-radius: 8px;
-  text-decoration: none;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-.seo-cta:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 4px 14px rgba(255,255,255,0.35);
-}
-
+    .seo-hero-content {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 3;
+    }
+    .seo-hero-content h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      margin-bottom: 1rem;
+      color: #ffffff;
+    }
+    .seo-hero-content p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin: 1.2rem auto;
+      max-width: 60ch;
+      color: #e0e0e0;
+    }
+    .seo-cta {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 16px 32px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #111;
+      background: linear-gradient(135deg, #ffffff, #cfcfcf);
+      border-radius: 8px;
+      text-decoration: none;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+    .seo-cta:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 4px 14px rgba(255,255,255,0.35);
+    }
   </style>
+
+  <!-- importmap opcional (cargas directas igualmente) -->
   <script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js"
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js"
+    }
   }
-}
-</script>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
+  </script>
 </head>
 <body>
 <script type="module">
   import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
   import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js';
 
-  // -------------------------------------------------
-  // ESCENA BÁSICA
-  // -------------------------------------------------
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x111111); // gris muy oscuro, no negro puro
+  // ---------------- CONFIG GLOBALES ----------------
+  const panelSpacing   = 15;  // distancia entre paneles
+  const firstPanelZ    = -15; // Z panel #1
+  const panelY         = 2;   // altura panel
+  const panelSideOffset= 2;   // alterna izquierda/derecha
+  const rotStartDist   = 20;  // dist rotación
+  const rotMaxSpeed    = 0.02;
+  const camZLerp       = 0.08;
+  const lookAtLerp     = 0.08;
+  const textFadeDist   = 45;
+  const approachStart  = 45;  // empieza a mirar panel
+  const approachEnd    = 5;   // deja de mirar panel y vuelve al frente
+  const fadeStartPercent = 90; // empieza fade de 3D
+  const fadeEndPercent   = 99; // termina fade
 
-  // Cámara: más largo far plane porque viajamos bastante en -Z
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
-  camera.position.set(0, 2, 12); // arranque
+  // ---------------- ESCENA ----------------
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x111111);
+
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    500
+  );
+  const camStartZ = 12;
+  camera.position.set(0, 2, camStartZ);
   camera.lookAt(0, 2, 0);
 
-  // Luz suave hemisférica (no crítica, pero ayuda a GLBs con materiales)
   const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
   light.position.set(0, 10, 0);
   scene.add(light);
 
-  // Renderer
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.domElement.classList.add('webgl-fade');
   document.body.appendChild(renderer.domElement);
 
-  // -------------------------------------------------
-  // PISO Y TECHO CUADRICULADOS
-  // -------------------------------------------------
+  // ---------------- GRID Piso/Techo ----------------
   const gridOpacity = 0.15;
   const gridSize = 500;
   const gridDivs = 100;
@@ -182,24 +195,19 @@ canvas {
   const gridCeiling = new THREE.GridHelper(gridSize, gridDivs, 0xffffff, 0xffffff);
   gridCeiling.material.opacity = gridOpacity;
   gridCeiling.material.transparent = true;
-  gridCeiling.position.y = 4;        // altura del “techo”
-  gridCeiling.rotation.x = Math.PI;  // voltear para que la cara visible mire hacia abajo
+  gridCeiling.position.y = 4;
+  gridCeiling.rotation.x = Math.PI;
   scene.add(gridCeiling);
 
-  // -------------------------------------------------
-  // LOGO (PLANO CON TEXTURA PNG TRANSPARENTE)
-  // -------------------------------------------------
+  // ---------------- LOGO central ----------------
   const textureLoader = new THREE.TextureLoader();
-  const logoTexture = textureLoader.load('PARALEL2.png'); // asegúrate que exista
+  const logoTexture = textureLoader.load('PARALEL2.png');
   const logoMaterial = new THREE.MeshBasicMaterial({ map: logoTexture, transparent: true });
   const logoMesh = new THREE.Mesh(new THREE.PlaneGeometry(10, 6), logoMaterial);
   logoMesh.position.set(0, 2, 0);
   scene.add(logoMesh);
 
-  // -------------------------------------------------
-  // CONFIG PANEL SCROLL
-  // -------------------------------------------------
-  // Datos: modelo GLB + texto
+  // ---------------- DATA DE PANELES ----------------
   const panelsData = [
     { model: 'EXP3.glb', text: 'Experiencia inmersiva' },
     { model: 'bus3.glb', text: 'Contenido personalizable' },
@@ -207,129 +215,116 @@ canvas {
     { model: 'par2.glb', text: 'Entra al mundo paralelo' }
   ];
 
-  // Espaciado entre paneles en -Z
-  const panelSpacing = 15;     // distancia entre paneles
-  const firstPanelZ = -15;     // Z del primero
-  const panelY = 2;            // altura base panel
-  const panelSideOffset = 2;   // +/- X alternado para darle ángulo
-
-  // Control de enfoque y animaciones
-  const rotStartDist = 20;   // empezar rotación cuando la cámara está más cerca que esto
-  const rotMaxSpeed  = 0.02; // rotación máxima
-  const lookAtLerp   = 0.08; // suavidad cámara hacia panel activo
-  const camZLerp     = 0.08; // suavidad mov. en Z (ya lo usabas)
-  const textFadeDist = 45;   // distancia a partir de la cual texto = 0
-
-  // Loader de modelos
   const loader = new GLTFLoader();
-
-  // Almacenamos referencias a cada panel
   const panels = [];
 
- // Crea texto Canvas -> textura con ajuste dinámico y fondo
-function makeTextTexture(str) {
-  const canvas = document.createElement('canvas');
-  canvas.width = 512;
-  canvas.height = 160;
-  const ctx = canvas.getContext('2d');
+  // ---- crea textura canvas con wrap + fondo
+  function makeTextTexture(str) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 160;
+    const ctx = canvas.getContext('2d');
 
-  // Fondo negro semitransparente
-  ctx.fillStyle = 'rgba(0,0,0,0.6)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Fondo
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Ajuste de tamaño base
-  let fontSize = 44;
-  ctx.font = `bold ${fontSize}px Arial`;
-  ctx.fillStyle = '#fff';
-  ctx.textAlign = 'center';
+    // Texto
+    let fontSize = 44;
+    ctx.font = `bold ${fontSize}px Arial`;
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
 
-  // Función para dividir texto
-  function wrapText(text, x, y, maxWidth, lineHeight) {
-    const words = text.split(' ');
-    let line = '';
-    for (let n = 0; n < words.length; n++) {
-      const testLine = line + words[n] + ' ';
-      const metrics = ctx.measureText(testLine);
-      if (metrics.width > maxWidth && n > 0) {
-        ctx.fillText(line, x, y);
-        line = words[n] + ' ';
-        y += lineHeight;
-      } else {
-        line = testLine;
+    // wrap
+    function wrapText(text, x, y, maxWidth, lineHeight) {
+      const words = text.split(' ');
+      let line = '';
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth && n > 0) {
+          ctx.fillText(line, x, y);
+          line = words[n] + ' ';
+          y += lineHeight;
+        } else {
+          line = testLine;
+        }
       }
+      ctx.fillText(line, x, y);
     }
-    ctx.fillText(line, x, y);
+    const lineHeight = fontSize + 10;
+    const startY = canvas.height / 2 - lineHeight / 2;
+    wrapText(str, canvas.width / 2, startY, canvas.width - 40, lineHeight);
+
+    return new THREE.CanvasTexture(canvas);
   }
-
-  // Centrado vertical básico
-  const lineHeight = fontSize + 10;
-  const startY = canvas.height / 2 - lineHeight / 2;
-
-  wrapText(str, canvas.width / 2, startY, canvas.width - 40, lineHeight);
-
-  return new THREE.CanvasTexture(canvas);
-}
 
   function createPanel(panelInfo, i) {
     const group = new THREE.Group();
 
-    // Texto (canvas → textura → plano)
+    // Texto
     const textTexture = makeTextTexture(panelInfo.text);
-    const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture, transparent: true, opacity: 0 });
+    const textMaterial = new THREE.MeshBasicMaterial({
+      map: textTexture,
+      transparent: true,
+      opacity: 0
+    });
+    textMaterial.baseOpacity = 1; // usado en fade global
+
     const textMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 1), textMaterial);
     textMesh.position.set(0, -1, 0);
     group.add(textMesh);
 
-    // Modelo 3D
+    // Modelo
     loader.load(panelInfo.model, (gltf) => {
       const model = gltf.scene;
       model.scale.set(1.5, 1.5, 1.5);
       model.position.y = 0;
-      model.userData.rotate = true; // bandera: se puede rotar cuando esté cerca
+      model.userData.rotate = true;
       group.add(model);
     });
 
-    // Posición alternando a izquierda/derecha
+    // Posición alternada X
     const side = i % 2 === 0 ? -panelSideOffset : panelSideOffset;
     group.position.set(side, panelY, firstPanelZ - i * panelSpacing);
-
-    // Inclinación leve hacia la cámara central
     group.rotation.y = side < 0 ? Math.PI / 8 : -Math.PI / 8;
 
     scene.add(group);
     panels.push({ group, textMaterial });
   }
-
   panelsData.forEach(createPanel);
 
-  // -------------------------------------------------
-  // SCROLL → progreso lineal [0..1]
-  // -------------------------------------------------
+  // ---------------- SCROLL PROGRESS ----------------
   let scrollProgress = 0;
   window.addEventListener('scroll', () => {
     const maxScroll = document.body.scrollHeight - window.innerHeight;
     scrollProgress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
   });
 
-  // Rango total que recorre la cámara en Z
-  const totalTravelZ = 100; // puedes ajustarlo; antes usabas ~100
-  const camStartZ = 12;
+  // ---------------- FADE GLOBAL CONTROL ----------------
+  let globalFade = 1;   // 1=visible 3D, 0=oculto
+  let animating = true; // para pausar render cuando está oculto
 
-  // Vector reutilizable para lerp de lookAt
-  const camLookTarget = new THREE.Vector3();
-  const currentLook = new THREE.Vector3(0, 2, 0); // arranque
+  function pause3D() { animating = false; }
+  function resume3D() { 
+    if (!animating) {
+      animating = true;
+      animate(); 
+    }
+  }
 
-  // -------------------------------------------------
-  // ANIMACIÓN
-  // -------------------------------------------------
+  // ---------------- ANIMATE LOOP ----------------
   function animate() {
+    if (!animating) return;
     requestAnimationFrame(animate);
 
     // Cámara avanza en Z según scroll
+    const totalTravelZ = 100; // puedes ajustar
     const targetZ = camStartZ - scrollProgress * totalTravelZ;
     camera.position.z += (targetZ - camera.position.z) * camZLerp;
 
-    // Determinar panel más cercano
+    // Determinar panel más cercano (para enfoque)
     let closestPanel = null;
     let minDist = Infinity;
     panels.forEach(p => {
@@ -341,110 +336,99 @@ function makeTextTexture(str) {
       }
     });
 
-const approachStart = 45;  // Empieza a mirar el panel desde esta distancia
-const approachEnd = 5;     // Deja de mirar el panel cuando llega a esta distancia
-const forwardLook = new THREE.Vector3(0, 2, -100);
+    // Enfoque asimétrico (approachStart -> approachEnd -> al frente)
+    const forwardLook = new THREE.Vector3(0, 2, -100);
+    if (closestPanel) {
+      const panelZ = closestPanel.group.position.z;
+      const dz = camera.position.z - panelZ; // + = antes del panel
+      let weight = 0;
 
-if (closestPanel) {
-  const panelZ = closestPanel.group.position.z;
-  const dz = camera.position.z - panelZ; // Distancia cámara - panel
+      if (dz > approachEnd && dz < approachStart) {
+        weight = THREE.MathUtils.clamp(
+          (dz - approachEnd) / (approachStart - approachEnd),
+          0, 1
+        );
+      } else if (dz <= approachEnd) {
+        weight = 0;
+      } else if (dz >= approachStart) {
+        weight = 0; // todavía lejos, mira al frente
+      }
 
-  let weight = 0; // 0 = mirar al frente, 1 = mirar al panel
+      // Mezcla panel vs adelante
+      const camLookTarget = forwardLook.clone().lerp(closestPanel.group.position, weight);
+      camLookTarget.y += 0.5;
+      currentLook.lerp(camLookTarget, lookAtLerp);
+      camera.lookAt(currentLook);
+    }
 
-  if (dz > approachEnd && dz < approachStart) {
-    // Dentro del rango [approachStart → approachEnd]
-    weight = THREE.MathUtils.clamp((dz - approachEnd) / (approachStart - approachEnd), 0, 1);
-  } else if (dz <= approachEnd) {
-    // Ya está muy cerca o lo pasó → mirar al frente
-    weight = 0;
-  }
-
-  // Mezclar objetivo: panel vs adelante
-  camLookTarget.copy(forwardLook).lerp(closestPanel.group.position, weight);
-  camLookTarget.y += 0.5;
-
-  currentLook.lerp(camLookTarget, lookAtLerp);
-  camera.lookAt(currentLook);
-}
-    // Actualizar texto + rotaciones por distancia
+    // Actualizar opacidades + rotación por distancia * fade global
     panels.forEach(p => {
       const dist = Math.abs(camera.position.z - p.group.position.z);
+      const distOpacity = THREE.MathUtils.clamp(1 - dist / textFadeDist, 0, 1);
+      p.textMaterial.opacity = distOpacity * p.textMaterial.baseOpacity * globalFade;
 
-      // Texto: fade según distancia
-      const opacity = THREE.MathUtils.clamp(1 - dist / textFadeDist, 0, 1);
-      p.textMaterial.opacity = opacity;
-
-      // Rotación: escala según cercanía
+      // Rotación al acercarse
       const speedScale = THREE.MathUtils.clamp(1 - dist / rotStartDist, 0, 1);
-      if (speedScale > 0) {
+      if (speedScale > 0 && globalFade > 0.01) {
         p.group.children.forEach(child => {
           if (child.userData.rotate) child.rotation.y += rotMaxSpeed * speedScale;
         });
       }
     });
 
+    // Fade grid/materials
+    gridFloor.material.opacity   = gridOpacity * globalFade;
+    gridCeiling.material.opacity = gridOpacity * globalFade;
+    logoMaterial.opacity         = globalFade;
+
     renderer.render(scene, camera);
   }
+  const currentLook = new THREE.Vector3(0, 2, 0); // after animate defined
   animate();
-  // Referencias
-const htmlSection = document.getElementById('html-section');
-const canvas = renderer.domElement;
 
-const htmlSection = document.getElementById('html-section');
-const canvas = renderer.domElement;
+  // ---------------- TRANSICIÓN 3D -> HTML ----------------
+  const htmlWrapper = document.getElementById('html-wrapper');
+  const htmlSection = document.getElementById('html-section');
+  const canvas = renderer.domElement;
 
-renderer.domElement.classList.add('webgl-fade');
-const fadeStartPercent = 90;  // empieza a desvanecer 3D
-const fadeEndPercent   = 99;  // termina fade, aparece HTML
-let threeVisible = true;      // control para pausar animación
+  function checkScrollTransition() {
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    const scrollPercent = maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
 
+    // t: 0..1 entre fadeStartPercent y fadeEndPercent
+    let t = (scrollPercent - fadeStartPercent) / (fadeEndPercent - fadeStartPercent);
+    t = Math.min(Math.max(t, 0), 1);
 
-function checkScrollTransition() {
-  const maxScroll = document.body.scrollHeight - window.innerHeight;
-  const scrollPercent = maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
+    globalFade = 1 - t; // usado en animate()
 
-  // Normalizamos factor de fade 0..1 entre fadeStartPercent y fadeEndPercent
-  let t = (scrollPercent - fadeStartPercent) / (fadeEndPercent - fadeStartPercent);
-  t = Math.min(Math.max(t, 0), 1); // clamp
+    // Canvas CSS fade
+    canvas.style.opacity = globalFade.toString();
 
-  // Opacidad escena 3D
-  const sceneOpacity = 1 - t;
-
-  // Canvas CSS
-  canvas.style.opacity = sceneOpacity.toString();
-
-  // Materiales de grillas
-  gridFloor.material.opacity = gridOpacity * sceneOpacity;
-  gridCeiling.material.opacity = gridOpacity * sceneOpacity;
-
-  // Texturas de paneles
-  panels.forEach(p => {
-    p.textMaterial.opacity *= sceneOpacity; // multiplicativo suave
-  });
-
-  // Mostrar HTML cuando t está casi a 1
-  if (t >= 1 && threeVisible) {
-    threeVisible = false;
-    htmlSection.style.display = 'block';
-    // Pausar animación si quieres ahorro GPU:
-    pause3D();
-  } else if (t < 1 && !threeVisible) {
-    threeVisible = true;
-    htmlSection.style.display = 'none';
-    resume3D();
+    if (t >= 1 && htmlWrapper.style.display !== 'block') {
+      htmlWrapper.style.display = 'block';
+      requestAnimationFrame(() => htmlWrapper.style.opacity = '1');
+      pause3D();
+    } else if (t < 1 && htmlWrapper.style.display === 'block') {
+      htmlWrapper.style.opacity = '0';
+      // pequeño timeout para ocultar tras transición
+      setTimeout(() => {
+        if (globalFade < 1) return; // evita ocultar si volvió a bajar
+        htmlWrapper.style.display = 'none';
+      }, 800);
+      resume3D();
+    }
   }
-}
-window.addEventListener('scroll', checkScrollTransition);
+  window.addEventListener('scroll', checkScrollTransition);
 
-  // -------------------------------------------------
-  // RESPONSIVE
-  // -------------------------------------------------
+  // ---------------- RESPONSIVE ----------------
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 </script>
+
+<!-- HTML overlay final -->
 <div id="html-wrapper">
   <section id="html-section" class="seo-hero">
     <img src="paralelchico.png" alt="Paralel VR" class="seo-hero-logo">
