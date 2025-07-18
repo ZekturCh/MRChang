@@ -23,129 +23,206 @@
   import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
   import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js';
 
-  // Escena
+  // -------------------------------------------------
+  // ESCENA BÁSICA
+  // -------------------------------------------------
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x111111);
+  scene.background = new THREE.Color(0x111111); // gris muy oscuro, no negro puro
 
-// Cámara
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
-camera.position.set(0, 2, 12);
-camera.lookAt(0, 2, 0);
- // Luz
+  // Cámara: más largo far plane porque viajamos bastante en -Z
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500);
+  camera.position.set(0, 2, 12); // arranque
+  camera.lookAt(0, 2, 0);
+
+  // Luz suave hemisférica (no crítica, pero ayuda a GLBs con materiales)
   const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
   light.position.set(0, 10, 0);
   scene.add(light);
 
-// Renderer
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+  // Renderer
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
 
-// Piso y techo
-const gridFloor = new THREE.GridHelper(500, 100, 0xffffff, 0xffffff);
-gridFloor.material.opacity = 0.15;
-gridFloor.material.transparent = true;
-scene.add(gridFloor);
+  // -------------------------------------------------
+  // PISO Y TECHO CUADRICULADOS
+  // -------------------------------------------------
+  const gridOpacity = 0.15;
+  const gridSize = 500;
+  const gridDivs = 100;
 
-const gridCeiling = new THREE.GridHelper(500, 100, 0xffffff, 0xffffff);
-gridCeiling.material.opacity = 0.15;
-gridCeiling.material.transparent = true;
-gridCeiling.position.y = 4;
-gridCeiling.rotation.x = Math.PI;
-scene.add(gridCeiling);
+  const gridFloor = new THREE.GridHelper(gridSize, gridDivs, 0xffffff, 0xffffff);
+  gridFloor.material.opacity = gridOpacity;
+  gridFloor.material.transparent = true;
+  scene.add(gridFloor);
 
-const textureLoader = new THREE.TextureLoader();
-// Logo
-const logoTexture = textureLoader.load('PARALEL.png'); // ajusta ruta si está en assets/
-const logoMaterial = new THREE.MeshBasicMaterial({ map: logoTexture, transparent: true });
-const logoMesh = new THREE.Mesh(new THREE.PlaneGeometry(10, 6), logoMaterial);
-logoMesh.position.set(0, 2, 0);
-scene.add(logoMesh);
-  // Loader para modelos
+  const gridCeiling = new THREE.GridHelper(gridSize, gridDivs, 0xffffff, 0xffffff);
+  gridCeiling.material.opacity = gridOpacity;
+  gridCeiling.material.transparent = true;
+  gridCeiling.position.y = 4;        // altura del “techo”
+  gridCeiling.rotation.x = Math.PI;  // voltear para que la cara visible mire hacia abajo
+  scene.add(gridCeiling);
+
+  // -------------------------------------------------
+  // LOGO (PLANO CON TEXTURA PNG TRANSPARENTE)
+  // -------------------------------------------------
+  const textureLoader = new THREE.TextureLoader();
+  const logoTexture = textureLoader.load('PARALEL.png'); // asegúrate que exista
+  const logoMaterial = new THREE.MeshBasicMaterial({ map: logoTexture, transparent: true });
+  const logoMesh = new THREE.Mesh(new THREE.PlaneGeometry(10, 6), logoMaterial);
+  logoMesh.position.set(0, 2, 0);
+  scene.add(logoMesh);
+
+  // -------------------------------------------------
+  // CONFIG PANEL SCROLL
+  // -------------------------------------------------
+  // Datos: modelo GLB + texto
+  const panelsData = [
+    { model: 'EXP3.glb', text: 'Experiencia inmersiva' },
+    { model: 'bus.glb', text: 'Contenido personalizable' },
+    { model: 'eco.glb', text: 'Inversión sin riesgos' },
+    { model: 'par2.glb', text: 'atrévete a ver el mundo virutal' }
+  ];
+
+  // Espaciado entre paneles en -Z
+  const panelSpacing = 15;     // distancia entre paneles
+  const firstPanelZ = -15;     // Z del primero
+  const panelY = 2;            // altura base panel
+  const panelSideOffset = 2;   // +/- X alternado para darle ángulo
+
+  // Control de enfoque y animaciones
+  const rotStartDist = 20;   // empezar rotación cuando la cámara está más cerca que esto
+  const rotMaxSpeed  = 0.02; // rotación máxima
+  const lookAtLerp   = 0.08; // suavidad cámara hacia panel activo
+  const camZLerp     = 0.08; // suavidad mov. en Z (ya lo usabas)
+  const textFadeDist = 45;   // distancia a partir de la cual texto = 0
+
+  // Loader de modelos
   const loader = new GLTFLoader();
 
-  function createPanel(modelPath, text, side, zPos) {
-    const group = new THREE.Group();
+  // Almacenamos referencias a cada panel
+  const panels = [];
 
-    // Texto (Canvas)
+  // Crea texto Canvas -> textura
+  function makeTextTexture(str) {
     const canvas = document.createElement('canvas');
     canvas.width = 512;
     canvas.height = 160;
     const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = '#fff';
     ctx.font = 'bold 34px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+    ctx.fillText(str, canvas.width / 2, canvas.height / 2);
+    const tex = new THREE.CanvasTexture(canvas);
+    return tex;
+  }
 
-    const textTexture = new THREE.CanvasTexture(canvas);
+  function createPanel(panelInfo, i) {
+    const group = new THREE.Group();
+
+    // Texto (canvas → textura → plano)
+    const textTexture = makeTextTexture(panelInfo.text);
     const textMaterial = new THREE.MeshBasicMaterial({ map: textTexture, transparent: true, opacity: 0 });
     const textMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 1), textMaterial);
     textMesh.position.set(0, -1, 0);
     group.add(textMesh);
 
     // Modelo 3D
-    loader.load(modelPath, (gltf) => {
+    loader.load(panelInfo.model, (gltf) => {
       const model = gltf.scene;
       model.scale.set(1.5, 1.5, 1.5);
       model.position.y = 0;
+      model.userData.rotate = true; // bandera: se puede rotar cuando esté cerca
       group.add(model);
-
-      // Rotación animada
-      model.userData.rotate = true;
     });
 
-    // Posición e inclinación
-    group.position.set(side, 2, zPos);
+    // Posición alternando a izquierda/derecha
+    const side = i % 2 === 0 ? -panelSideOffset : panelSideOffset;
+    group.position.set(side, panelY, firstPanelZ - i * panelSpacing);
+
+    // Inclinación leve hacia la cámara central
     group.rotation.y = side < 0 ? Math.PI / 8 : -Math.PI / 8;
 
     scene.add(group);
-    return { group, textMaterial };
+    panels.push({ group, textMaterial });
   }
 
-  const panelsData = [
-    { model: 'exp1.glb', text: 'Experiencia inmersiva' },
-    { model: 'bus.glb', text: 'Contenido personalizable' },
-    { model: 'eco.glb', text: 'Inversión sin riesgos' },
-    { model: 'par2.glb', text: 'atrévete a ver el mundo virutal' }
-  ];
+  panelsData.forEach(createPanel);
 
-  const panels = [];
-  panelsData.forEach((panel, i) => {
-    const side = i % 2 === 0 ? -2 : 2;
-    const { group, textMaterial } = createPanel(panel.model, panel.text, side, -i * 15 - 15);
-    panels.push({ group, textMaterial });
-  });
-
-  // Scroll
+  // -------------------------------------------------
+  // SCROLL → progreso lineal [0..1]
+  // -------------------------------------------------
   let scrollProgress = 0;
   window.addEventListener('scroll', () => {
     const maxScroll = document.body.scrollHeight - window.innerHeight;
     scrollProgress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
   });
 
-  // Animación
+  // Rango total que recorre la cámara en Z
+  const totalTravelZ = 100; // puedes ajustarlo; antes usabas ~100
+  const camStartZ = 12;
+
+  // Vector reutilizable para lerp de lookAt
+  const camLookTarget = new THREE.Vector3();
+  const currentLook = new THREE.Vector3(0, 2, 0); // arranque
+
+  // -------------------------------------------------
+  // ANIMACIÓN
+  // -------------------------------------------------
   function animate() {
     requestAnimationFrame(animate);
-    const targetZ = 12 - scrollProgress * 100;
-    camera.position.z += (targetZ - camera.position.z) * 0.08;
 
-    panels.forEach(panel => {
-      const distance = Math.abs(camera.position.z - panel.group.position.z);
-      const opacity = THREE.MathUtils.clamp(1 - distance / 45, 0, 1);
-      panel.textMaterial.opacity = opacity;
+    // Cámara avanza en Z según scroll
+    const targetZ = camStartZ - scrollProgress * totalTravelZ;
+    camera.position.z += (targetZ - camera.position.z) * camZLerp;
 
-      // Rotación de modelos si están cerca
-      panel.group.children.forEach(child => {
-        if (child.userData.rotate) child.rotation.y += 0.01;
-      });
+    // Determinar panel más cercano
+    let closestPanel = null;
+    let minDist = Infinity;
+    panels.forEach(p => {
+      const dz = camera.position.z - p.group.position.z;
+      const dist = Math.abs(dz);
+      if (dist < minDist) {
+        minDist = dist;
+        closestPanel = p;
+      }
+    });
+
+    // Lerp cámara.lookAt hacia el panel más cercano (enfoque)
+    if (closestPanel) {
+      camLookTarget.copy(closestPanel.group.position);
+      // subimos un toque para encuadrar el modelo + texto
+      camLookTarget.y += 0.5;
+      currentLook.lerp(camLookTarget, lookAtLerp);
+      camera.lookAt(currentLook);
+    }
+
+    // Actualizar texto + rotaciones por distancia
+    panels.forEach(p => {
+      const dist = Math.abs(camera.position.z - p.group.position.z);
+
+      // Texto: fade según distancia
+      const opacity = THREE.MathUtils.clamp(1 - dist / textFadeDist, 0, 1);
+      p.textMaterial.opacity = opacity;
+
+      // Rotación: escala según cercanía
+      const speedScale = THREE.MathUtils.clamp(1 - dist / rotStartDist, 0, 1);
+      if (speedScale > 0) {
+        p.group.children.forEach(child => {
+          if (child.userData.rotate) child.rotation.y += rotMaxSpeed * speedScale;
+        });
+      }
     });
 
     renderer.render(scene, camera);
   }
   animate();
 
-  // Resize
+  // -------------------------------------------------
+  // RESPONSIVE
+  // -------------------------------------------------
   window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
