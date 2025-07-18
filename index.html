@@ -201,7 +201,7 @@
   const dz = camera.position.z - panelZ;
 
   const forwardLook = new THREE.Vector3(0, 2, -100); // Punto fijo adelante
-  const transitionRange = 60; // Ajusta para suavizar transición después del panel
+  const transitionRange = -20; // Ajusta para suavizar transición después del panel
 
   let weight = 1; // Por defecto, enfocado al panel
   if (dz <= 0) {
