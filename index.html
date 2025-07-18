@@ -103,26 +103,30 @@
   // Almacenamos referencias a cada panel
   const panels = [];
 
-  // Crea texto Canvas -> textura
-  function makeTextTexture(str) {
+ // Crea texto Canvas -> textura con ajuste dinámico y fondo
+function makeTextTexture(str) {
   const canvas = document.createElement('canvas');
   canvas.width = 512;
   canvas.height = 160;
   const ctx = canvas.getContext('2d');
 
-  // Fondo negro
+  // Fondo negro semitransparente
   ctx.fillStyle = 'rgba(0,0,0,0.6)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Texto blanco centrado
+  // Ajuste dinámico del tamaño
+  let fontSize = 54;
+  if (str.length > 15) fontSize = 44;  
+  if (str.length > 25) fontSize = 36;  
+  if (str.length > 35) fontSize = 28;  
+
   ctx.fillStyle = '#fff';
-  ctx.font = 'bold 44px Arial';
+  ctx.font = `bold ${fontSize}px Arial`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText(str, canvas.width / 2, canvas.height / 2);
 
-  const tex = new THREE.CanvasTexture(canvas);
-  return tex;
+  return new THREE.CanvasTexture(canvas);
 }
 
   function createPanel(panelInfo, i) {
