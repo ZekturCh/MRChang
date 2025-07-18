@@ -114,17 +114,35 @@ function makeTextTexture(str) {
   ctx.fillStyle = 'rgba(0,0,0,0.6)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Ajuste dinámico del tamaño
+  // Ajuste de tamaño base
   let fontSize = 44;
-  if (str.length > 15) fontSize = 44;  
-  if (str.length > 25) fontSize = 36;  
-  if (str.length > 35) fontSize = 28;  
-
-  ctx.fillStyle = '#fff';
   ctx.font = `bold ${fontSize}px Arial`;
+  ctx.fillStyle = '#fff';
   ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(str, canvas.width / 2, canvas.height / 2);
+
+  // Función para dividir texto
+  function wrapText(text, x, y, maxWidth, lineHeight) {
+    const words = text.split(' ');
+    let line = '';
+    for (let n = 0; n < words.length; n++) {
+      const testLine = line + words[n] + ' ';
+      const metrics = ctx.measureText(testLine);
+      if (metrics.width > maxWidth && n > 0) {
+        ctx.fillText(line, x, y);
+        line = words[n] + ' ';
+        y += lineHeight;
+      } else {
+        line = testLine;
+      }
+    }
+    ctx.fillText(line, x, y);
+  }
+
+  // Centrado vertical básico
+  const lineHeight = fontSize + 10;
+  const startY = canvas.height / 2 - lineHeight / 2;
+
+  wrapText(str, canvas.width / 2, startY, canvas.width - 40, lineHeight);
 
   return new THREE.CanvasTexture(canvas);
 }
