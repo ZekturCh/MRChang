@@ -105,19 +105,25 @@
 
   // Crea texto Canvas -> textura
   function makeTextTexture(str) {
-    const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 160;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 52px Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(str, canvas.width / 2, canvas.height / 2);
-    const tex = new THREE.CanvasTexture(canvas);
-    return tex;
-  }
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 160;
+  const ctx = canvas.getContext('2d');
+
+  // Fondo negro
+  ctx.fillStyle = 'rgba(0,0,0,0.6)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Texto blanco centrado
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 44px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(str, canvas.width / 2, canvas.height / 2);
+
+  const tex = new THREE.CanvasTexture(canvas);
+  return tex;
+}
 
   function createPanel(panelInfo, i) {
     const group = new THREE.Group();
@@ -195,7 +201,7 @@
   const dz = camera.position.z - panelZ;
 
   const forwardLook = new THREE.Vector3(0, 2, -100); // Punto fijo adelante
-  const transitionRange = 10; // Ajusta para suavizar transición después del panel
+  const transitionRange = 30; // Ajusta para suavizar transición después del panel
 
   let weight = 1; // Por defecto, enfocado al panel
   if (dz <= 0) {
