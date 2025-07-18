@@ -190,17 +190,22 @@
       }
     });
 
-  if (closestPanel) {
+ if (closestPanel) {
   const panelZ = closestPanel.group.position.z;
+  const dz = camera.position.z - panelZ;
 
-  if (camera.position.z > panelZ) {
-    // Si la cámara está antes del panel → enfocar al panel
-    camLookTarget.copy(closestPanel.group.position);
-    camLookTarget.y += 0.5;
-  } else {
-    // Si la cámara ya pasó el panel → mirar hacia adelante
-    camLookTarget.set(0, 2, -100); // punto fijo
+  const forwardLook = new THREE.Vector3(0, 2, -100); // Punto fijo adelante
+  const transitionRange = 10; // Ajusta para suavizar transición después del panel
+
+  let weight = 1; // Por defecto, enfocado al panel
+  if (dz <= 0) {
+    // Si la cámara ya pasó el panel → reducir peso gradualmente
+    weight = THREE.MathUtils.clamp(1 + dz / transitionRange, 0, 1);
   }
+
+  // Interpolación: mezcla entre mirar al frente y mirar al panel
+  camLookTarget.copy(forwardLook).lerp(closestPanel.group.position, weight);
+  camLookTarget.y += 0.5;
 
   currentLook.lerp(camLookTarget, lookAtLerp);
   camera.lookAt(currentLook);
