@@ -5,18 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PARALEL VR</title>
   <style>
-    body { margin: 0; background: #111; }
-    canvas { display: block; position: fixed; top: 0; left: 0; }
+    body {
+  margin: 0;
+  background: #111;
+}
+html, body {
+  height: 300vh; /* ✅ Mantener scroll para animación */
+}
+canvas {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
 
-    #html-section {
-    display: none;            /* Oculto por defecto */
-    background: #fff;
-    color: #111;
-    padding: 50px;
-    text-align: center;
-    font-family: Arial, sans-serif;
-    min-height: 100vh;        /* ✅ Para que ocupe toda la pantalla */
-  }
+#html-wrapper {
+  position: relative;
+  z-index: 1;          /* Aparece sobre canvas cuando está visible */
+}
+
+#html-section {
+  display: none;       /* Oculto al inicio */
+  background: #fff;
+  color: #111;
+  padding: 50px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;   /* Ocupa la pantalla completa */
+}
   </style>
   <script type="importmap">
 {
