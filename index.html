@@ -67,7 +67,7 @@
   // LOGO (PLANO CON TEXTURA PNG TRANSPARENTE)
   // -------------------------------------------------
   const textureLoader = new THREE.TextureLoader();
-  const logoTexture = textureLoader.load('PARALEL.png'); // asegúrate que exista
+  const logoTexture = textureLoader.load('PARALEL2.png'); // asegúrate que exista
   const logoMaterial = new THREE.MeshBasicMaterial({ map: logoTexture, transparent: true });
   const logoMesh = new THREE.Mesh(new THREE.PlaneGeometry(10, 6), logoMaterial);
   logoMesh.position.set(0, 2, 0);
