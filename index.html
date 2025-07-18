@@ -8,6 +8,15 @@
     body { margin: 0; background: #111; }
     html, body { height: 300vh; }
     canvas { display: block; position: fixed; top: 0; left: 0; }
+
+  #html-section {
+    display: none;
+    background: #fff;
+    color: #111;
+    padding: 50px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
   </style>
   <script type="importmap">
 {
@@ -263,6 +272,27 @@ if (closestPanel) {
     renderer.render(scene, camera);
   }
   animate();
+  // Referencias
+const htmlSection = document.getElementById('html-section');
+const canvas = renderer.domElement;
+
+// Mostrar/Ocultar según scroll
+function checkScrollTransition() {
+  const maxScroll = document.body.scrollHeight - window.innerHeight;
+  const scrollPercent = maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
+
+  if (scrollPercent > 95) {
+    // Llegó al final: ocultar canvas y mostrar HTML
+    canvas.style.display = 'none';
+    htmlSection.style.display = 'block';
+  } else {
+    // Aún en la parte 3D: mostrar canvas, ocultar HTML
+    canvas.style.display = 'block';
+    htmlSection.style.display = 'none';
+  }
+}
+
+window.addEventListener('scroll', checkScrollTransition);
 
   // -------------------------------------------------
   // RESPONSIVE
@@ -273,5 +303,10 @@ if (closestPanel) {
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 </script>
+<div id="html-section">
+  <h1>Bienvenido a la siguiente sección</h1>
+  <p>Aquí puedes poner contenido normal: texto, imágenes, botones...</p>
+  <button onclick="alert('¡Click!')">Haz click</button>
+</div>
 </body>
 </html>
