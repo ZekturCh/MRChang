@@ -196,20 +196,25 @@
       }
     });
 
- if (closestPanel) {
+const approachStart = 30;  // Empieza a mirar el panel desde esta distancia
+const approachEnd = 5;     // Deja de mirar el panel cuando llega a esta distancia
+const forwardLook = new THREE.Vector3(0, 2, -100);
+
+if (closestPanel) {
   const panelZ = closestPanel.group.position.z;
-  const dz = camera.position.z - panelZ;
+  const dz = camera.position.z - panelZ; // Distancia cámara - panel
 
-  const forwardLook = new THREE.Vector3(0, 2, -100); // Punto fijo adelante
-  const transitionRange = -20; // Ajusta para suavizar transición después del panel
+  let weight = 0; // 0 = mirar al frente, 1 = mirar al panel
 
-  let weight = 1; // Por defecto, enfocado al panel
-  if (dz <= 0) {
-    // Si la cámara ya pasó el panel → reducir peso gradualmente
-    weight = THREE.MathUtils.clamp(1 + dz / transitionRange, 0, 1);
+  if (dz > approachEnd && dz < approachStart) {
+    // Dentro del rango [approachStart → approachEnd]
+    weight = THREE.MathUtils.clamp((dz - approachEnd) / (approachStart - approachEnd), 0, 1);
+  } else if (dz <= approachEnd) {
+    // Ya está muy cerca o lo pasó → mirar al frente
+    weight = 0;
   }
 
-  // Interpolación: mezcla entre mirar al frente y mirar al panel
+  // Mezclar objetivo: panel vs adelante
   camLookTarget.copy(forwardLook).lerp(closestPanel.group.position, weight);
   camLookTarget.y += 0.5;
 
