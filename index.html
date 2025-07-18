@@ -190,15 +190,21 @@
       }
     });
 
-    // Lerp cámara.lookAt hacia el panel más cercano (enfoque)
-    if (closestPanel) {
-      camLookTarget.copy(closestPanel.group.position);
-      // subimos un toque para encuadrar el modelo + texto
-      camLookTarget.y += 0.5;
-      currentLook.lerp(camLookTarget, lookAtLerp);
-      camera.lookAt(currentLook);
-    }
+  if (closestPanel) {
+  const panelZ = closestPanel.group.position.z;
 
+  if (camera.position.z > panelZ) {
+    // Si la cámara está antes del panel → enfocar al panel
+    camLookTarget.copy(closestPanel.group.position);
+    camLookTarget.y += 0.5;
+  } else {
+    // Si la cámara ya pasó el panel → mirar hacia adelante
+    camLookTarget.set(0, 2, -100); // punto fijo
+  }
+
+  currentLook.lerp(camLookTarget, lookAtLerp);
+  camera.lookAt(currentLook);
+}
     // Actualizar texto + rotaciones por distancia
     panels.forEach(p => {
       const dist = Math.abs(camera.position.z - p.group.position.z);
