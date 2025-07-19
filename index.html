@@ -225,46 +225,53 @@
   const panels = [];
 
   // ---- crea textura canvas con wrap + fondo
-  function makeTextTexture(str) {
-    const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 160;
-    const ctx = canvas.getContext('2d');
+ function makeTextTexture(str) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 160;
+  const ctx = canvas.getContext('2d');
 
-    // Fondo
-    ctx.fillStyle = 'rgba(0,0,0,0.6)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // Fondo negro con borde blanco
+  const padding = 8;
+  ctx.fillStyle = 'rgba(0,0,0,0.6)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Texto
-    let fontSize = 44;
-    ctx.font = `bold ${fontSize}px Arial`;
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+  // Borde blanco
+  ctx.strokeStyle = 'white';
+  ctx.lineWidth = 4; // grosor del borde
+  ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
-    // wrap
-    function wrapText(text, x, y, maxWidth, lineHeight) {
-      const words = text.split(' ');
-      let line = '';
-      for (let n = 0; n < words.length; n++) {
-        const testLine = line + words[n] + ' ';
-        const metrics = ctx.measureText(testLine);
-        if (metrics.width > maxWidth && n > 0) {
-          ctx.fillText(line, x, y);
-          line = words[n] + ' ';
-          y += lineHeight;
-        } else {
-          line = testLine;
-        }
+  // Texto blanco centrado
+  let fontSize = 44;
+  ctx.font = `bold ${fontSize}px Arial`;
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  // Wrap text
+  function wrapText(text, x, y, maxWidth, lineHeight) {
+    const words = text.split(' ');
+    let line = '';
+    for (let n = 0; n < words.length; n++) {
+      const testLine = line + words[n] + ' ';
+      const metrics = ctx.measureText(testLine);
+      if (metrics.width > maxWidth && n > 0) {
+        ctx.fillText(line, x, y);
+        line = words[n] + ' ';
+        y += lineHeight;
+      } else {
+        line = testLine;
       }
-      ctx.fillText(line, x, y);
     }
-    const lineHeight = fontSize + 10;
-    const startY = canvas.height / 2 - lineHeight / 2;
-    wrapText(str, canvas.width / 2, startY, canvas.width - 40, lineHeight);
-
-    return new THREE.CanvasTexture(canvas);
+    ctx.fillText(line, x, y);
   }
+
+  const lineHeight = fontSize + 10;
+  const startY = canvas.height / 2 - lineHeight / 2;
+  wrapText(str, canvas.width / 2, startY, canvas.width - 40, lineHeight);
+
+  return new THREE.CanvasTexture(canvas);
+}
 
   function createPanel(panelInfo, i) {
   const group = new THREE.Group();
