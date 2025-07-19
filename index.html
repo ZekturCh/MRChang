@@ -182,6 +182,12 @@
   renderer.domElement.classList.add('webgl-fade');
   document.body.appendChild(renderer.domElement);
 
+  const borderMaterial = new THREE.MeshBasicMaterial({
+  color: 0xffffff,
+  transparent: true,
+  opacity: 0.8
+  });
+
   // ---------------- GRID Piso/Techo ----------------
   const gridOpacity = 0.15;
   const gridSize = 500;
@@ -271,6 +277,16 @@
       opacity: 0
     });
     textMaterial.baseOpacity = 1; // usado en fade global
+
+        // Crear borde luminoso (plano detrás del texto)
+    const borderMesh = new THREE.Mesh(new THREE.PlaneGeometry(4.1, 1.1), borderMaterial);
+    borderMesh.position.set(0, -1, -0.01); // un poco atrás para evitar z-fighting
+    group.add(borderMesh);
+    
+    // Plano del texto
+    const textMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 1), textMaterial);
+    textMesh.position.set(0, -1, 0);
+    group.add(textMesh);
 
     const textMesh = new THREE.Mesh(new THREE.PlaneGeometry(4, 1), textMaterial);
     textMesh.position.set(0, -1, 0);
