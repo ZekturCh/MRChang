@@ -160,6 +160,7 @@
   const fadeEndPercent   = 85; // termina fade
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
+  const delta = clock.getDelta();
 
   // ---------------- ESCENA ----------------
   const scene = new THREE.Scene();
@@ -377,6 +378,9 @@
       if (dist < minDist) {
         minDist = dist;
         closestPanel = p;
+      }
+    if (p.group.userData.mixer) {
+        p.group.userData.mixer.update(delta);
       }
     });
 
