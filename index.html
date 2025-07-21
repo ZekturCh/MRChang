@@ -158,6 +158,8 @@
   const approachEnd    = 5;   // deja de mirar panel y vuelve al frente
   const fadeStartPercent = 80; // empieza fade de 3D
   const fadeEndPercent   = 85; // termina fade
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
 
   // ---------------- ESCENA ----------------
   const scene = new THREE.Scene();
@@ -215,9 +217,9 @@
 
   // ---------------- DATA DE PANELES ----------------
   const panelsData = [
-    { model: 'EXP3.glb', text: 'Experiencia inmersiva' },
-    { model: 'bus3.glb', text: 'Contenido personalizable' },
-    { model: 'eco2.glb', text: 'Inversión a tu presupuesto' },
+    { model: 'exp5.glb', text: 'Renta una verdadera experiencia interactiva VR para tu evento.' },
+    { model: 'bus5.glb', text: 'Un juego personalizado a la línea de tu marca.' },
+    { model: 'eco2.glb', text: 'Invierto lo justo para ese evento' },
     { model: 'par3.glb', text: 'Entra al mundo paralelo' }
   ];
 
@@ -310,14 +312,22 @@
   textMesh.position.set(0, -1, 0);
   group.add(textMesh);
 
-  // Modelo
+  // Modelo con animaciones
   loader.load(panelInfo.model, (gltf) => {
     const model = gltf.scene;
     model.scale.set(1.5, 1.5, 1.5);
     model.position.y = 0;
     model.userData.rotate = true;
+
+    // Si hay animaciones, guardamos mixer y clip
+    if (gltf.animations && gltf.animations.length > 0) {
+      const mixer = new THREE.AnimationMixer(model);
+      const action = mixer.clipAction(gltf.animations[0]); // primera animación
+      model.userData.mixer = mixer;
+      model.userData.action = action;
+    }
+
     group.add(model);
-  });
 
   // Posición alternada
   const side = i % 2 === 0 ? -panelSideOffset : panelSideOffset;
@@ -460,6 +470,22 @@
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
+window.addEventListener('click', (event) => {
+  // Normalizar coordenadas de mouse
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  // Lanzar raycaster
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(scene.children, true); // true = busca en hijos
+
+  if (intersects.length > 0) {
+    const clicked = intersects[0].object;
+    const root = clicked.parent; // subimos al modelo
+    if (root.userData.mixer && root.userData.action) {
+      root.userData.action.reset().play(); // reproducir desde inicio
+    }
+  }
 </script>
 
 <!-- HTML overlay final -->
