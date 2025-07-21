@@ -160,7 +160,8 @@
   const fadeEndPercent   = 85; // termina fade
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
-  const delta = clock.getDelta();
+  const clock = new THREE.Clock();
+  const mixers = [];
 
   // ---------------- ESCENA ----------------
   const scene = new THREE.Scene();
@@ -364,6 +365,8 @@
     if (!animating) return;
     requestAnimationFrame(animate);
 
+    const delta = clock.getDelta();
+    mixers.forEach(m => m.update(delta));
     // Cámara avanza en Z según scroll
     const totalTravelZ = 100; // puedes ajustar
     const targetZ = camStartZ - scrollProgress * totalTravelZ;
