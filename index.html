@@ -127,68 +127,136 @@
     .seo-cta:hover {
       transform: translateY(-2px) scale(1.02);
       box-shadow: 0 4px 14px rgba(255,255,255,0.35);
-    }
-    .paralelepipedo {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-    padding: 2rem 1rem;
-  }
-  .panel {
-    width: 200px;
-    cursor: pointer;
-    position: relative;
-  }
-  .panel img {
-    width: 100%;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  }
-  #panel-info {
-    background: white;
-    position: fixed;
-    top: 20%;
-    left: 10%;
-    right: 10%;
-    padding: 2rem;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    border-radius: 10px;
-    z-index: 10;
-  }
-  #panel-info.hidden {
-    display: none;
+    }.seo-panels {
+  background: #0a0a0a;
+  color: white;
+  padding: 4rem 1rem;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+/* === PARALELEPIPEDO PANELS === */
+.paralelepipedo-panels {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 5rem;
+}
+
+.panel-img {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.panel-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+}
+
+.panel-img:hover img {
+  transform: scale(1.1);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease;
+  padding: 1rem;
+  text-align: center;
+}
+
+.panel-img:hover .overlay {
+  opacity: 1;
+}
+
+.overlay h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.overlay p {
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+/* === CENTER + SIDE PANELS === */
+.interactive-center {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#central-trigger {
+  width: 250px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.side-panel {
+  position: absolute;
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.3s ease;
+}
+
+.side-panel .box {
+  background: #111;
+  padding: 1rem;
+  border-radius: 10px;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.side-panel p {
+  font-size: 0.85rem;
+  color: #ccc;
+}
+
+.side-panel.left {
+  left: 5%;
+  top: 50%;
+  transform: translate(-100%, -50%);
+}
+
+.side-panel.right {
+  right: 5%;
+  top: 50%;
+  transform: translate(100%, -50%);
+}
+
+@media (max-width: 768px) {
+  .side-panel {
+    position: static;
+    transform: none;
+    margin-top: 1rem;
   }
 
-  .explosive-panels {
-    text-align: center;
-    margin-top: 4rem;
-    position: relative;
+  .interactive-center {
+    flex-direction: column;
+    gap: 2rem;
   }
-  #trigger-image {
-    width: 300px;
-    cursor: pointer;
-    transition: transform 0.3s;
-  }
-  .exploding-panel {
-    position: absolute;
-    background: #111;
-    color: white;
-    padding: 1rem 2rem;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.4s ease;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(255,255,255,0.3);
-  }
-  .exploding-panel:nth-child(2) { top: -80px; left: 50%; transform: translateX(-50%); }
-  .exploding-panel:nth-child(3) { top: 50%; left: -180px; transform: translateY(-50%); }
-  .exploding-panel:nth-child(4) { top: 50%; right: -180px; transform: translateY(-50%); }
-
-  .exploding-panel.active {
-    opacity: 1;
-    pointer-events: auto;
-  }
+}
   </style>
 
   <!-- importmap opcional (cargas directas igualmente) -->
@@ -583,32 +651,51 @@ window.addEventListener('click', (event) => {
       <a href="mailto:ventas@paralelvr.pe" class="seo-cta">Cotiza tu evento VR</a>
     </div>
   </section>
-  <section id="interactive-panels" class="paralelepipedo">
-  <div class="panel" data-title="Innovación VR" data-text="Creamos experiencias personalizadas con realidad virtual para tu evento.">
-    <img src="g1.webp" alt="Realidad Virtual Innovadora">
-  </div>
-  <div class="panel" data-title="Experiencias AR" data-text="Integramos realidad aumentada con activaciones físicas y digitales.">
-    <img src="g1.webp" alt="Realidad Aumentada">
-  </div>
-  <div class="panel" data-title="Simuladores 3D" data-text="Desarrollamos simuladores de producto en entornos inmersivos.">
-    <img src="g1.webp" alt="Simulador Interactivo">
-  </div>
-  <div class="panel" data-title="Cabinas de Fotos VR" data-text="Sorprende a tus invitados con cabinas fotográficas VR únicas.">
-    <img src="g1.webp" alt="Cabina de Realidad Virtual">
+ <section class="seo-panels">
+  <div class="paralelepipedo-panels">
+    <div class="panel-img" data-title="Innovación VR" data-text="Experiencias VR inolvidables.">
+      <img src="g1.webp" alt="Innovación VR">
+      <div class="overlay">
+        <h3>Innovación VR</h3>
+        <p>Experiencias VR inolvidables.</p>
+      </div>
+    </div>
+    <div class="panel-img" data-title="Experiencias AR" data-text="Realidad aumentada para marcas.">
+      <img src="g1.webp" alt="Experiencias AR">
+      <div class="overlay">
+        <h3>Experiencias AR</h3>
+        <p>Realidad aumentada para marcas.</p>
+      </div>
+    </div>
+    <div class="panel-img" data-title="Simuladores 3D" data-text="Entrenamiento y juegos 3D.">
+      <img src="g1.webp" alt="Simuladores 3D">
+      <div class="overlay">
+        <h3>Simuladores 3D</h3>
+        <p>Entrenamiento y juegos 3D.</p>
+      </div>
+    </div>
+    <div class="panel-img" data-title="Cabinas VR" data-text="Cabinas fotográficas interactivas.">
+      <img src="g1.webp" alt="Cabinas VR">
+      <div class="overlay">
+        <h3>Cabinas VR</h3>
+        <p>Cabinas fotográficas interactivas.</p>
+      </div>
+    </div>
   </div>
 
-  <div id="panel-info" class="hidden">
-    <h3 id="panel-title"></h3>
-    <p id="panel-description"></p>
-    <button onclick="closePanel()">Cerrar</button>
-  </div>
-</section>
-  <section id="central-image-interaction" class="explosive-panels">
-  <img id="trigger-image" src="g1.webp" alt="Explora nuestra experiencia interactiva">
+  <div class="interactive-center">
+    <img id="central-trigger" src="g1.webp" alt="Disparador">
 
-  <div class="exploding-panel" data-title="Iluminación LED" data-text="Control inteligente y efectos visuales integrados.">Iluminación</div>
-  <div class="exploding-panel" data-title="Control Remoto" data-text="Activación remota de contenido 3D.">Control</div>
-  <div class="exploding-panel" data-title="Integración Sensorial" data-text="Respuesta a movimiento y sonido.">Sensorial</div>
+    <div class="side-panel left active">
+      <div class="box">Iluminación</div>
+      <p>Sistemas LED controlados remotamente.</p>
+    </div>
+
+    <div class="side-panel right active">
+      <div class="box">Sensorial</div>
+      <p>Interacción por sensores y movimiento.</p>
+    </div>
+  </div>
 </section>
 </div>
 </body>
