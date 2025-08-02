@@ -128,6 +128,67 @@
       transform: translateY(-2px) scale(1.02);
       box-shadow: 0 4px 14px rgba(255,255,255,0.35);
     }
+    .paralelepipedo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+  .panel {
+    width: 200px;
+    cursor: pointer;
+    position: relative;
+  }
+  .panel img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  }
+  #panel-info {
+    background: white;
+    position: fixed;
+    top: 20%;
+    left: 10%;
+    right: 10%;
+    padding: 2rem;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    border-radius: 10px;
+    z-index: 10;
+  }
+  #panel-info.hidden {
+    display: none;
+  }
+
+  .explosive-panels {
+    text-align: center;
+    margin-top: 4rem;
+    position: relative;
+  }
+  #trigger-image {
+    width: 300px;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  .exploding-panel {
+    position: absolute;
+    background: #111;
+    color: white;
+    padding: 1rem 2rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s ease;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(255,255,255,0.3);
+  }
+  .exploding-panel:nth-child(2) { top: -80px; left: 50%; transform: translateX(-50%); }
+  .exploding-panel:nth-child(3) { top: 50%; left: -180px; transform: translateY(-50%); }
+  .exploding-panel:nth-child(4) { top: 50%; right: -180px; transform: translateY(-50%); }
+
+  .exploding-panel.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
   </style>
 
   <!-- importmap opcional (cargas directas igualmente) -->
@@ -522,7 +583,68 @@ window.addEventListener('click', (event) => {
       <a href="mailto:ventas@paralelvr.pe" class="seo-cta">Cotiza tu evento VR</a>
     </div>
   </section>
-</div>
+  <section id="interactive-panels" class="paralelepipedo">
+  <div class="panel" data-title="Innovación VR" data-text="Creamos experiencias personalizadas con realidad virtual para tu evento.">
+    <img src="panel1.jpg" alt="Realidad Virtual Innovadora">
+  </div>
+  <div class="panel" data-title="Experiencias AR" data-text="Integramos realidad aumentada con activaciones físicas y digitales.">
+    <img src="panel2.jpg" alt="Realidad Aumentada">
+  </div>
+  <div class="panel" data-title="Simuladores 3D" data-text="Desarrollamos simuladores de producto en entornos inmersivos.">
+    <img src="panel3.jpg" alt="Simulador Interactivo">
+  </div>
+  <div class="panel" data-title="Cabinas de Fotos VR" data-text="Sorprende a tus invitados con cabinas fotográficas VR únicas.">
+    <img src="panel4.jpg" alt="Cabina de Realidad Virtual">
+  </div>
 
+  <div id="panel-info" class="hidden">
+    <h3 id="panel-title"></h3>
+    <p id="panel-description"></p>
+    <button onclick="closePanel()">Cerrar</button>
+  </div>
+</section>
+  <section id="central-image-interaction" class="explosive-panels">
+  <img id="trigger-image" src="central.jpg" alt="Explora nuestra experiencia interactiva">
+
+  <div class="exploding-panel" data-title="Iluminación LED" data-text="Control inteligente y efectos visuales integrados.">Iluminación</div>
+  <div class="exploding-panel" data-title="Control Remoto" data-text="Activación remota de contenido 3D.">Control</div>
+  <div class="exploding-panel" data-title="Integración Sensorial" data-text="Respuesta a movimiento y sonido.">Sensorial</div>
+</section>
+</div>
 </body>
+  <script>
+  // Paneles tipo paralelepípedo
+  const panels = document.querySelectorAll('.panel');
+  const infoBox = document.getElementById('panel-info');
+  const titleBox = document.getElementById('panel-title');
+  const textBox = document.getElementById('panel-description');
+
+  panels.forEach(panel => {
+    panel.addEventListener('click', () => {
+      titleBox.textContent = panel.dataset.title;
+      textBox.textContent = panel.dataset.text;
+      infoBox.classList.remove('hidden');
+    });
+  });
+
+  function closePanel() {
+    infoBox.classList.add('hidden');
+  }
+
+  // Paneles que se revelan desde la imagen central
+  const triggerImage = document.getElementById('trigger-image');
+  const explosivePanels = document.querySelectorAll('.exploding-panel');
+
+  triggerImage.addEventListener('click', () => {
+    explosivePanels.forEach((panel, i) => {
+      panel.classList.toggle('active');
+    });
+  });
+
+  explosivePanels.forEach(panel => {
+    panel.addEventListener('click', () => {
+      alert(`${panel.dataset.title}\n${panel.dataset.text}`);
+    });
+  });
+</script>
 </html>
