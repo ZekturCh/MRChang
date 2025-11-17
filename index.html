@@ -290,22 +290,24 @@
   // --- estilos dinámicos para evitar tocar <head> ---
   const style = document.createElement('style');
   style.textContent = `
-    #preloader-overlay {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #0b0b0b;
-      z-index: 9999;
-      transition: opacity 0.7s ease;
-      opacity: 1;
-    }
     #preloader-canvas {
-      width: 220px;
-      height: 220px;
-      display: block;
-    }
+  width: 220px;
+  height: 220px;
+  display: block;
+  margin: 0 auto;       /* Centra horizontalmente */
+}
+#preloader-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;  /* Centra también verticalmente */
+  flex-direction: column;    /* Para colocar logo + canvas + barra en columna */
+  background: #0b0b0b;
+  z-index: 9999;
+  transition: opacity 0.7s ease;
+  opacity: 1;
+}
     #preloader-ui {
       position: absolute;
       left: 50%;
@@ -588,7 +590,78 @@
   panels.push({ group, textMaterial });
 }
   panelsData.forEach(createPanel);
+// ---------------- TEXTO debajo del logo ----------------
 
+// Crear un canvas para dibujar el texto
+const textCanvas = document.createElement("canvas");
+textCanvas.width = 1024;
+textCanvas.height = 256;
+
+const ctx = textCanvas.getContext("2d");
+ctx.fillStyle = "rgba(255, 255, 255, 1)";
+ctx.font = "80px Arial";
+ctx.textAlign = "center";
+ctx.textBaseline = "middle";
+ctx.fillText("Empieza a bajar ↓", textCanvas.width / 2, textCanvas.height / 2);
+
+// Convertir a textura de Three.js
+const textTexture = new THREE.CanvasTexture(textCanvas);
+textTexture.needsUpdate = true;
+
+const textMaterial = new THREE.MeshBasicMaterial({
+  map: textTexture,
+  transparent: true
+});
+
+// Ajusta estas medidas para que combine con el tamaño de tu logo
+const textMesh = new THREE.Mesh(
+  new THREE.PlaneGeometry(10, 2), // ancho, alto
+  textMaterial
+);
+
+// Posición debajo del logo
+textMesh.position.set(0, -1, 0); 
+scene.add(textMesh);
+  // ---------------- TEXTO final de los paneles ----------------
+
+// Canvas para texto final
+const endTextCanvas = document.createElement("canvas");
+endTextCanvas.width = 1024;
+endTextCanvas.height = 256;
+
+const endCtx = endTextCanvas.getContext("2d");
+endCtx.fillStyle = "rgba(255, 255, 255, 1)";
+endCtx.font = "80px Arial";
+endCtx.textAlign = "center";
+endCtx.textBaseline = "middle";
+endCtx.fillText("Sigue bajando ↓", endTextCanvas.width / 2, endTextCanvas.height / 2);
+
+const endTextTexture = new THREE.CanvasTexture(endTextCanvas);
+endTextTexture.needsUpdate = true;
+
+const endTextMaterial = new THREE.MeshBasicMaterial({
+  map: endTextTexture,
+  transparent: true
+});
+
+// Ajusta el tamaño igual que el texto inicial
+const endTextMesh = new THREE.Mesh(
+  new THREE.PlaneGeometry(12, 2.5),
+  endTextMaterial
+);
+
+// <<< IMPORTANTE >>>  
+// Aquí colocamos el texto al FINAL del pasillo.
+// Si tus paneles están distribuidos con z += 30 aproximadamente,
+// esto lo coloca justo al terminar todo.
+
+const totalPanels = panelsData.length;
+const spacing = 30;  // Ajusta este valor si tu pasillo usa otro espaciado
+const finalZ = -(totalPanels * spacing) - 20; // aparece un poco después del último panel
+
+endTextMesh.position.set(0, 3, finalZ);
+scene.add(endTextMesh);
+  
   // ---------------- SCROLL PROGRESS ----------------
   let scrollProgress = 0;
   window.addEventListener('scroll', () => {
