@@ -272,7 +272,125 @@
 <script type="module">
   import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js';
   import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/loaders/GLTFLoader.js';
+/* ------------------ PRELOADER W/ ROTATING WIREFRAME CUBE ------------------ */
 
+(() => {
+  // --- crear DOM del preloader ---
+  const pre = document.createElement('div');
+  pre.id = 'preloader-overlay';
+  pre.innerHTML = `
+    <canvas id="preloader-canvas"></canvas>
+    <div id="preloader-ui">
+      <div id="preloader-cube-label">Cargando...</div>
+      <div id="preloader-bar"><div id="preloader-bar-fill"></div></div>
+    </div>
+  `;
+  document.body.appendChild(pre);
+
+  // --- estilos dinámicos para evitar tocar <head> ---
+  const style = document.createElement('style');
+  style.textContent = `
+    #preloader-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0b0b0b;
+      z-index: 9999;
+      transition: opacity 0.7s ease;
+      opacity: 1;
+    }
+    #preloader-canvas {
+      width: 220px;
+      height: 220px;
+      display: block;
+    }
+    #preloader-ui {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 8vh;
+      width: 70%;
+      max-width: 520px;
+      text-align: center;
+      pointer-events: none;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    #preloader-cube-label { margin-bottom: 10px; opacity: 0.95; font-weight: 600; }
+    #preloader-bar {
+      height: 8px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    #preloader-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: rgba(255,255,255,1);
+      transition: width 0.2s linear;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // --- THREE renderer for preloader cube (isolation to avoid conflicts) ---
+  const canvas = document.getElementById('preloader-canvas');
+  const preRenderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  preRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  preRenderer.setSize(220, 220);
+
+  // escena pequeña
+  const preScene = new THREE.Scene();
+  const preCam = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+  preCam.position.set(0, 0, 3);
+  preScene.add(new THREE.AmbientLight(0xffffff, 0.9));
+
+  // wireframe cube (aristas)
+  const box = new THREE.BoxGeometry(1.2, 1.2, 1.2);
+  // líneas de aristas
+  const edges = new THREE.EdgesGeometry(box);
+  const lineMat = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 1 });
+  const wire = new THREE.LineSegments(edges, lineMat);
+  preScene.add(wire);
+
+  // animación simple
+  let preAnim = true;
+  function prerender() {
+    if (!preAnim) return;
+    requestAnimationFrame(prerender);
+    const t = performance.now() * 0.001;
+    wire.rotation.x = t * 0.6;
+    wire.rotation.y = t * 0.9;
+    preRenderer.render(preScene, preCam);
+  }
+  prerender();
+
+  // --- LoadingManager para sincronizar cargas (se usará en tu módulo) ---
+  const loadingBarFill = document.getElementById('preloader-bar-fill');
+  const manager = new THREE.LoadingManager();
+  let itemsTotal = 0;
+  manager.onStart = function (url, itemsLoaded, itemsTotalArg) {
+    itemsTotal = itemsTotalArg || itemsTotal;
+    // console.log('onStart', url, itemsLoaded, itemsTotalArg);
+  };
+  manager.onProgress = function (url, itemsLoaded, itemsTotalArg) {
+    itemsTotal = itemsTotalArg || itemsTotal;
+    const pct = itemsTotal > 0 ? (itemsLoaded / itemsTotal) * 100 : 100;
+    loadingBarFill.style.width = pct.toFixed(2) + '%';
+  };
+  manager.onLoad = function () {
+    // fade out overlay
+    pre.style.opacity = '0';
+    setTimeout(() => {
+      preAnim = false;
+      pre.remove();
+      style.remove();
+    }, 700);
+  };
+  // Exponer manager y helper globalmente dentro del closure para que puedas usarlo
+  window.__PARALEL_PRELOADER = { manager, updateProgress: (p)=>{ loadingBarFill.style.width = p+'%'; } };
+})();
   // ---------------- CONFIG GLOBALES ----------------
   const panelSpacing   = 15;  // distancia entre paneles
   const firstPanelZ    = -15; // Z panel #1
@@ -339,7 +457,8 @@
   scene.add(gridCeiling);
 
   // ---------------- LOGO central ----------------
-  const textureLoader = new THREE.TextureLoader();
+  const loadingManager = window.__PARALEL_PRELOADER ? window.__PARALEL_PRELOADER.manager : new THREE.LoadingManager();
+  const textureLoader = new THREE.TextureLoader(loadingManager);
   const logoTexture = textureLoader.load('PARALEL2.png');
   const logoMaterial = new THREE.MeshBasicMaterial({ map: logoTexture, transparent: true });
   const logoMesh = new THREE.Mesh(new THREE.PlaneGeometry(10, 6), logoMaterial);
@@ -354,7 +473,7 @@
     { model: 'par3.glb', text: 'Entra al mundo paralelo' }
   ];
 
-  const loader = new GLTFLoader();
+  const loader = new GLTFLoader(loadingManager);
   const panels = [];
 
   // ---- crea textura canvas con wrap + fondo
