@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Realidad Virtual para Eventos en Lima | Paralel</title>
+  <meta name="description" content="Realidad Virtual para eventos en Lima Perú. Juegos VR, experiencias inmersivas y activaciones tecnológicas para marcas y eventos corporativos.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style> /* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background:
+    radial-gradient(circle at left, rgba(255,0,80,0.15), transparent 60%),
+    radial-gradient(circle at right, rgba(0,120,255,0.15), transparent 60%);
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  margin-bottom: 1.5rem;
+}
+
+.hero p {
+  max-width: 700px;
+  margin: auto;
+  color: #bbb;
+}
+
+.hero-buttons {
+  margin-top: 2.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* BOTONES */
+.btn {
+  text-decoration: none;
+  padding: 0.9rem 1.8rem;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn.outline {
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.btn.outline:hover {
+  background: #fff;
+  color: #000;
+}
+
+.btn.gradient {
+  background: linear-gradient(90deg, #ff0033, #007bff);
+  color: #fff;
+}
+
+.btn.gradient:hover {
+  box-shadow: 0 0 25px rgba(0,120,255,0.6);
+}
+
+.btn.big {
+  font-size: 1.1rem;
+  padding: 1rem 2.5rem;
+}
+
+/* SECCIONES */
+section {
+  padding: 5rem 1.5rem;
+  text-align: center;
+}
+
+.section-intro {
+  max-width: 700px;
+  margin: 1rem auto 3rem;
+  color: #aaa;
+}
+
+/* VENTAJAS */
+.advantages-grid {
+  display: grid;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.adv-card {
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 2rem;
+  background: linear-gradient(180deg, #0b0b0b, #000);
+}
+
+/* JUEGOS */
+/*
+  👇 AQUÍ ESTÁ LA CLAVE
+  Desktop: 3 columnas
+  Tablet: 2 columnas
+  Móvil: 1 columna
+*/
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.game-card {
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 2rem;
+  text-align: left;
+  background: #050505;
+}
+
+.game-card h3 {
+  margin-bottom: 0.8rem;
+}
+
+.game-card p {
+  color: #bbb;
+}
+
+.game-card span {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+/* SERVICIO */
+.service-steps {
+  display: grid;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.step {
+  border-left: 3px solid #ff0033;
+  padding: 1.5rem;
+  text-align: left;
+}
+
+/* CTA */
+.cta {
+  padding: 4rem 1.5rem;
+  background: radial-gradient(circle, rgba(255,0,80,0.2), transparent 70%);
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .games-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+
+  section {
+    padding: 3rem 1.5rem;
+  }
+}
+</style>
+</head>
+<body>
+
+  <!-- HERO / PORTADA -->
+  <header class="hero">
+    <div class="hero-content">
+     <h1>Realidad Virtual para Eventos en Lima, Perú</h1>
+      <p>
+        Creamos experiencias inmersivas con Realidad Virtual y Realidad Aumentada
+        para eventos corporativos, ferias y activaciones de marca.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#juegos" class="btn outline">Ver juegos disponibles</a>
+        <a href="#contacto" class="btn gradient">Cotizar experiencia VR</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- VENTAJAS -->
+  <section class="advantages">
+    <h2>Ventajas de nuestras experiencias de Realidad Virtual</h2>
+
+    <div class="advantages-grid">
+      <div class="adv-card">
+        <h3>Tecnología diseñada para eventos</h3>
+        <p>Experiencias estables, rápidas y pensadas para alto flujo de personas.</p>
+      </div>
+
+      <div class="adv-card">
+        <h3>Producción rápida y personalizada</h3>
+        <p>Adaptamos juegos VR a la identidad visual y objetivos de tu marca.</p>
+      </div>
+
+      <div class="adv-card">
+        <h3>Inmersión real</h3>
+        <p>No es solo VR: diseñamos interacción, objetivos y narrativa.</p>
+      </div>
+
+      <div class="adv-card">
+        <h3>Soporte local en Lima</h3>
+        <p>Equipo técnico en sitio durante todo el evento.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- JUEGOS -->
+  <section class="games" id="juegos">
+    <h2>Juegos de Realidad Virtual para Eventos</h2>
+    <p class="section-intro">
+      Nuestro catálogo de juegos VR está diseñado para eventos corporativos,
+      ferias y activaciones en Lima, Perú.
+    </p>
+
+    <div class="games-grid">
+      <!-- JUEGO 1 -->
+      <article class="game-card">
+        <h3>VR Shooter / Arcade</h3>
+        <p>Juego competitivo por puntaje ideal para eventos masivos.</p>
+        <span>Duración: 2–3 min</span>
+      </article>
+
+      <!-- JUEGO 2 -->
+      <article class="game-card">
+        <h3>Simulador VR</h3>
+        <p>Experiencia inmersiva de simulación para marcas y lanzamientos.</p>
+        <span>Duración: 3–5 min</span>
+      </article>
+
+      <!-- JUEGO 3 -->
+      <article class="game-card">
+        <h3>Experiencia Interactiva VR</h3>
+        <p>Exploración y narrativa enfocada en branding.</p>
+        <span>Duración: variable</span>
+      </article>
+
+      <!-- 🔁 DUPLICA ESTOS BLOQUES PARA MÁS JUEGOS -->
+    </div>
+  </section>
+
+  <!-- SERVICIO PERSONALIZADO -->
+  <section class="service">
+    <h2>Desarrollo y rebranding de juegos VR para eventos</h2>
+
+    <div class="service-steps">
+      <div class="step">
+        <h3>Concepto & Briefing</h3>
+        <p>Definimos objetivos, público y tipo de experiencia.</p>
+        <span>1–3 días</span>
+      </div>
+
+      <div class="step">
+        <h3>Rebranding del juego</h3>
+        <p>Visuales, logos, colores y ajustes de gameplay.</p>
+        <span>5–10 días</span>
+      </div>
+
+      <div class="step">
+        <h3>Pruebas & optimización</h3>
+        <p>Testeo técnico y ajuste para eventos reales.</p>
+        <span>2–4 días</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <footer class="cta" id="contacto">
+    <h2>¿Listo para llevar tu evento a otra dimensión?</h2>
+    <a href="#" class="btn gradient big">Solicitar propuesta</a>
+  </footer>
+
+</body>
+</html>
