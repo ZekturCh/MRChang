@@ -162,12 +162,28 @@ section {
   text-align: left;
 }
 
-/* CTA */
-.cta {
-  padding: 4rem 1.5rem;
-  background: radial-gradient(circle, rgba(255,0,80,0.2), transparent 70%);
-}
+.cta{
+      text-align:center;
+      background:#050505;
+    }
 
+    .cta h2{
+      font-size:3rem;
+      margin-bottom:40px;
+    }
+
+    .cta .btn{
+      margin:12px;
+    }
+
+    footer{
+      padding:40px 8vw;
+      border-top:1px solid #1f1f1f;
+      display:flex;
+      justify-content:space-between;
+      color:var(--gray);
+      font-size:.9rem;
+    }
 /* RESPONSIVE */
 @media (max-width: 1024px) {
   .games-grid {
@@ -290,9 +306,14 @@ section {
   </section>
 
   <!-- CTA -->
-  <footer class="cta" id="contacto">
+  <section class="cta" id="contacto">
     <h2>¿Listo para llevar tu evento a otra dimensión?</h2>
     <a href="#" class="btn gradient big">Solicitar propuesta</a>
+  </section>
+
+    <footer>
+    <div>© 2026 · Realidad Aumentada Eventos</div>
+    <div>Tecnología · Diseño · Experiencia</div>
   </footer>
 
 </body>
