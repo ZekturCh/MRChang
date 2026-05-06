@@ -115,24 +115,23 @@
       text-transform: uppercase;
     }
 
-    .brand-mark {
-      width: 42px;
-      height: 42px;
+    .brand-logo-box {
+      width: 46px;
+      height: 46px;
       border-radius: 14px;
-      background:
-        linear-gradient(135deg, rgba(255,34,56,.95), rgba(33,150,255,.95));
+      background: #ffffff;
       display: grid;
       place-items: center;
-      box-shadow: 0 0 28px rgba(33,150,255,.25);
-      position: relative;
+      padding: 6px;
+      box-shadow: 0 0 28px rgba(33, 150, 255, .22);
+      border: 1px solid rgba(255, 255, 255, .35);
     }
-
-    .brand-mark::after {
-      content: "P";
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 900;
-      color: white;
-      font-size: 1.25rem;
+    
+    .brand-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
     }
 
     .nav-links {
@@ -716,9 +715,11 @@
   <header class="site-header">
     <div class="container nav">
       <a class="brand" href="#inicio" aria-label="Paralel VR inicio">
-        <span class="brand-mark"></span>
-        <span>Paralel VR</span>
-      </a>
+          <span class="brand-logo-box">
+            <img src="paralelogo2.png" alt="Paralel VR" class="brand-logo">
+            </span>
+            <span>Paralel VR</span>
+        </a>
 
       <nav class="nav-links" aria-label="Navegación principal">
         <a href="#servicios">Servicios</a>
