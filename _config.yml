@@ -1,0 +1,9 @@
+title: Paralel
+description: Tecnología de entretenimiento para eventos, marcas y activaciones en Perú.
+url: "https://paralelvr.space"
+baseurl: ""
+
+lang: es
+
+plugins:
+  - jekyll-sitemap
