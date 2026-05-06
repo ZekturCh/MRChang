@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Paralel VR | Realidad Virtual para Eventos en Lima y Perú</title>
+
+  <meta name="description" content="Experiencias de realidad virtual para eventos, activaciones BTL, ferias, lanzamientos y marcas en Lima y Perú. Juegos VR personalizados, Meta Quest, soporte técnico y montaje completo." />
+  <meta name="keywords" content="realidad virtual para eventos, VR Lima, alquiler Oculus Quest Lima, activaciones BTL, juegos VR personalizados, realidad aumentada Perú, Meta Quest eventos" />
+  <meta name="author" content="Paralel VR" />
+
+  <meta property="og:title" content="Paralel VR | Realidad Virtual para Eventos" />
+  <meta property="og:description" content="Creamos experiencias VR personalizadas para marcas, ferias, activaciones y eventos corporativos." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://paralelvr.space/" />
+  <meta property="og:image" content="https://paralelvr.space/og-image.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #050508;
+      --bg-soft: #0b0b12;
+      --bg-card: rgba(255, 255, 255, 0.055);
+      --text: #f5f5f7;
+      --muted: #b9bac7;
+      --muted-2: #777988;
+      --line: rgba(255, 255, 255, 0.11);
+      --red: #ff2238;
+      --blue: #2196ff;
+      --cyan: #23f0ff;
+      --purple: #8a4dff;
+      --radius: 26px;
+      --shadow: 0 28px 80px rgba(0, 0, 0, .55);
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(33, 150, 255, .22), transparent 32%),
+        radial-gradient(circle at 85% 0%, rgba(255, 34, 56, .20), transparent 30%),
+        radial-gradient(circle at 50% 90%, rgba(138, 77, 255, .14), transparent 35%),
+        var(--bg);
+      color: var(--text);
+      font-family: 'Roboto', sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -2;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.9), transparent 80%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 36px));
+      margin-inline: auto;
+    }
+
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      background: rgba(5, 5, 8, .72);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background:
+        linear-gradient(135deg, rgba(255,34,56,.95), rgba(33,150,255,.95));
+      display: grid;
+      place-items: center;
+      box-shadow: 0 0 28px rgba(33,150,255,.25);
+      position: relative;
+    }
+
+    .brand-mark::after {
+      content: "P";
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      color: white;
+      font-size: 1.25rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .nav-links a:hover {
+      color: white;
+    }
+
+    .nav-cta {
+      padding: 12px 18px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      font-weight: 700;
+      color: white;
+    }
+
+    .nav-cta:hover {
+      border-color: rgba(35,240,255,.5);
+      box-shadow: 0 0 24px rgba(35,240,255,.14);
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      align-items: center;
+      padding: 130px 0 80px;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 13px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.1);
+      color: var(--muted);
+      font-size: .86rem;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow span {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 18px var(--cyan);
+    }
+
+    h1, h2, h3 {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      letter-spacing: -.04em;
+    }
+
+    h1 {
+      font-size: clamp(2.85rem, 7vw, 6.7rem);
+      line-height: .92;
+      text-transform: uppercase;
+      max-width: 980px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #fff, #dfeaff 38%, #23f0ff 62%, #ff4052);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-copy {
+      max-width: 680px;
+      margin-top: 24px;
+      font-size: clamp(1rem, 1.55vw, 1.25rem);
+      line-height: 1.72;
+      color: var(--muted);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      padding: 0 22px;
+      border-radius: 999px;
+      font-weight: 800;
+      border: 1px solid transparent;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--red), var(--blue));
+      color: white;
+      box-shadow: 0 18px 40px rgba(33, 150, 255, .22);
+    }
+
+    .btn-secondary {
+      border-color: rgba(255,255,255,.18);
+      background: rgba(255,255,255,.055);
+      color: white;
+    }
+
+    .hero-points {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 38px;
+      max-width: 720px;
+    }
+
+    .hero-point {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.09);
+    }
+
+    .hero-point strong {
+      display: block;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .92rem;
+      margin-bottom: 5px;
+    }
+
+    .hero-point small {
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .hero-visual {
+      min-height: 520px;
+      position: relative;
+      border-radius: 34px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.12);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.02)),
+        radial-gradient(circle at 50% 30%, rgba(35,240,255,.2), transparent 35%),
+        #080812;
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .hero-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, transparent, rgba(0,0,0,.72)),
+        url("https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=1200&q=80");
+      background-size: cover;
+      background-position: center;
+      opacity: .72;
+      z-index: -2;
+    }
+
+    .hero-visual::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 26px;
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow:
+        inset 0 0 40px rgba(35,240,255,.13),
+        0 0 34px rgba(255,34,56,.11);
+      z-index: -1;
+    }
+
+    .floating-card {
+      position: absolute;
+      left: 26px;
+      right: 26px;
+      bottom: 26px;
+      padding: 22px;
+      border-radius: 24px;
+      background: rgba(0,0,0,.62);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(14px);
+    }
+
+    .floating-card h3 {
+      font-size: 1.35rem;
+      margin-bottom: 8px;
+    }
+
+    .floating-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .section {
+      padding: 92px 0;
+    }
+
+    .section-head {
+      max-width: 780px;
+      margin-bottom: 38px;
+    }
+
+    .section-kicker {
+      color: var(--cyan);
+      text-transform: uppercase;
+      font-weight: 900;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .82rem;
+      letter-spacing: .14em;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4.5vw, 4.15rem);
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.68;
+      margin: 18px 0 0;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      min-height: 280px;
+      padding: 28px;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.085), rgba(255,255,255,.035));
+      border: 1px solid rgba(255,255,255,.1);
+      box-shadow: 0 18px 50px rgba(0,0,0,.22);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      right: -70px;
+      top: -70px;
+      background: radial-gradient(circle, rgba(35,240,255,.22), transparent 70%);
+    }
+
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      font-size: 1.45rem;
+      margin-bottom: 24px;
+    }
+
+    .card h3 {
+      font-size: 1.35rem;
+      margin-bottom: 12px;
+      letter-spacing: -.02em;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .list-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 15px;
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.052);
+      border: 1px solid rgba(255,255,255,.09);
+    }
+
+    .check {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      color: #001018;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .list-item strong {
+      font-family: 'Montserrat', sans-serif;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .list-item span {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .experiences {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .experience {
+      min-height: 230px;
+      padding: 20px;
+      border-radius: 24px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.76)),
+        var(--bg-card);
+      border: 1px solid rgba(255,255,255,.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .experience::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 20%, rgba(35,240,255,.22), transparent 40%);
+      opacity: .8;
+      z-index: -1;
+    }
+
+    .experience h3 {
+      font-size: 1.08rem;
+      margin-bottom: 8px;
+    }
+
+    .experience p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: .94rem;
+    }
+
+    .process {
+      counter-reset: step;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .process-card {
+      padding: 24px;
+      border-radius: 24px;
+      background: rgba(255,255,255,.052);
+      border: 1px solid rgba(255,255,255,.09);
+      position: relative;
+    }
+
+    .process-card::before {
+      counter-increment: step;
+      content: "0" counter(step);
+      display: block;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      color: rgba(35,240,255,.9);
+      margin-bottom: 36px;
+      font-size: 1.15rem;
+    }
+
+    .process-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+
+    .process-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: .95rem;
+    }
+
+    .cta {
+      padding: 80px 0;
+    }
+
+    .cta-box {
+      padding: clamp(30px, 6vw, 72px);
+      border-radius: 36px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,34,56,.22), transparent 32%),
+        radial-gradient(circle at 80% 10%, rgba(33,150,255,.24), transparent 35%),
+        linear-gradient(145deg, rgba(255,255,255,.09), rgba(255,255,255,.035));
+      border: 1px solid rgba(255,255,255,.13);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .cta-box h2 {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .cta-box p {
+      max-width: 720px;
+      margin: 22px auto 0;
+      color: var(--muted);
+      line-height: 1.68;
+      font-size: 1.08rem;
+    }
+
+    .cta-box .hero-actions {
+      justify-content: center;
+    }
+
+    .site-footer {
+      padding: 36px 0;
+      border-top: 1px solid rgba(255,255,255,.09);
+      color: var(--muted-2);
+    }
+
+    .footer-grid {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .whatsapp-float {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 60;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #25D366;
+      color: white;
+      font-size: 1.55rem;
+      box-shadow: 0 16px 40px rgba(37,211,102,.3);
+      border: 1px solid rgba(255,255,255,.22);
+    }
+
+    .mobile-only {
+      display: none;
+    }
+
+    @media (max-width: 980px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero-grid,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 118px;
+      }
+
+      .hero-visual {
+        min-height: 420px;
+      }
+
+      .cards,
+      .process {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .experiences {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 26px, var(--max));
+      }
+
+      .brand {
+        font-size: .9rem;
+      }
+
+      .hero {
+        padding: 112px 0 56px;
+      }
+
+      h1 {
+        font-size: clamp(2.55rem, 16vw, 4.4rem);
+      }
+
+      .hero-copy {
+        font-size: 1rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .hero-points {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-visual {
+        min-height: 360px;
+      }
+
+      .cards,
+      .process,
+      .experiences {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 68px 0;
+      }
+
+      .card {
+        min-height: auto;
+      }
+
+      .footer-grid {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#inicio" aria-label="Paralel VR inicio">
+        <span class="brand-mark"></span>
+        <span>Paralel VR</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Navegación principal">
+        <a href="#servicios">Servicios</a>
+        <a href="#experiencias">Experiencias</a>
+        <a href="#incluye">Qué incluye</a>
+        <a href="#proceso">Proceso</a>
+        <a class="nav-cta" href="https://wa.me/51912576685?text=Hola%2C%20quiero%20cotizar%20una%20experiencia%20VR%20para%20un%20evento." target="_blank" rel="noopener">
+          Cotizar
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">
+            <span></span>
+            Realidad virtual para eventos, marcas y activaciones BTL
+          </div>
+
+          <h1>
+            Experiencias VR que hacen que tu marca
+            <span class="gradient-text">se recuerde</span>
+          </h1>
+
+          <p class="hero-copy">
+            Creamos juegos de realidad virtual, simuladores interactivos y experiencias inmersivas para eventos corporativos,
+            ferias, lanzamientos, universidades y campañas promocionales en Lima y Perú.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://wa.me/51912576685?text=Hola%2C%20quiero%20cotizar%20una%20experiencia%20VR%20para%20un%20evento.%0AFecha%3A%0ALugar%3A%0ACantidad%20estimada%20de%20personas%3A%0ATipo%20de%20evento%3A" target="_blank" rel="noopener">
+              Cotizar experiencia VR
+            </a>
+            <a class="btn btn-secondary" href="#experiencias">
+              Ver experiencias
+            </a>
+          </div>
+
+          <div class="hero-points">
+            <div class="hero-point">
+              <strong>Marca personalizada</strong>
+              <small>Adaptamos visuales, logos, colores y dinámica del juego.</small>
+            </div>
+            <div class="hero-point">
+              <strong>Listo para evento</strong>
+              <small>Montaje, pruebas, soporte técnico y operación en sitio.</small>
+            </div>
+            <div class="hero-point">
+              <strong>Desarrollo rápido</strong>
+              <small>Demos adaptables y juegos personalizados según tiempo.</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-label="Experiencia de realidad virtual en evento">
+          <div class="floating-card">
+            <h3>Más que alquilar visores</h3>
+            <p>
+              Diseñamos una experiencia completa: juego, branding, pantalla espejo, soporte técnico y dinámica para atraer público.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="servicios">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">Servicios</div>
+          <h2>VR para vender, entretener y activar marcas</h2>
+          <p>
+            No lo presentamos como “alquiler de lentes”. Lo convertimos en una experiencia de marca que el público puede jugar,
+            grabar, compartir y recordar.
+          </p>
+        </div>
+
+        <div class="cards">
+          <article class="card">
+            <div class="card-icon">🥽</div>
+            <h3>Estaciones VR para eventos</h3>
+            <p>
+              Experiencias con Meta Quest / Oculus listas para ferias, activaciones, eventos corporativos y campañas de alto tráfico.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon">🎮</div>
+            <h3>Juegos VR personalizados</h3>
+            <p>
+              Adaptamos mecánicas simples y efectivas: apuntar, disparar, pintar, atrapar, esquivar o competir por puntaje.
+            </p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon">🧩</div>
+            <h3>Simuladores de marca</h3>
+            <p>
+              Creamos entornos 3D para mostrar productos, procesos, seguridad, entrenamiento o storytelling inmersivo.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="experiencias">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">Experiencias disponibles</div>
+          <h2>Ideas listas para adaptar a tu campaña</h2>
+          <p>
+            Podemos partir de una demo base y personalizarla con tu marca, o desarrollar una experiencia más completa si el proyecto tiene más tiempo.
+          </p>
+        </div>
+
+        <div class="experiences">
+          <article class="experience">
+            <h3>Shooter VR de marca</h3>
+            <p>Juego rápido por puntaje, ideal para tráfico alto y competencia entre asistentes.</p>
+          </article>
+
+          <article class="experience">
+            <h3>Simulador industrial</h3>
+            <p>Perfecto para maquinaria, pintura, seguridad, capacitación o demostraciones de producto.</p>
+          </article>
+
+          <article class="experience">
+            <h3>Reto de precisión</h3>
+            <p>Dinámicas simples con controles fáciles para público que nunca usó VR.</p>
+          </article>
+
+          <article class="experience">
+            <h3>Recorrido inmersivo</h3>
+            <p>Espacios 3D para mostrar una sede, producto, stand, universo de marca o historia.</p>
+          </article>
+
+          <article class="experience">
+            <h3>Realidad aumentada</h3>
+            <p>Filtros, imágenes interactivas, WebAR y experiencias que se activan desde celular.</p>
+          </article>
+
+          <article class="experience">
+            <h3>Cabina inmersiva</h3>
+            <p>Instalación visual para fotos, videos, contenido social y experiencias memorables.</p>
+          </article>
+
+          <article class="experience">
+            <h3>Juego por ranking</h3>
+            <p>Competencia con puntajes para aumentar participación, cola y permanencia en el stand.</p>
+          </article>
+
+          <article class="experience">
+            <h3>Experiencia a medida</h3>
+            <p>Diseñada según campaña, producto, público, espacio y presupuesto disponible.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="incluye">
+      <div class="container split">
+        <div class="section-head">
+          <div class="section-kicker">Qué incluye</div>
+          <h2>Todo listo para que el cliente solo firme y disfrute</h2>
+          <p>
+            La idea es que la marca no se preocupe por la parte técnica. Nosotros dejamos la experiencia lista para operar en evento.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://wa.me/51912576685?text=Hola%2C%20quiero%20saber%20qué%20incluye%20una%20experiencia%20VR%20para%20mi%20evento." target="_blank" rel="noopener">
+              Consultar paquete
+            </a>
+          </div>
+        </div>
+
+        <div class="list">
+          <div class="list-item">
+            <div class="check">✓</div>
+            <div>
+              <strong>Visores Meta Quest / Oculus</strong>
+              <span>Equipos configurados y probados antes del evento.</span>
+            </div>
+          </div>
+
+          <div class="list-item">
+            <div class="check">✓</div>
+            <div>
+              <strong>Juego o demo VR configurada</strong>
+              <span>Experiencia adaptada al tipo de evento, público y objetivo de marca.</span>
+            </div>
+          </div>
+
+          <div class="list-item">
+            <div class="check">✓</div>
+            <div>
+              <strong>Branding visual</strong>
+              <span>Logo, colores, mensajes, elementos 3D o visuales de campaña según el alcance.</span>
+            </div>
+          </div>
+
+          <div class="list-item">
+            <div class="check">✓</div>
+            <div>
+              <strong>Pantalla espejo</strong>
+              <span>El público puede ver lo que está viviendo el jugador dentro del visor.</span>
+            </div>
+          </div>
+
+          <div class="list-item">
+            <div class="check">✓</div>
+            <div>
+              <strong>Técnico en sitio</strong>
+              <span>Instalación, pruebas, operación, soporte y desmontaje.</span>
+            </div>
+          </div>
+
+          <div class="list-item">
+            <div class="check">✓</div>
+            <div>
+              <strong>Adaptación al espacio</strong>
+              <span>Recomendamos distribución, flujo de usuarios y dinámica para evitar tiempos muertos.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="proceso">
+      <div class="container">
+        <div class="section-head">
+          <div class="section-kicker">Proceso</div>
+          <h2>Cómo convertimos una idea en experiencia VR</h2>
+          <p>
+            Trabajamos con una ruta simple para avanzar rápido, evitar sobrecostos y llegar al evento con una demo estable.
+          </p>
+        </div>
+
+        <div class="process">
+          <article class="process-card">
+            <h3>Brief rápido</h3>
+            <p>Revisamos marca, público, fecha, espacio, objetivo y nivel de personalización necesario.</p>
+          </article>
+
+          <article class="process-card">
+            <h3>Propuesta de dinámica</h3>
+            <p>Definimos si conviene juego, simulador, recorrido, ranking o experiencia visual inmersiva.</p>
+          </article>
+
+          <article class="process-card">
+            <h3>Producción y pruebas</h3>
+            <p>Adaptamos la experiencia, probamos rendimiento en Quest y ajustamos controles simples.</p>
+          </article>
+
+          <article class="process-card">
+            <h3>Montaje en evento</h3>
+            <p>Instalamos, operamos y damos soporte para que la activación fluya sin complicaciones.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="contacto">
+      <div class="container">
+        <div class="cta-box">
+          <div class="section-kicker">Cotización</div>
+          <h2>Cuéntanos tu evento y te proponemos una experiencia VR a la medida</h2>
+          <p>
+            Envíanos fecha, lugar, cantidad estimada de personas y tipo de campaña. Con eso podemos recomendarte el formato ideal:
+            estación VR, juego personalizado, simulador o experiencia inmersiva.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="https://wa.me/51999999999?text=Hola%2C%20quiero%20cotizar%20una%20experiencia%20VR%20para%20un%20evento.%0AFecha%3A%0ALugar%3A%0ACantidad%20estimada%20de%20personas%3A%0ATipo%20de%20evento%3A" target="_blank" rel="noopener">
+              Escribir por WhatsApp
+            </a>
+            <a class="btn btn-secondary" href="mailto:contacto@paralelvr.space">
+              Enviar correo
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="brand">
+        <span class="brand-mark"></span>
+        <span>Paralel VR</span>
+      </div>
+
+      <div>
+        Realidad virtual, realidad aumentada y experiencias interactivas para eventos en Perú.
+      </div>
+    </div>
+  </footer>
+
+  <a class="whatsapp-float" href="https://wa.me/51912576685?text=Hola%2C%20quiero%20cotizar%20una%20experiencia%20VR%20para%20un%20evento." target="_blank" rel="noopener" aria-label="Cotizar por WhatsApp">
+    ☎
+  </a>
+</body>
+</html>
