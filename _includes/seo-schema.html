@@ -1,0 +1,117 @@
+{% assign page_title = page.title | default: site.title %}
+{% assign page_description = page.description | default: site.description %}
+{% assign page_url = page.url | absolute_url %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["Organization", "ProfessionalService"],
+      "@id": "{{ site.url }}/#organization",
+      "name": "ParalelVR.space",
+      "alternateName": "Paralel",
+      "url": "{{ site.url }}/",
+      "logo": "{{ '/paralelogo2.png' | absolute_url }}",
+      "image": "{{ '/assets/img/og-paralel.jpg' | absolute_url }}",
+      "description": {{ site.description | jsonify }},
+      "telephone": "+51912576685",
+      "areaServed": [
+        {
+          "@type": "City",
+          "name": "Lima"
+        },
+        {
+          "@type": "Country",
+          "name": "Peru"
+        }
+      ],
+      "knowsAbout": [
+        "realidad virtual para eventos",
+        "realidad aumentada para eventos",
+        "motion tracking",
+        "apps web interactivas",
+        "activaciones BTL",
+        "juegos para eventos"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+51912576685",
+        "contactType": "sales",
+        "areaServed": "PE",
+        "availableLanguage": ["es"]
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "{{ site.url }}/#website",
+      "url": "{{ site.url }}/",
+      "name": "ParalelVR.space",
+      "publisher": {
+        "@id": "{{ site.url }}/#organization"
+      },
+      "inLanguage": "es-PE"
+    },
+    {% if page.service_name %}
+    {
+      "@type": "Service",
+      "@id": "{{ page_url }}#service",
+      "name": {{ page.service_name | jsonify }},
+      "serviceType": {{ page.service_type | default: page.service_name | jsonify }},
+      "description": {{ page_description | jsonify }},
+      "url": "{{ page_url }}",
+      "provider": {
+        "@id": "{{ site.url }}/#organization"
+      },
+      "areaServed": [
+        {
+          "@type": "City",
+          "name": "Lima"
+        },
+        {
+          "@type": "Country",
+          "name": "Peru"
+        }
+      ],
+      "audience": {
+        "@type": "BusinessAudience",
+        "audienceType": "marcas, agencias, empresas y organizadores de eventos"
+      }
+    },
+    {% endif %}
+    {
+      "@type": "WebPage",
+      "@id": "{{ page_url }}#webpage",
+      "url": "{{ page_url }}",
+      "name": {{ page_title | jsonify }},
+      "description": {{ page_description | jsonify }},
+      "isPartOf": {
+        "@id": "{{ site.url }}/#website"
+      },
+      "about": {
+        "@id": "{{ site.url }}/#organization"
+      },
+      "inLanguage": "es-PE"
+    }
+  ]
+}
+</script>
+{% if page.faqs %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% for faq in page.faqs %}
+    {
+      "@type": "Question",
+      "name": {{ faq.question | jsonify }},
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": {{ faq.answer | jsonify }}
+      }
+    }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
