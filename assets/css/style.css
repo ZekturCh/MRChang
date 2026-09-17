@@ -1565,7 +1565,7 @@ h3,
 .case-card span {
   display: block;
   margin-bottom: 10px;
-  color: var(--cyan);
+  color: var(--service-accent, var(--cyan));
   font-family: 'Montserrat', sans-serif;
   font-size: .74rem;
   font-weight: 900;
@@ -1594,6 +1594,90 @@ h3,
 
 .experience-card--featured h3 {
   font-size: 2.1rem;
+}
+
+.service-vr {
+  --service-accent: #36a3ff;
+  --service-accent-2: #23f0ff;
+}
+
+.service-ar {
+  --service-accent: #ff3d6e;
+  --service-accent-2: #35e6ff;
+}
+
+.service-motion {
+  --service-accent: #23f0ff;
+  --service-accent-2: #5a7cff;
+}
+
+.service-web {
+  --service-accent: #ff4f52;
+  --service-accent-2: #ffb347;
+}
+
+.experience-card.service-vr,
+.experience-card.service-ar,
+.experience-card.service-motion,
+.experience-card.service-web,
+.case-card.service-vr,
+.case-card.service-ar,
+.case-card.service-motion,
+.case-card.service-web {
+  border-color: color-mix(in srgb, var(--service-accent) 34%, rgba(255,255,255,.12));
+}
+
+.service-map {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.service-map__item {
+  --service-accent: var(--cyan);
+  min-height: 260px;
+  display: grid;
+  align-content: end;
+  padding: 24px;
+  border: 1px solid color-mix(in srgb, var(--service-accent) 34%, rgba(255,255,255,.12));
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 20% 15%, color-mix(in srgb, var(--service-accent) 22%, transparent), transparent 38%),
+    linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.032));
+  box-shadow: 0 22px 60px rgba(0,0,0,.25);
+  transition: transform .22s ease, border-color .22s ease;
+}
+
+.service-map__item:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--service-accent) 62%, rgba(255,255,255,.16));
+}
+
+.service-map__item span {
+  width: fit-content;
+  margin-bottom: 34px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.3);
+  border: 1px solid color-mix(in srgb, var(--service-accent) 45%, rgba(255,255,255,.12));
+  color: var(--service-accent);
+  font-family: 'Montserrat', sans-serif;
+  font-size: .74rem;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.service-map__item h3 {
+  margin-bottom: 10px;
+  font-size: 1.25rem;
+  line-height: 1.12;
+}
+
+.service-map__item p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
 }
 
 .value-split {
@@ -1676,6 +1760,8 @@ h3,
 }
 
 .product-hero {
+  --product-accent: var(--cyan);
+  --product-accent-2: var(--blue);
   min-height: 100vh;
   position: relative;
   display: grid;
@@ -1691,6 +1777,7 @@ h3,
   background:
     linear-gradient(90deg, rgba(5,5,8,.96) 0%, rgba(5,5,8,.78) 45%, rgba(5,5,8,.18) 100%),
     linear-gradient(0deg, rgba(5,5,8,.94) 0%, rgba(5,5,8,.18) 50%, rgba(5,5,8,.62) 100%),
+    radial-gradient(circle at 22% 50%, color-mix(in srgb, var(--product-accent) 20%, transparent), transparent 34%),
     var(--product-img);
   background-size: cover;
   background-position: center;
@@ -1730,6 +1817,41 @@ h3,
   line-height: 1.7;
 }
 
+.product-hero .eyebrow,
+.product-hero .proof-strip span {
+  color: var(--product-accent);
+  border-color: color-mix(in srgb, var(--product-accent) 34%, rgba(255,255,255,.16));
+}
+
+.product-hero .btn-primary {
+  background: linear-gradient(135deg, var(--product-accent), var(--product-accent-2));
+  box-shadow: 0 18px 42px color-mix(in srgb, var(--product-accent) 24%, transparent);
+}
+
+.product-vr {
+  --product-accent: #36a3ff;
+  --product-accent-2: #23f0ff;
+}
+
+.product-ar {
+  --product-accent: #ff3d6e;
+  --product-accent-2: #35e6ff;
+}
+
+.product-web {
+  --product-accent: #ff4f52;
+  --product-accent-2: #ffb347;
+}
+
+.motion-hero {
+  --product-accent: #23f0ff;
+  --product-accent-2: #5a7cff;
+}
+
+.motion-hero .btn-primary {
+  background: linear-gradient(135deg, var(--product-accent), var(--product-accent-2));
+}
+
 .centered-tags {
   justify-content: center;
 }
@@ -1756,7 +1878,8 @@ h3,
   }
 
   .experience-grid,
-  .case-grid {
+  .case-grid,
+  .service-map {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -1819,7 +1942,8 @@ h3,
 
   .experience-grid,
   .case-grid,
-  .sales-process {
+  .sales-process,
+  .service-map {
     grid-template-columns: 1fr;
   }
 

@@ -1,294 +1,212 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+---
+layout: default
+title: "Realidad Aumentada para Eventos | ParalelVR"
+description: "Experiencias AR para eventos, activaciones y marcas: WebAR, productos 3D, piezas impresas interactivas, filtros, QR y contenido digital sin instalar apps."
+permalink: /ar.html
+---
 
-  <!-- SEO -->
-  <title>Realidad Aumentada para Eventos | Experiencias AR Premium</title>
-  <meta name="description" content="Realidad Aumentada para eventos corporativos, activaciones de marca y experiencias interactivas. Tecnología AR premium para eventos memorables." />
-  <meta name="keywords" content="realidad aumentada eventos, activaciones AR, experiencias interactivas, tecnología para eventos, AR marketing" />
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<section class="product-hero product-ar" id="inicio" style="--product-img: url('{{ '/HeroAR.webp' | relative_url }}');">
+  <div class="product-hero__visual" aria-hidden="true"></div>
 
-  <style>
-    :root{
-      --black:#0a0a0a;
-      --white:#f5f5f5;
-      --red:#ff2a2a;
-      --blue:#3fa9f5;
-      --gray:#9a9a9a;
-    }
+  <div class="container product-hero__content">
+    <p class="eyebrow hero-eyebrow">Realidad aumentada para eventos</p>
+    <h1>Haz que lo fisico cobre vida</h1>
+    <p>
+      Creamos experiencias AR para productos, impresos, stands y espacios: el publico escanea,
+      aparece contenido digital y la marca se vuelve interactiva desde el celular.
+    </p>
 
-    *{margin:0;padding:0;box-sizing:border-box;}
-
-    body{
-      font-family:'Inter', sans-serif;
-      background:var(--black);
-      color:var(--white);
-      line-height:1.6;
-    }
-
-    a{color:inherit;text-decoration:none;}
-
-    section{
-      padding:120px 8vw;
-    }
-
-    /* HERO */
-    .hero{
-      min-height:100vh;
-      display:grid;
-      grid-template-columns:1.1fr 1fr;
-      align-items:center;
-      gap:80px;
-    }
-
-    .hero h1{
-      font-size:clamp(3rem,5vw,5rem);
-      font-weight:800;
-      letter-spacing:-2px;
-    }
-
-    .hero h1 span{
-      color:var(--red);
-    }
-
-    .hero p{
-      margin-top:24px;
-      color:var(--gray);
-      max-width:480px;
-    }
-
-    .hero-img{
-      width:100%;
-      max-width:420px;
-      filter: drop-shadow(0 0 30px rgba(255,42,42,.25))
-              drop-shadow(0 0 40px rgba(63,169,245,.25));
-    }
-
-
-    .btn{
-      display:inline-block;
-      margin-top:48px;
-      padding:16px 36px;
-      border:1px solid var(--white);
-      font-weight:600;
-      transition:.3s ease;
-    }
-
-    .btn:hover{
-      background:var(--white);
-      color:var(--black);
-    }
-
-    .hero-visual{
-      display:flex;
-      justify-content:center;
-      align-items:center;
-    }
-
-    .cube{
-      width:320px;
-      height:320px;
-      border:2px solid var(--white);
-      position:relative;
-      box-shadow:
-        0 0 40px rgba(255,42,42,.3),
-        0 0 60px rgba(63,169,245,.25);
-    }
-
-    /* SERVICES */
-    .services{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:60px;
-      border-top:1px solid #1f1f1f;
-    }
-
-    .service h3{
-      font-size:1.4rem;
-      margin-bottom:16px;
-    }
-
-    .service p{
-      color:var(--gray);
-    }
-
-    /* SHOWCASE */
-    .showcase{
-      background:#050505;
-      text-align:center;
-    }
-
-    .showcase h2{
-      font-size:3rem;
-      margin-bottom:60px;
-    }
-
-    .showcase span{
-      color:var(--blue);
-    }
-
-    .show-visual{
-      width:100%;
-      height:420px;
-      border:1px solid #222;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    /* PROJECTS */
-    .projects h2{
-      font-size:2.5rem;
-      margin-bottom:60px;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:40px;
-    }
-
-    .card{
-      position:relative;
-      height:280px;
-      border:1px solid #222;
-      padding:24px;
-      display:flex;
-      align-items:flex-end;
-      transition:.3s;
-    }
-
-    .card:hover{
-      border-color:var(--white);
-    }
-
-    .card span{
-      font-size:.85rem;
-      color:var(--gray);
-    }
-
-    /* PROCESS */
-    .process{
-      border-top:1px solid #1f1f1f;
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:60px;
-    }
-
-    .step h4{
-      font-size:2rem;
-      margin-bottom:12px;
-    }
-
-    /* CTA */
-    .cta{
-      text-align:center;
-      background:#050505;
-    }
-
-    .cta h2{
-      font-size:3rem;
-      margin-bottom:40px;
-    }
-
-    .cta .btn{
-      margin:12px;
-    }
-
-    footer{
-      padding:40px 8vw;
-      border-top:1px solid #1f1f1f;
-      display:flex;
-      justify-content:space-between;
-      color:var(--gray);
-      font-size:.9rem;
-    }
-
-    @media(max-width:900px){
-      .hero{grid-template-columns:1fr;}
-      .services,.grid,.process{grid-template-columns:1fr;}
-    }
-  </style>
-</head>
-<body>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div>
-      <h1>Realidad Aumentada<br><span>para eventos</span><br>que se recuerdan</h1>
-      <p>Activaciones AR · Experiencias interactivas · Tecnología en vivo para marcas que buscan impacto real.</p>
-      <a href="#projects" class="btn">Ver experiencias</a>
+    <div class="sales-hero__actions">
+      <a class="btn btn-primary"
+         href="https://wa.me/51912576685?text=Hola%2C%20quiero%20cotizar%20una%20experiencia%20AR%20para%20mi%20evento.%0AFecha%3A%0ALugar%3A%0AProducto%20o%20pieza%20a%20activar%3A"
+         target="_blank"
+         rel="noopener">
+        Cotizar AR
+      </a>
+      <a class="btn btn-secondary" href="#formatos">Ver formatos</a>
     </div>
-    <div class="hero-visual">
-      <img src="HeroAR.webp" alt="Experiencia de realidad aumentada en eventos" class="hero-img">
-    </div>
-  </section>
 
-  <!-- SERVICES -->
-  <section class="services">
-    <div class="service">
-      <h3>Activaciones AR</h3>
-      <p>El público no mira. Participa, interactúa y recuerda tu marca.</p>
+    <div class="proof-strip">
+      <span>WebAR</span>
+      <span>QR o marcador</span>
+      <span>Modelos 3D</span>
+      <span>Sin instalar app</span>
     </div>
-    <div class="service">
-      <h3>Eventos Inmersivos</h3>
-      <p>Convertimos espacios físicos en experiencias digitales memorables.</p>
-    </div>
-    <div class="service">
-      <h3>Marca Viva</h3>
-      <p>Tu marca no se muestra. Se experimenta.</p>
-    </div>
-  </section>
+  </div>
+</section>
 
-  <!-- SHOWCASE -->
-  <section class="showcase">
-    <h2>No lo expliques. <span>Muéstralo.</span></h2>
-    <div class="show-visual">
-      <p style="color:#444">[ Experiencia AR interactiva aquí ]</p>
+<section class="section compact-section" id="formatos">
+  <div class="container">
+    <div class="section-head center">
+      <div class="section-kicker">Formatos AR</div>
+      <h2>Contenido digital encima del mundo real, sin explicar de mas</h2>
+      <p>
+        AR funciona cuando quieres que una pieza fisica haga algo: revelar informacion,
+        mostrar un producto en 3D, disparar una animacion o convertir el celular en una ventana interactiva.
+      </p>
     </div>
-  </section>
 
-  <!-- PROJECTS -->
-  <section class="projects" id="projects">
-    <h2>Proyectos</h2>
-    <div class="grid">
-      <div class="card"><span>Festival Universitario · 2025</span></div>
-      <div class="card"><span>Lanzamiento de Marca · AR</span></div>
-      <div class="card"><span>Concierto Inmersivo</span></div>
+    <div class="case-grid">
+      <article class="case-card service-ar">
+        <img src="{{ '/HeroAR.webp' | relative_url }}" alt="Realidad aumentada para eventos y activaciones">
+        <div>
+          <span>WebAR</span>
+          <h3>Experiencias por QR</h3>
+          <p>El usuario escanea y entra desde navegador, sin descargar una app.</p>
+        </div>
+      </article>
+
+      <article class="case-card service-ar">
+        <img src="{{ '/assets/img/case-web-games.jpg' | relative_url }}" alt="Pieza digital interactiva para activacion">
+        <div>
+          <span>Productos</span>
+          <h3>Modelos 3D y contenido de marca</h3>
+          <p>Productos, personajes, empaques, objetos o escenas flotando sobre una pieza real.</p>
+        </div>
+      </article>
+
+      <article class="case-card service-ar">
+        <img src="{{ '/assets/img/case-trivia.jpg' | relative_url }}" alt="Contenido interactivo conectado a dinamicas de marca">
+        <div>
+          <span>Dinamicas</span>
+          <h3>AR conectada a juego o registro</h3>
+          <p>La experiencia puede llevar a trivias, formularios, rankings, premios o contenido compartible.</p>
+        </div>
+      </article>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- PROCESS -->
-  <section class="process">
-    <div class="step">
-      <h4>01</h4>
-      <p>Concepto y narrativa de experiencia.</p>
+<section class="section dark-panel">
+  <div class="container split value-split">
+    <div class="section-head">
+      <div class="section-kicker">Cuando usar AR</div>
+      <h2>Ideal cuando ya tienes una pieza fisica y quieres hacerla memorable</h2>
+      <p>
+        AR no tiene que ser complicada. La usamos como capa digital para que el usuario vea,
+        juegue, explore o comparta algo que antes era solo una grafica, producto o stand.
+      </p>
     </div>
-    <div class="step">
-      <h4>02</h4>
-      <p>Diseño y desarrollo AR.</p>
+
+    <div class="list value-list">
+      <div class="list-item">
+        <div class="check">1</div>
+        <div>
+          <strong>Activa piezas impresas</strong>
+          <span>Posters, tarjetas, empaques, paneles, merchandising o senaletica con contenido digital.</span>
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="check">2</div>
+        <div>
+          <strong>Muestra productos en 3D</strong>
+          <span>Modelos, animaciones, objetos, personajes o escenas vinculadas a la marca.</span>
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="check">3</div>
+        <div>
+          <strong>Reduce friccion</strong>
+          <span>Puede funcionar desde navegador movil, con QR y una instruccion muy simple.</span>
+        </div>
+      </div>
+
+      <div class="list-item">
+        <div class="check">4</div>
+        <div>
+          <strong>Conecta con otras dinamicas</strong>
+          <span>Puede llevar a juego web, trivia, registro, premio, video, landing o experiencia 3D.</span>
+        </div>
+      </div>
     </div>
-    <div class="step">
-      <h4>03</h4>
-      <p>Ejecución técnica en vivo.</p>
+  </div>
+</section>
+
+<section class="section compact-section">
+  <div class="container">
+    <div class="section-head center">
+      <div class="section-kicker">Ideas AR</div>
+      <h2>Aplicaciones simples de entender y faciles de vender</h2>
+      <p>
+        Partimos del objetivo de la campana y elegimos una dinamica que se entienda en segundos.
+        La magia esta en que el publico vea algo aparecer donde no habia nada.
+      </p>
     </div>
-  </section>
 
-  <!-- CTA -->
-  <section class="cta">
-    <h2>¿Creamos algo inolvidable?</h2>
-    <a href="https://wa.me/51912576685" class="btn">WhatsApp</a>
-    <a href="#" class="btn">Ver demo</a>
-  </section>
+    <div class="tech-tags centered-tags">
+      <span>Producto 3D</span>
+      <span>Empaque interactivo</span>
+      <span>Poster activable</span>
+      <span>Filtro de marca</span>
+      <span>Personaje AR</span>
+      <span>Escena inmersiva</span>
+      <span>QR para eventos</span>
+      <span>WebAR</span>
+      <span>Contenido educativo</span>
+      <span>Experiencias para compartir</span>
+    </div>
+  </div>
+</section>
 
-  <footer>
-    <div>© 2026 · Realidad Aumentada Eventos</div>
-    <div>Tecnología · Diseño · Experiencia</div>
-  </footer>
+<section class="section section-soft" id="proceso">
+  <div class="container">
+    <div class="section-head center">
+      <div class="section-kicker">Proceso</div>
+      <h2>De pieza fisica a experiencia aumentada</h2>
+      <p>
+        Ordenamos el flujo para que el usuario no se pierda: escanea, entiende que hacer,
+        interactua y llega al resultado que la marca necesita.
+      </p>
+    </div>
 
-</body>
-</html>
+    <div class="process sales-process">
+      <article class="process-card">
+        <h3>Brief</h3>
+        <p>Definimos producto, pieza, mensaje, publico, fecha y espacio de uso.</p>
+      </article>
+
+      <article class="process-card">
+        <h3>Formato</h3>
+        <p>Elegimos WebAR, QR, marcador, modelo 3D, animacion o experiencia conectada.</p>
+      </article>
+
+      <article class="process-card">
+        <h3>Contenido</h3>
+        <p>Preparamos visuales, 3D, textos, instrucciones y pantallas de interaccion.</p>
+      </article>
+
+      <article class="process-card">
+        <h3>Pruebas</h3>
+        <p>Validamos lectura, carga movil, claridad de uso y compatibilidad de dispositivos.</p>
+      </article>
+
+      <article class="process-card">
+        <h3>Activacion</h3>
+        <p>Entregamos la experiencia lista con QR, URL, piezas y soporte si el evento lo requiere.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="contacto">
+  <div class="container">
+    <div class="cta-box">
+      <div class="section-kicker">Cotizacion AR</div>
+      <h2>Cuentanos que pieza quieres activar y la volvemos interactiva</h2>
+      <p>
+        Envia producto, pieza grafica, objetivo y fecha del evento. Te proponemos una experiencia AR
+        simple, clara y conectada a tu campana.
+      </p>
+      <div class="hero-actions center-actions">
+        <a class="btn btn-primary"
+           href="https://wa.me/51912576685?text=Hola%2C%20quiero%20cotizar%20realidad%20aumentada.%0AProducto%20o%20pieza%3A%0AFecha%3A%0AObjetivo%20de%20marca%3A"
+           target="_blank"
+           rel="noopener">
+          Cotizar por WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
