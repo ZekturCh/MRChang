@@ -1675,6 +1675,61 @@ h3,
   line-height: 1.7;
 }
 
+.product-hero {
+  min-height: 100vh;
+  position: relative;
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  padding: 150px 0 80px;
+  background: #050508;
+}
+
+.product-hero__visual {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(5,5,8,.96) 0%, rgba(5,5,8,.78) 45%, rgba(5,5,8,.18) 100%),
+    linear-gradient(0deg, rgba(5,5,8,.94) 0%, rgba(5,5,8,.18) 50%, rgba(5,5,8,.62) 100%),
+    var(--product-img);
+  background-size: cover;
+  background-position: center;
+}
+
+.product-hero__visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+  background-size: 54px 54px;
+  opacity: .35;
+}
+
+.product-hero__content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 24px;
+  max-width: 820px;
+}
+
+.product-hero h1 {
+  max-width: 820px;
+  font-size: 5.1rem;
+  line-height: .98;
+  text-transform: uppercase;
+}
+
+.product-hero p:not(.eyebrow) {
+  max-width: 680px;
+  margin: 0;
+  color: #d7d8e2;
+  font-size: 1.12rem;
+  line-height: 1.7;
+}
+
 .centered-tags {
   justify-content: center;
 }
@@ -1695,7 +1750,8 @@ h3,
 
 @media (max-width: 1100px) {
   .sales-hero h1,
-  .motion-hero h1 {
+  .motion-hero h1,
+  .product-hero h1 {
     font-size: 4.1rem;
   }
 
@@ -1711,7 +1767,8 @@ h3,
 
 @media (max-width: 760px) {
   .sales-hero,
-  .motion-hero {
+  .motion-hero,
+  .product-hero {
     min-height: auto;
     padding: 116px 0 54px;
   }
@@ -1729,19 +1786,30 @@ h3,
       linear-gradient(0deg, rgba(5,5,8,.96) 0%, rgba(5,5,8,.45) 48%, rgba(5,5,8,.74) 100%);
   }
 
+  .product-hero__visual {
+    background:
+      linear-gradient(0deg, rgba(5,5,8,.96) 0%, rgba(5,5,8,.42) 48%, rgba(5,5,8,.74) 100%),
+      var(--product-img);
+    background-size: cover;
+    background-position: center top;
+  }
+
   .sales-hero__content,
-  .motion-hero__content {
+  .motion-hero__content,
+  .product-hero__content {
     padding-top: 310px;
   }
 
   .sales-hero h1,
-  .motion-hero h1 {
+  .motion-hero h1,
+  .product-hero h1 {
     font-size: 2.75rem;
     line-height: 1;
   }
 
   .sales-hero__lead,
-  .motion-hero p:not(.eyebrow) {
+  .motion-hero p:not(.eyebrow),
+  .product-hero p:not(.eyebrow) {
     font-size: 1rem;
   }
 
