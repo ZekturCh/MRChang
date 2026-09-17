@@ -1,251 +1,259 @@
 ---
 layout: default
-title: "Paralel | Realidad Virtual, Realidad Aumentada y Motion Tracking para eventos"
-description: "Creamos experiencias interactivas con realidad virtual, realidad aumentada y motion tracking para eventos creativos, marcas, ferias y activaciones BTL en Perú."
+title: "ParalelVR | Experiencias interactivas para eventos y activaciones"
+description: "Diseñamos experiencias interactivas para eventos, ferias y activaciones de marca: VR, AR, motion tracking, trivias, juegos web, muros digitales y tecnologia en vivo."
 ---
 
-<section class="home-hero" id="inicio" style="--hero-img: url('{{ '/assets/img/hero-home.jpg' | relative_url }}');">
-  <div class="home-hero-overlay"></div>
+<section class="sales-hero" id="inicio">
+  <div class="sales-hero__media" aria-hidden="true"></div>
 
-  <div class="container home-hero-content">
-    <div class="eyebrow hero-eyebrow">
-      <span></span>
-      Tecnología interactiva para eventos y marcas
-    </div>
+  <div class="container sales-hero__content">
+    <p class="eyebrow hero-eyebrow">ParalelVR.space · tecnologia para eventos</p>
 
-    <h1 class="hero-title-custom">
-      <span class="hero-line hero-line-top">REALIDAD</span>
-      <span class="hero-line hero-line-accent">Virtual / Aumentada</span>
-      <span class="hero-line hero-line-bottom">Motion Tracking para Eventos</span>
-    </h1>
+    <h1>Experiencias interactivas que hacen participar a tu publico</h1>
 
-    <p class="hero-subtext">
-      Creamos experiencias interactivas para marcas, activaciones BTL, ferias y eventos corporativos,
-      combinando tecnología, arte digital y producción pensada para el mundo real.
+    <p class="sales-hero__lead">
+      Creamos activaciones digitales para marcas: juegos VR, realidad aumentada, motion tracking,
+      trivias, web games y muros interactivos listos para operar en eventos reales.
     </p>
 
-    <div class="hero-actions center-actions">
-      <a class="btn btn-primary" href="#servicios">Conocer servicios</a>
-      <a class="btn btn-secondary"
-         href="https://wa.me/51912576685?text=Hola%2C%20quiero%20cotizar%20una%20experiencia%20interactiva%20para%20un%20evento."
+    <div class="sales-hero__actions">
+      <a class="btn btn-primary"
+         href="https://wa.me/51912576685?text=Hola%2C%20quiero%20cotizar%20una%20experiencia%20interactiva%20para%20mi%20evento.%0AFecha%3A%0ALugar%3A%0ATipo%20de%20evento%3A%0ACantidad%20estimada%20de%20personas%3A"
          target="_blank"
          rel="noopener">
-        Cotizar experiencia
+        Cotizar activacion
       </a>
+      <a class="btn btn-secondary" href="#experiencias">Ver experiencias</a>
+    </div>
+
+    <div class="proof-strip" aria-label="Capacidades principales">
+      <span>VR y AR</span>
+      <span>Motion tracking</span>
+      <span>Juegos touch</span>
+      <span>Ranking en vivo</span>
     </div>
   </div>
 </section>
 
-<section class="section" id="servicios">
+<section class="section compact-section" id="experiencias">
   <div class="container">
-
     <div class="section-head center">
-      <div class="section-kicker">Conoce más</div>
-      <h2>Experiencias interactivas para marcas y eventos</h2>
+      <div class="section-kicker">Que vendemos</div>
+      <h2>Un portafolio pensado para que la gente juegue, toque, se mueva y comparta</h2>
       <p>
-        Cada tecnología cumple un objetivo distinto. Te ayudamos a elegir la solución ideal
-        según tu evento, público, espacio, presupuesto y campaña.
+        No ofrecemos solo una pantalla bonita. Armamos experiencias con dinamica, visual de marca,
+        operacion tecnica y un flujo claro para eventos con alto movimiento de publico.
       </p>
     </div>
 
-    <div class="cards service-cards">
-
-      <a class="card service-card" href="{{ '/vr.html' | relative_url }}">
-        <div class="card-icon">🥽</div>
-        <h3>Realidad Virtual</h3>
-        <p>
-          La realidad virtual permite que el público juegue, explore, compita o viva una simulación inmersiva
-          usando visores Meta Quest en eventos y activaciones de marca.
-        </p>
-        <span class="card-link">Conocer VR →</span>
+    <div class="experience-grid">
+      <a class="experience-card experience-card--featured" href="{{ '/motion.html' | relative_url }}">
+        <img src="{{ '/assets/img/motion-tracking.jpg' | relative_url }}" alt="Experiencia de motion tracking en evento">
+        <div>
+          <span>Producto destacado</span>
+          <h3>Motion tracking sin controles</h3>
+          <p>El cuerpo del usuario controla el juego, avatar o visual en tiempo real.</p>
+        </div>
       </a>
 
-      <a class="card service-card" href="{{ '/ar.html' | relative_url }}">
-        <div class="card-icon">📱</div>
-        <h3>Realidad Aumentada</h3>
-        <p>
-          La realidad aumentada conecta productos, piezas gráficas, empaques o espacios físicos
-          con contenido digital interactivo desde el celular.
-        </p>
-        <span class="card-link">Conocer AR →</span>
+      <a class="experience-card" href="{{ '/vr.html' | relative_url }}">
+        <img src="{{ '/assets/img/case-vr-jet.jpg' | relative_url }}" alt="Activacion de realidad virtual para marca">
+        <div>
+          <span>Inmersion</span>
+          <h3>Realidad virtual para eventos</h3>
+          <p>Juegos y recorridos personalizados para stands, ferias y activaciones.</p>
+        </div>
       </a>
 
-      <a class="card service-card" href="{{ '/motion.html' | relative_url }}">
-        <div class="card-icon">🕺</div>
-        <h3>Motion Tracking</h3>
-        <p>
-          El motion tracking convierte los movimientos del cuerpo en interacción para crear juegos,
-          avatares, espejos mágicos y dinámicas sin controles físicos.
-        </p>
-        <span class="card-link">Conocer Motion →</span>
+      <a class="experience-card" href="{{ '/ar.html' | relative_url }}">
+        <img src="{{ '/HeroAR.webp' | relative_url }}" alt="Experiencia de realidad aumentada">
+        <div>
+          <span>Contenido digital</span>
+          <h3>Realidad aumentada</h3>
+          <p>Productos, piezas graficas y espacios que activan contenido desde el celular.</p>
+        </div>
       </a>
 
+      <article class="experience-card">
+        <img src="{{ '/assets/img/case-trivia.jpg' | relative_url }}" alt="Trivia interactiva con ranking en vivo">
+        <div>
+          <span>Competencia</span>
+          <h3>Trivias interactivas</h3>
+          <p>Preguntas, respuestas, categorias y puntajes en vivo para eventos presenciales o virtuales.</p>
+        </div>
+      </article>
+
+      <article class="experience-card">
+        <img src="{{ '/assets/img/case-web-games.jpg' | relative_url }}" alt="Juego touch para activacion de marca">
+        <div>
+          <span>Touch y web</span>
+          <h3>Juegos web personalizables</h3>
+          <p>Dinamicas touch sin apps, listas para tablets, pantallas tactiles o celulares.</p>
+        </div>
+      </article>
+
+      <article class="experience-card">
+        <img src="{{ '/assets/img/case-muro-digital.jpg' | relative_url }}" alt="Muro digital interactivo para evento corporativo">
+        <div>
+          <span>Instalacion</span>
+          <h3>Muros digitales interactivos</h3>
+          <p>Mensajes, firmas, dibujos y contenido de marca apareciendo en tiempo real.</p>
+        </div>
+      </article>
     </div>
-
   </div>
 </section>
 
-<section class="section dark-panel" id="especializacion">
-  <div class="container split">
-
+<section class="section dark-panel" id="valor">
+  <div class="container split value-split">
     <div class="section-head">
-      <div class="section-kicker">Nuestra especialización</div>
-      <h2>Te acompañamos para que no tengas que preocuparte por la parte técnica</h2>
+      <div class="section-kicker">Por que Paralel</div>
+      <h2>De la idea creativa al montaje, con la parte tecnica resuelta</h2>
       <p>
-        Lo que nos caracteriza no es solo programar una experiencia. Te orientamos, aterrizamos la idea,
-        revisamos alcances y limitaciones, y ejecutamos pensando en cómo funcionará dentro del evento.
+        Ayudamos a marcas, agencias y equipos de eventos a convertir una idea en una experiencia
+        viable: mecanica, interfaz, visuales, hardware, pruebas, montaje y soporte durante la activacion.
       </p>
     </div>
 
-    <div class="list">
-
+    <div class="list value-list">
       <div class="list-item">
-        <div class="check">✓</div>
+        <div class="check">1</div>
         <div>
-          <strong>Te orientamos desde la idea</strong>
-          <span>
-            Te ayudamos a elegir entre realidad virtual, realidad aumentada, motion tracking
-            o una combinación de tecnologías según el objetivo de tu campaña.
-          </span>
+          <strong>Experiencias alineadas a marca</strong>
+          <span>Visual, mensajes, mecanica, ranking, interfaz y contenido se adaptan a la campana.</span>
         </div>
       </div>
 
       <div class="list-item">
-        <div class="check">✓</div>
+        <div class="check">2</div>
         <div>
-          <strong>Explicamos alcances y limitantes</strong>
-          <span>
-            No prometemos humo. Te contamos qué se puede hacer, qué conviene evitar
-            y qué solución funcionará mejor para tu evento.
-          </span>
+          <strong>Disenado para alto flujo</strong>
+          <span>Dinamicas rapidas, faciles de entender y pensadas para rotacion de publico.</span>
         </div>
       </div>
 
       <div class="list-item">
-        <div class="check">✓</div>
+        <div class="check">3</div>
         <div>
-          <strong>Personalizamos para cada marca</strong>
-          <span>
-            Nos encanta crear experiencias con identidad propia: visuales, escenarios,
-            personajes, interfaces, mecánicas y dinámicas adaptadas a cada campaña.
-          </span>
+          <strong>Integracion total</strong>
+          <span>Software, pantallas, visores, sensores, PCs, tabletas, luces y soporte trabajando juntos.</span>
         </div>
       </div>
 
       <div class="list-item">
-        <div class="check">✓</div>
+        <div class="check">4</div>
         <div>
-          <strong>Pensamos en el evento real</strong>
-          <span>
-            Consideramos montaje, operación, tiempos, pantallas, conexiones, iluminación,
-            flujo de público y soporte técnico para que todo sea más claro para el cliente.
-          </span>
+          <strong>Contenido compartible</strong>
+          <span>Experiencias visuales que se entienden rapido y funcionan bien para fotos, video y redes.</span>
         </div>
       </div>
-
     </div>
-
   </div>
 </section>
 
-<section class="section" id="tecnologia">
-  <div class="container split">
-
-    <div class="visual-panel" style="--panel-img: url('{{ '/assets/img/hero-home.jpg' | relative_url }}');"></div>
-
-    <div>
-      <div class="section-head">
-        <div class="section-kicker">Tecnología + arte + producción</div>
-        <h2>Creamos entornos de experiencia, no solo pantallas bonitas</h2>
-        <p>
-          Podemos combinar desarrollo interactivo con arte 3D, diseño 2D, proyectores,
-          pantallas, luces LED, cámaras y sensores para crear una experiencia más completa
-          alrededor de la activación.
-        </p>
-      </div>
-
-      <div class="tech-tags">
-        <span>Arte 3D</span>
-        <span>Diseño 2D</span>
-        <span>Realidad Virtual</span>
-        <span>Realidad Aumentada</span>
-        <span>Motion Tracking</span>
-        <span>Proyectores</span>
-        <span>Pantallas</span>
-        <span>Luces LED</span>
-        <span>Cámaras</span>
-        <span>Sensores</span>
-        <span>Interfaces</span>
-        <span>Visuales interactivos</span>
-      </div>
+<section class="section compact-section" id="casos">
+  <div class="container">
+    <div class="section-head center">
+      <div class="section-kicker">Casos y formatos</div>
+      <h2>Ideas que ya se ven como activaciones listas para vender</h2>
+      <p>
+        Estos formatos pueden adaptarse a lanzamientos, aniversarios, ferias, eventos internos,
+        centros comerciales, universidades, stands y activaciones BTL.
+      </p>
     </div>
 
+    <div class="case-grid">
+      <article class="case-card">
+        <img src="{{ '/assets/img/motion-panel.jpg' | relative_url }}" alt="Motion tracking con paneles LED">
+        <div>
+          <span>Motion tracking</span>
+          <h3>Juego corporal para atraer publico</h3>
+          <p>El participante mueve el cuerpo y ve la respuesta inmediata en pantalla.</p>
+        </div>
+      </article>
+
+      <article class="case-card">
+        <img src="{{ '/assets/img/case-trivia.jpg' | relative_url }}" alt="Trivia interactiva para eventos">
+        <div>
+          <span>Trivia interactiva</span>
+          <h3>Ranking, categorias y puntaje en vivo</h3>
+          <p>Ideal para dinamicas de conocimiento, cultura, salud, ciencia, deporte o marca.</p>
+        </div>
+      </article>
+
+      <article class="case-card">
+        <img src="{{ '/assets/img/case-muro-digital.jpg' | relative_url }}" alt="Muro digital interactivo con firmas">
+        <div>
+          <span>Muro digital</span>
+          <h3>Firmas y mensajes en tiempo real</h3>
+          <p>Una instalacion participativa para aniversarios, lanzamientos y eventos corporativos.</p>
+        </div>
+      </article>
+    </div>
   </div>
 </section>
 
 <section class="section section-soft" id="proceso">
   <div class="container">
-
     <div class="section-head center">
-      <div class="section-kicker">Cómo trabajamos</div>
-      <h2>Un proceso simple para llegar al evento con claridad</h2>
+      <div class="section-kicker">Como trabajamos</div>
+      <h2>Proceso simple para llegar al evento con seguridad</h2>
       <p>
-        Ordenamos la idea desde el inicio para que la experiencia sea creativa,
-        viable y entendible para el equipo que la usará en campo.
+        Antes de cotizar definimos objetivo, publico, espacio, tiempo de juego, tecnologia,
+        nivel de personalizacion y necesidades de operacion.
       </p>
     </div>
 
-    <div class="process">
-
+    <div class="process sales-process">
       <article class="process-card">
-        <h3>Escuchamos tu idea</h3>
-        <p>Revisamos marca, evento, público, espacio, objetivo y tiempo disponible.</p>
+        <h3>Brief</h3>
+        <p>Entendemos marca, evento, publico, lugar, fecha y objetivo de la activacion.</p>
       </article>
 
       <article class="process-card">
-        <h3>Elegimos la tecnología</h3>
-        <p>Definimos si conviene VR, AR, motion tracking o una mezcla de formatos.</p>
+        <h3>Propuesta</h3>
+        <p>Elegimos formato, mecanica, hardware, tiempos y alcance de personalizacion.</p>
       </article>
 
       <article class="process-card">
-        <h3>Diseñamos la experiencia</h3>
-        <p>Aterrizamos visuales, mecánica, flujo del usuario e interacción principal.</p>
+        <h3>Desarrollo</h3>
+        <p>Preparamos visuales, interfaz, juego, contenido, pruebas y ajustes tecnicos.</p>
       </article>
 
       <article class="process-card">
-        <h3>Probamos y ajustamos</h3>
-        <p>Revisamos rendimiento, controles, tiempos, estabilidad y claridad para el público.</p>
+        <h3>Montaje</h3>
+        <p>Instalamos equipos, configuramos pantallas, sensores, red local y operacion.</p>
       </article>
 
       <article class="process-card">
-        <h3>Ejecutamos en evento</h3>
-        <p>Instalamos, orientamos, operamos y damos soporte durante la activación.</p>
+        <h3>Evento</h3>
+        <p>Acompanamos la activacion y damos soporte para que el publico participe sin friccion.</p>
       </article>
-
     </div>
-
   </div>
 </section>
 
 <section class="cta" id="contacto">
   <div class="container">
     <div class="cta-box">
-      <div class="section-kicker">Cotización</div>
+      <div class="section-kicker">Cotizacion</div>
 
-      <h2>¿Tienes una campaña o evento en mente?</h2>
+      <h2>Cuentanos que quieres activar y lo convertimos en experiencia</h2>
 
       <p>
-        Cuéntanos qué quieres lograr y te ayudamos a elegir entre realidad virtual,
-        realidad aumentada, motion tracking o una experiencia combinada para tu marca.
+        Envianos fecha, lugar, publico esperado y objetivo de marca. Te respondemos con una ruta clara:
+        tecnologia recomendada, formato de experiencia y necesidades para producirla.
       </p>
 
       <div class="hero-actions center-actions">
         <a class="btn btn-primary"
-           href="https://wa.me/51912576685?text=Hola%2C%20quiero%20cotizar%20una%20experiencia%20interactiva%20para%20un%20evento.%0AFecha%3A%0ALugar%3A%0ACantidad%20estimada%20de%20personas%3A%0ATipo%20de%20evento%3A"
+           href="https://wa.me/51912576685?text=Hola%2C%20quiero%20cotizar%20una%20experiencia%20interactiva%20para%20mi%20evento.%0AFecha%3A%0ALugar%3A%0APublico%20estimado%3A%0AObjetivo%20de%20la%20marca%3A%0AFormato%20que%20me%20interesa%3A"
            target="_blank"
            rel="noopener">
           Cotizar por WhatsApp
         </a>
+        <a class="btn btn-secondary" href="#casos">Ver formatos</a>
       </div>
     </div>
   </div>
