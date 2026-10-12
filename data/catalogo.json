@@ -1,0 +1,133 @@
+{
+  "updated": "2026-10-12",
+  "games": [
+    {
+      "id": "memoria",
+      "name": "Memoria de marca",
+      "category": "touch",
+      "action": "Encuentra las parejas",
+      "description": "Un reto de memoria con imágenes de tu marca, productos o campaña.",
+      "branding": "Imágenes de las tarjetas, colores y logo."
+    },
+    {
+      "id": "trivia",
+      "name": "Trivia interactiva",
+      "category": "touch",
+      "action": "Responde y participa",
+      "description": "Preguntas para descubrir tus productos, reforzar mensajes o poner a prueba al público.",
+      "branding": "Preguntas, respuestas e identidad visual."
+    },
+    {
+      "id": "rompecabezas",
+      "name": "Rompecabezas",
+      "category": "touch",
+      "action": "Arma la imagen",
+      "description": "Convierte una imagen de campaña en un desafío sencillo para tu evento.",
+      "branding": "Imagen del rompecabezas e identidad visual."
+    },
+    {
+      "id": "disparos-touch",
+      "name": "Disparos touch",
+      "category": "touch",
+      "action": "Apunta en la pantalla",
+      "description": "Un reto de puntería que se juega directamente desde una pantalla táctil.",
+      "branding": "Logo, colores y elementos visuales compatibles."
+    },
+    {
+      "id": "corta-frutas",
+      "name": "Corta frutas",
+      "category": "touch",
+      "action": "Desliza y corta",
+      "description": "Un juego de reacción: corta los elementos que aparecen en la pantalla.",
+      "branding": "Logo, colores y objetos visuales compatibles."
+    },
+    {
+      "id": "encuestas",
+      "name": "Encuestas interactivas",
+      "category": "touch",
+      "action": "Escucha a tu público",
+      "description": "Un sistema táctil de encuestas para recoger respuestas durante tu activación.",
+      "branding": "Preguntas e identidad visual; uso de respuestas según alcance."
+    },
+    {
+      "id": "carrera",
+      "name": "Carrera por movimiento",
+      "category": "motion",
+      "action": "Tu cuerpo toma el control",
+      "description": "Una carrera que responde al movimiento del participante. El personaje y el ambiente pueden adaptarse a la campaña.",
+      "branding": "Logo, colores; personaje, mascota y entorno según compatibilidad y alcance."
+    },
+    {
+      "id": "luces-led",
+      "name": "Luces que te siguen",
+      "category": "motion",
+      "action": "Muévete y activa la luz",
+      "description": "Instalamos luces LED que responden al movimiento del público y convierten el espacio en una experiencia.",
+      "branding": "Colores y propuesta visual; instalación definida para el espacio."
+    },
+    {
+      "id": "avatar",
+      "name": "Atrapa con tu avatar",
+      "category": "motion",
+      "action": "Atrapa lo que cae del cielo",
+      "description": "El participante mueve un personaje o una mascota para atrapar los objetos que caen.",
+      "branding": "Logo, objetos y avatar compatible, según el alcance acordado."
+    },
+    {
+      "id": "laboratorio",
+      "name": "Laboratorio interactivo",
+      "category": "motion",
+      "action": "Mezcla y descubre",
+      "description": "Levanta los brazos, mira tus manos en pantalla y mezcla productos para crear pociones.",
+      "branding": "Logo, productos y ambientación visual compatible."
+    },
+    {
+      "id": "pintura-vr",
+      "name": "Pintura VR",
+      "category": "vr",
+      "action": "Pinta en realidad virtual",
+      "description": "Una experiencia de pintura que detecta superficies y permite intervenirlas dentro del entorno virtual.",
+      "branding": "Logo e identidad visual en los elementos compatibles del juego."
+    },
+    {
+      "id": "moto-vr",
+      "name": "Moto VR",
+      "category": "vr",
+      "action": "Súbete a la experiencia",
+      "description": "Una experiencia de conducción en moto para llevar la emoción a tu activación.",
+      "branding": "Logo, colores y recursos visuales compatibles."
+    },
+    {
+      "id": "arquero-vr",
+      "name": "Arquero VR",
+      "category": "vr",
+      "action": "Ataja y defiende tu arco",
+      "description": "Ponte los guantes de arquero y ataja penales dentro de una cancha virtual.",
+      "branding": "Logo, colores y elementos visuales compatibles de la cancha."
+    },
+    {
+      "id": "disparos-vr",
+      "name": "Disparos VR",
+      "category": "vr",
+      "action": "Pon a prueba tu puntería",
+      "description": "Un juego de disparos en realidad virtual para que el público participe en un reto inmersivo.",
+      "branding": "Logo, colores y elementos visuales compatibles."
+    },
+    {
+      "id": "escalada-vr",
+      "name": "Escalada VR",
+      "category": "vr",
+      "action": "Lleva el reto a otra altura",
+      "description": "Una experiencia de escalada en realidad virtual para sumar aventura a tu evento.",
+      "branding": "Logo, colores y recursos visuales compatibles."
+    },
+    {
+      "id": "plataformas-vr",
+      "name": "Plataformero VR",
+      "category": "vr",
+      "action": "Avanza y supera el recorrido",
+      "description": "Un recorrido de plataformas en realidad virtual que convierte la participación en un reto.",
+      "branding": "Logo, colores y recursos visuales compatibles."
+    }
+  ]
+}
