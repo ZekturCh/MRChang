@@ -1,29 +1,13 @@
-<header class="site-header">
-  <div class="container nav">
-
-    <a class="brand" href="{{ '/' | relative_url }}" aria-label="Paralel inicio">
-      <span class="brand-logo-box">
-        <img src="{{ '/paralelogo2.png' | relative_url }}" alt="Paralel" class="brand-logo">
-      </span>
-      <span>Paralel</span>
-    </a>
-
-    <nav class="nav-links" aria-label="Navegación principal">
-      <a href="{{ '/' | relative_url }}">Inicio</a>
-      <a href="{{ '/' | relative_url }}#experiencias">Experiencias</a>
-      <a href="{{ '/' | relative_url }}#casos">Casos</a>
-      <a href="{{ '/vr.html' | relative_url }}">VR</a>
-      <a href="{{ '/ar.html' | relative_url }}">AR</a>
-      <a href="{{ '/motion.html' | relative_url }}">Motion</a>
-      <a href="{{ '/web-apps.html' | relative_url }}">Web Apps</a>
-
-      <a class="nav-cta"
-         href="https://wa.me/51912576685?text=Hola%2C%20quiero%20cotizar%20una%20experiencia%20interactiva%20para%20un%20evento."
-         target="_blank"
-         rel="noopener">
-        Cotizar
-      </a>
-    </nav>
-
-  </div>
-</header>
+<a class="skip-link" href="#contenido">Ir al contenido</a>
+<header class="site-header"><div class="container navigation">
+<a class="brand" href="{{ '/' | relative_url }}" aria-label="ParalelVR, inicio"><img src="{{ '/paralelogo2.png' | relative_url }}" width="44" height="44" alt=""><span>PARALEL<span class="brand-vr">VR</span><small>ENTERTAINMENT TECHNOLOGY</small></span></a>
+<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="menu-bars" aria-hidden="true">☰</span><span>Menú</span></button>
+<nav class="site-nav" id="site-nav" aria-label="Navegación principal">
+<a href="{{ '/' | relative_url }}" {% if page.nav == 'index.html' %}aria-current="page"{% endif %}>Inicio</a>
+<a href="{{ '/catalogo.html' | relative_url }}" {% if page.nav == 'catalogo.html' %}aria-current="page"{% endif %}>Catálogo</a>
+<a href="{{ '/web-apps.html' | relative_url }}" {% if page.nav == 'web-apps.html' %}aria-current="page"{% endif %}>Touch</a>
+<a href="{{ '/motion.html' | relative_url }}" {% if page.nav == 'motion.html' %}aria-current="page"{% endif %}>Movimiento</a>
+<a href="{{ '/vr.html' | relative_url }}" {% if page.nav == 'vr.html' %}aria-current="page"{% endif %}>VR</a>
+<a href="{{ '/stands.html' | relative_url }}" {% if page.nav == 'stands.html' %}aria-current="page"{% endif %}>Stands</a>
+<a class="nav-contact" href="https://wa.me/51912576685?text=Hola%2C%20quiero%20una%20experiencia%20para%20mi%20evento." target="_blank" rel="noopener noreferrer">Hablemos ↗</a>
+</nav></div></header>

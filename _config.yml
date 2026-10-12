@@ -1,10 +1,12 @@
-title: "ParalelVR.space"
-description: "Experiencias interactivas para eventos en Lima y Peru: realidad virtual, realidad aumentada, motion tracking, juegos web, trivias y activaciones BTL."
+title: ParalelVR
+description: "Entretenimiento tecnológico para eventos y activaciones en Lima y Perú: juegos touch, motion tracking, realidad virtual y stands completos para marcas y agencias."
 url: "https://paralelvr.space"
 baseurl: ""
-
-lang: es
-
+lang: es-PE
 plugins:
   - jekyll-sitemap
-
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
