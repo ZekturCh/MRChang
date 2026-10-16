@@ -10,6 +10,12 @@ Marca: manual Attach Group 2025 enviado por el cliente, azul #1840E2, violeta #5
 
 Contenido educativo basado en el curso IA para ejecutivos proporcionado por Attach. Demos para validar contenido y experiencia; no implican contratación conjunta de los tres juegos.
 
+## Dirección visual
+
+Escenas oscuras con azul/violeta y tipografía Graphik, tarjetas SVG ilustradas, esferas con volumen y una red tridimensional dibujada en Canvas 2D. Animación limitada a 25 cuadros por segundo, densidad de píxel limitada y suspensión al ocultar la pestaña. Se respeta la preferencia de movimiento reducido.
+
+Los aciertos generan ondas y partículas; en oportunidades también iluminan la escena y muestran +100. Los microcasos presentan el tema y la decisión en dos paneles. Sonido sintetizado opcional, desactivado al iniciar, en oportunidades y trivia. Sin bibliotecas gráficas ni dependencias externas en ejecución.
+
 ## Hosting
 
 Proyecto Firebase existente: `dbdosparax`. Sitio separado: `paralelvr-demos`. Solo se despliega Hosting; no modifica Firestore, reglas, datos ni otros sitios.
