@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#003f76">
+<title>Memoria IA | Attach Group · ParalelVR</title>
+<style>
+:root {
+  --navy:#003b70;
+  --navy2:#062e5c;
+  --blue:#009fe3;
+  --blue2:#28b7ed;
+  --ice:#eaf8ff;
+  --white:#fff;
+  --text:#073a68;
+  --panel:rgba(255,255,255,.12);
+  --line:rgba(255,255,255,.25);
+  --shadow:0 20px 55px rgba(0,35,72,.32);
+  --radius:22px;
+  --gap:clamp(9px,1.35vw,16px);
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-right:env(safe-area-inset-right,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-left:env(safe-area-inset-left,0px);
+}
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;overscroll-behavior:none}
+body{
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  color:#fff;
+  background:
+    radial-gradient(circle at 18% 12%,rgba(77,203,248,.42),transparent 26%),
+    radial-gradient(circle at 82% 78%,rgba(17,151,218,.32),transparent 30%),
+    linear-gradient(145deg,#00528e 0%,#003b70 48%,#01284f 100%);
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+body::before{
+  content:"";position:fixed;inset:-25%;pointer-events:none;opacity:.22;
+  background:repeating-radial-gradient(circle at 50% 52%,transparent 0 38px,rgba(123,220,255,.55) 39px 44px,transparent 45px 78px);
+}
+button{font:inherit}
+img{display:block;pointer-events:none;-webkit-user-drag:none}
+#app{position:relative;width:100%;height:100%;padding:var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left)}
+.screen{position:absolute;inset:0;display:none;min-width:0;min-height:0}
+.screen.active{display:flex}
+#menu{
+  align-items:center;justify-content:center;flex-direction:column;gap:26px;padding:28px;
+}
+.menu-logo{
+  width:min(330px,58vw);max-height:118px;object-fit:contain;
+  filter:drop-shadow(0 18px 28px rgba(0,24,55,.28));
+}
+.menu-subtitle{
+  margin-top:-18px;font-size:clamp(13px,2vw,20px);font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:#dff6ff;
+}
+.play{
+  min-width:clamp(190px,31vw,310px);min-height:74px;padding:15px 40px;border:2px solid rgba(255,255,255,.9);
+  border-radius:999px;background:linear-gradient(180deg,#fff,#dff6ff);color:var(--navy);
+  font-size:clamp(30px,5vw,50px);font-weight:900;letter-spacing:.08em;cursor:pointer;
+  box-shadow:0 0 0 7px rgba(0,159,227,.35),0 18px 35px rgba(0,27,58,.35),inset 0 2px 0 #fff;
+  transition:transform .13s ease,filter .13s ease;
+}
+.play:active,.btn:active{transform:scale(.96)}
+#game{
+  flex-direction:column;gap:10px;
+  padding:calc(10px + var(--safe-top)) calc(12px + var(--safe-right)) calc(10px + var(--safe-bottom)) calc(12px + var(--safe-left));
+}
+.header{
+  flex:0 0 auto;display:grid;grid-template-columns:minmax(48px,1fr) auto minmax(48px,1fr);align-items:center;gap:10px;
+  padding:8px 10px;border:1px solid var(--line);border-radius:20px;background:rgba(0,44,86,.58);
+  box-shadow:0 12px 30px rgba(0,26,58,.22);backdrop-filter:blur(12px);
+}
+.brand-mini{justify-self:start;display:flex;align-items:center;gap:8px;min-width:0}
+.brand-mini img{width:118px;max-width:24vw;height:42px;object-fit:contain;object-position:left center}
+.brand-mini strong{display:none;font-size:14px;letter-spacing:.08em}
+.stats{display:flex;align-items:center;justify-content:center;gap:clamp(16px,4vw,40px)}
+.stat{display:flex;flex-direction:column;align-items:center;line-height:1}
+.stat b{font-size:clamp(20px,2.8vw,28px);color:#fff}
+.stat span{margin-top:4px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#bfeeff;font-weight:800}
+.actions{justify-self:end;display:flex;gap:8px}
+.btn{
+  min-width:46px;min-height:46px;padding:10px 14px;border:1px solid rgba(255,255,255,.25);border-radius:999px;
+  background:rgba(255,255,255,.10);color:#fff;font-weight:800;cursor:pointer;transition:transform .12s ease,filter .12s ease;
+}
+.btn:hover,.play:hover{filter:brightness(1.07)}
+.play-panel{
+  position:relative;
+  flex:1 1 auto;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden;
+  border:1px solid rgba(255,255,255,.18);border-radius:26px;
+  background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.055));
+  box-shadow:inset 0 0 60px rgba(0,22,49,.22),0 18px 40px rgba(0,20,45,.16);
+  backdrop-filter:blur(8px);
+}
+.board{
+  flex:1 1 auto;min-width:0;min-height:0;display:grid;
+  grid-template-columns:repeat(var(--cols,5),var(--card-w,120px));
+  grid-template-rows:repeat(var(--rows,2),var(--card-h,160px));
+  gap:var(--gap);justify-content:center;align-content:center;
+  padding:clamp(10px,1.5vw,18px);
+  transition:filter .22s ease,transform .22s ease;
+}
+.play-panel.flash-active .board{filter:brightness(.58) saturate(.82);transform:scale(.992)}
+.value-message{
+  flex:0 0 auto;min-height:clamp(82px,11vh,116px);
+  margin:clamp(10px,1.5vw,18px) clamp(10px,1.5vw,18px) 0;
+  padding:clamp(12px,1.5vw,17px) clamp(14px,2vw,24px);
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  border:1px solid rgba(255,255,255,.17);border-radius:18px;
+  background:linear-gradient(145deg,rgba(0,54,104,.44),rgba(0,107,165,.22));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+.value-copy{max-width:min(900px,94%);will-change:transform,opacity}
+.value-title{
+  margin:0 0 5px;color:#8be4ff;font-size:clamp(17px,2.2vw,25px);font-weight:900;
+  letter-spacing:.08em;text-transform:uppercase;line-height:1.05;
+}
+.value-phrase{
+  margin:0;color:#fff;font-size:clamp(13px,1.65vw,18px);font-weight:650;font-style:italic;
+  line-height:1.35;text-wrap:balance;
+}
+.value-message.initial .value-phrase{color:#ccefff;font-size:clamp(12px,1.45vw,16px);font-weight:650;font-style:normal}
+.value-message.animate .value-copy{animation:valueReveal .44s cubic-bezier(.2,.75,.25,1) both}
+@keyframes valueReveal{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.value-flash{
+  position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;
+  padding:clamp(18px,4vw,46px);pointer-events:none;
+  opacity:0;visibility:hidden;transition:opacity .2s ease,visibility .2s ease;
+}
+.value-flash.show{opacity:1;visibility:visible;pointer-events:auto}
+.value-flash-card{
+  width:min(560px,88%);padding:clamp(24px,4vw,38px) clamp(22px,4vw,42px);
+  text-align:center;border:1px solid rgba(255,255,255,.34);border-radius:26px;
+  background:linear-gradient(155deg,rgba(0,82,143,.97),rgba(0,42,84,.98));
+  box-shadow:0 24px 70px rgba(0,17,42,.48),0 0 0 6px rgba(65,208,255,.10);
+  backdrop-filter:blur(16px);transform:translateY(14px) scale(.94);
+  transition:transform .28s cubic-bezier(.2,.8,.2,1);
+}
+.value-flash.show .value-flash-card{transform:translateY(0) scale(1)}
+.value-flash-kicker{
+  margin:0 0 8px;color:#9ceaff;font-size:clamp(11px,1.4vw,14px);font-weight:900;
+  letter-spacing:.16em;text-transform:uppercase;
+}
+.value-flash-title{
+  margin:0 0 12px;color:#fff;font-size:clamp(28px,5vw,48px);font-weight:1000;
+  letter-spacing:.045em;line-height:1;text-transform:uppercase;
+}
+.value-flash-phrase{
+  margin:0;color:#fff;font-size:clamp(17px,2.3vw,24px);font-weight:700;font-style:italic;
+  line-height:1.35;text-wrap:balance;
+}
+.value-flash-found{
+  display:inline-flex;margin-top:18px;padding:7px 12px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.10);
+  color:#b9f2ff;font-size:11px;font-weight:900;letter-spacing:.11em;text-transform:uppercase;
+}
+.value-flash-skip{
+  display:block;min-width:150px;margin:14px auto 0;padding:10px 18px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.32);background:rgba(255,255,255,.12);color:#fff;
+  font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
+  transition:transform .12s ease,background .12s ease,opacity .12s ease;
+}
+.value-flash-skip:hover{background:rgba(255,255,255,.18)}
+.value-flash-skip:active{transform:scale(.97)}
+.card{
+  position:relative;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer;perspective:1100px;
+  filter:drop-shadow(0 9px 9px rgba(0,29,60,.30));
+}
+.inner{position:relative;width:100%;height:100%;display:block;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,.2,.2,1)}
+.card.flipped .inner{transform:rotateY(180deg)}
+.face{
+  position:absolute;inset:0;display:block;overflow:hidden;border-radius:clamp(13px,1.6vw,20px);
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border:1px solid rgba(255,255,255,.78);background:#eaf8ff;
+  box-shadow:inset 0 0 0 1px rgba(0,104,168,.18),0 4px 12px rgba(0,20,50,.25);
+}
+.front{transform:rotateY(180deg)}
+.face img{width:100%;height:100%;object-fit:cover}
+.card.matched{animation:pop .36s ease}
+.card.matched .face{box-shadow:0 0 0 4px rgba(98,221,255,.85),0 0 28px rgba(69,203,255,.65),0 8px 16px rgba(0,27,58,.28)}
+.card:disabled{cursor:default}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(.93)}100%{transform:scale(1)}}
+.overlay{
+  position:absolute;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(0,26,56,.76);backdrop-filter:blur(10px)
+}
+.overlay[hidden]{display:none}
+.modal{
+  width:min(520px,92vw);padding:34px;border:1px solid rgba(255,255,255,.28);border-radius:28px;
+  background:linear-gradient(155deg,rgba(4,79,133,.98),rgba(1,42,80,.99));text-align:center;box-shadow:var(--shadow)
+}
+.modal-logo{width:min(250px,64vw);height:auto;object-fit:contain;margin:0 auto 4px}
+.eyebrow{margin:0 0 6px;color:#83dcff;font-size:12px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
+.modal h2{margin:0 0 10px;font-size:clamp(27px,4vw,40px)}
+.modal p{margin:0 0 24px;color:#d5f3ff}
+.modal-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.primary{background:linear-gradient(180deg,#fff,#cfefff);color:var(--navy);border-color:#fff}
+@media(max-width:720px){
+  .brand-mini strong{display:none}
+  .header{grid-template-columns:50px 1fr 50px}
+  .actions .label{display:none}
+  .btn{padding:10px 12px}
+  .stats{gap:14px}
+  .stat b{font-size:19px}
+  .stat span{font-size:8px}
+  .play-panel{border-radius:20px}
+  .value-message{min-height:74px;margin:8px 8px 0;padding:10px 12px;border-radius:14px}
+  .value-title{font-size:16px}
+  .value-phrase{font-size:12px}
+  .value-message.initial .value-phrase{font-size:12px}
+  .value-flash-card{width:min(520px,92%);border-radius:20px}
+}
+@media(max-height:600px){
+  #game{gap:6px;padding-top:6px;padding-bottom:6px}
+  .header{padding:5px 8px}
+  .brand-mini img{width:38px;height:38px}
+  .btn{min-height:40px;min-width:40px}
+  .stat span{display:none}
+  .value-message{min-height:56px;margin:7px 7px 0;padding:7px 10px}
+  .value-title{margin-bottom:2px;font-size:14px}
+  .value-phrase,.value-message.initial .value-phrase{font-size:11px;line-height:1.25}
+  .value-flash-card{padding:18px 22px}
+  .value-flash-title{margin-bottom:8px;font-size:26px}
+  .value-flash-phrase{font-size:15px}
+  .value-flash-found{margin-top:12px}
+}
+
+/* Perfil vertical 9:16 + modo ligero para Android del tótem */
+body.portrait-layout #game{
+  gap:clamp(5px,.8vh,9px);
+  padding:calc(6px + var(--safe-top)) clamp(6px,1.5vw,12px) calc(6px + var(--safe-bottom));
+}
+body.portrait-layout .header{
+  min-height:clamp(50px,6vh,68px);
+  padding:clamp(5px,.7vh,8px) clamp(7px,1.5vw,12px);
+  border-radius:clamp(14px,2vw,19px);backdrop-filter:none;
+}
+body.portrait-layout .brand-mini img{width:clamp(78px,17vw,126px);height:clamp(28px,4vh,42px)}
+body.portrait-layout .stats{gap:clamp(16px,4vw,42px)}
+body.portrait-layout .stat b{font-size:clamp(21px,3.8vw,30px)}
+body.portrait-layout .stat span{font-size:clamp(10px,1.7vw,12px)}
+body.portrait-layout .play-panel{
+  min-height:0;border-radius:clamp(18px,2.6vw,24px);backdrop-filter:none;
+}
+body.portrait-layout .value-message{
+  min-height:clamp(92px,10.5vh,140px);
+  margin:clamp(9px,1.1vh,14px) clamp(9px,1.2vw,14px) 0;
+  padding:clamp(14px,1.5vh,20px) clamp(16px,2.4vw,26px);
+  border-radius:clamp(15px,2.2vw,20px);
+}
+body.portrait-layout .value-title{font-size:clamp(21px,3.5vw,29px)}
+body.portrait-layout .value-phrase,
+body.portrait-layout .value-message.initial .value-phrase{font-size:clamp(16px,2.9vw,21px);line-height:1.38}
+body.portrait-layout .board{
+  gap:clamp(12px,1.7vw,20px);padding:clamp(12px,1.8vw,20px);
+  align-content:space-evenly;
+}
+body.portrait-layout .card{filter:none;contain:layout paint style}
+body.portrait-layout .inner{
+  transition:transform .32s cubic-bezier(.32,.05,.2,1);
+  transform:translateZ(0);will-change:transform;
+}
+body.portrait-layout .card.flipped .inner{transform:rotateY(180deg) translateZ(0)}
+body.portrait-layout .face{
+  box-shadow:inset 0 0 0 1px rgba(0,104,168,.14),0 3px 8px rgba(0,20,50,.18);
+}
+body.portrait-layout .card.matched .face{
+  box-shadow:0 0 0 3px rgba(98,221,255,.78),0 0 16px rgba(69,203,255,.42);
+}
+body.portrait-layout .play-panel.flash-active .board{filter:none;transform:none;opacity:.48}
+body.portrait-layout .value-flash-card{
+  width:min(620px,92%);padding:clamp(28px,4vh,48px) clamp(24px,4vw,44px);backdrop-filter:none
+}
+body.portrait-layout .value-flash-kicker{font-size:clamp(12px,2vw,15px)}
+body.portrait-layout .value-flash-title{font-size:clamp(34px,6vw,54px)}
+body.portrait-layout .value-flash-phrase{font-size:clamp(20px,3.7vw,28px);line-height:1.38}
+body.portrait-layout .value-flash-found{font-size:clamp(11px,1.8vw,13px)}
+body.portrait-layout .value-flash-skip{min-width:180px;padding:12px 20px;font-size:clamp(12px,2vw,14px)}
+body.portrait-layout.hub-mode .brand-mini,
+body.portrait-layout.hub-mode .actions{display:none}
+body.portrait-layout.hub-mode .header{grid-template-columns:1fr}
+body.portrait-layout.hub-mode .stats{justify-self:center}
+@media(prefers-reduced-motion:reduce){
+  .inner,.play,.btn{transition:none}
+  .card.matched,.value-message.animate .value-copy{animation:none}
+  .board,.value-flash,.value-flash-card{transition:none}
+}
+
+/* Ajustes de contingencia offline para pantalla vertical/touch */
+body.portrait-layout .value-title{font-size:clamp(24px,4.6vw,36px);line-height:1.02}
+body.portrait-layout .value-phrase{font-size:clamp(18px,3.2vw,25px);line-height:1.42}
+body.portrait-layout .value-message.initial .value-phrase{font-size:clamp(19px,3.5vw,27px)}
+body.portrait-layout .stat b{font-size:clamp(24px,4.5vw,34px)}
+body.portrait-layout .stat span{font-size:clamp(11px,1.9vw,15px)}
+body.portrait-layout .value-message{min-height:clamp(118px,13vh,165px)}
+body.portrait-layout .board{place-content:center}
+
+
+/* Modo touch liviano: menos efectos para televisores Android lentos */
+body::before{opacity:.08}
+.card,.inner,.face,.value-flash,.win-modal,.screen,.topbar,.game-shell{animation:none!important;filter:none!important;backdrop-filter:none!important}
+.card:hover{transform:none!important}
+.inner{transition:transform .14s linear!important}
+.value-flash-card{box-shadow:none!important}
+
+
+/* Ajustes OGopt: controles de evento + rendimiento para totem Android */
+:root{--opt-ui-scale:1;--opt-memory-font:1;--opt-card-scale:1}
+body{font-size:calc(16px * var(--opt-ui-scale,1))}
+body::before{opacity:.06!important}
+.header,.play-panel,.modal,.value-message,.value-flash-card{backdrop-filter:none!important;box-shadow:none!important}
+.card{filter:none!important;touch-action:manipulation}
+.inner{transition:transform .16s linear!important}
+.face{box-shadow:inset 0 0 0 1px rgba(0,104,168,.14)!important}
+.card.matched .face{box-shadow:0 0 0 3px rgba(98,221,255,.74)!important}
+body.portrait-layout .value-title{font-size:calc(var(--opt-memory-font,1) * clamp(28px,5.4vw,42px))!important;line-height:1.02}
+body.portrait-layout .value-phrase,
+body.portrait-layout .value-message.initial .value-phrase{font-size:calc(var(--opt-memory-font,1) * clamp(22px,4vw,31px))!important;line-height:1.35}
+body.portrait-layout .value-message{min-height:clamp(134px,15vh,190px)!important}
+body.portrait-layout .stat b{font-size:calc(var(--opt-ui-scale,1) * clamp(26px,4.8vw,36px))!important}
+body.portrait-layout .stat span{font-size:calc(var(--opt-ui-scale,1) * clamp(12px,2vw,16px))!important}
+body.portrait-layout .board{align-content:center!important;justify-content:center!important}
+body.portrait-layout .card{transform:scale(var(--opt-card-scale,1));transform-origin:center}
+
+</style>
+<style>
+body{background:radial-gradient(ellipse at 80% 10%,#322369,transparent 60%),#080e29!important;font-family:Arial,sans-serif!important}.screen{background:transparent!important}.header,.play-panel,.modal{background:#0e1839!important;color:white!important;border-color:#344579!important}.value-message,.value-flash-card{background:#18275a!important;color:white!important}.value-title,.value-flash-title{color:#74e4e7!important}.value-phrase,.value-flash-phrase,.menu-subtitle{color:#e5ebff!important}.btn,.play{background:#1840e2!important;color:white!important;border-color:#6583ff!important}.stat b{color:#7ee4e5!important}.stat span{color:#c4d0fb!important}.menu-logo{width:300px!important}.brand-mini img{width:160px!important}.menu-subtitle{font-size:28px!important}.value-message{border:1px solid #3f5188!important}.value-flash-found{color:#74e4e7!important}
+</style><link rel="stylesheet" href="../../assets/memory-brand.css"></head>
+<body>
+<div id="app">
+  <section id="menu" class="screen active" aria-label="Menú principal">
+    <img class="menu-logo" src="../../assets/attach-logo.svg" alt="ATTACH">
+    <div class="menu-subtitle">Memoria IA</div><p class="memory-instruction">Encuentra cinco pares. Descubre cinco ideas para liderar con IA.</p><a class="back-link" href="../../">← Elegir otro juego</a>
+    <button id="start" class="play" type="button">CONECTAR IDEAS</button>
+  </section>
+
+  <section id="game" class="screen" aria-label="Memoria IA ATTACH">
+    <header class="header">
+      <div class="brand-mini"><img src="../../assets/attach-logo.svg" alt="ATTACH"></div>
+      <div class="stats" aria-live="polite">
+        <div class="stat"><b id="pairs">0/5</b><span>Pares</span></div>
+        <div class="stat"><b id="moves">0</b><span>Movimientos</span></div>
+        <div class="stat"><b id="points">0</b><span>Puntos</span></div>
+      </div>
+      <div class="actions"><a class="btn back-game" href="../../" aria-label="Elegir otro juego">← Juegos</a>
+        <button id="restart" class="btn" type="button" aria-label="Reiniciar"><span>↻</span><span class="label"> Reiniciar</span></button>
+      </div>
+    </header>
+    <div id="playPanel" class="play-panel">
+      <section id="valueMessage" class="value-message initial animate" aria-live="polite" aria-atomic="true">
+        <div class="value-copy">
+          <h2 id="valueTitle" class="value-title" hidden></h2>
+          <p id="valuePhrase" class="value-phrase">Encuentra un par para descubrir una idea</p>
+        </div>
+      </section>
+      <main id="board" class="board" role="grid" aria-label="Tablero de memoria de 10 cartas"></main>
+      <div id="valueFlash" class="value-flash" aria-live="assertive" aria-atomic="true">
+        <div class="value-flash-card">
+          <p class="value-flash-kicker">Par encontrado</p>
+          <h2 id="valueFlashTitle" class="value-flash-title"></h2>
+          <p id="valueFlashPhrase" class="value-flash-phrase"></p>
+          <span class="value-flash-found">✓ Idea conectada</span>
+          <button id="valueFlashSkip" class="value-flash-skip" type="button">Continuar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="win" class="overlay" hidden>
+    <div class="modal">
+      <img class="modal-logo" src="../../assets/attach-logo.svg" alt="ATTACH">
+      <p class="eyebrow">¡Completado!</p>
+      <h2>Conectaste las 5 oportunidades</h2>
+      <p id="summary"></p>
+      <div class="modal-actions">
+        <button id="again" class="btn primary" type="button">Jugar de nuevo</button>
+        <button id="menuBtn" class="btn" type="button">Volver al menú</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  const HUB_MODE=new URLSearchParams(location.search).get("hub")==="1";
+
+  function applyLayoutProfile(){
+    const portrait=window.innerHeight>window.innerWidth;
+    const ratio=window.innerHeight/Math.max(window.innerWidth,1);
+    document.body.classList.toggle("portrait-layout",portrait && ratio>1.35);
+    document.body.classList.toggle("hub-mode",HUB_MODE);
+  }
+  applyLayoutProfile();
+  addEventListener("resize",applyLayoutProfile);
+  addEventListener("orientationchange",applyLayoutProfile);
+
+  const CONFIG = {"totalPairs": 5, "mismatchDelay": 720, "pointsPerMatch": 200, "penaltyPerMiss": 10, "cardAspectRatio": 0.75, "maxCardWidth": 260, "back": "../../assets/back.svg", "cards": [{"name": "PRODUCTIVIDAD", "id": "productividad", "image": "../../assets/productividad.svg"}, {"name": "DATOS", "id": "datos", "image": "../../assets/datos.svg"}, {"name": "VALOR Y ROI", "id": "roi", "image": "../../assets/roi.svg"}, {"name": "SEGURIDAD", "id": "seguridad", "image": "../../assets/seguridad.svg"}, {"name": "SUPERVISIÓN", "id": "supervision", "image": "../../assets/supervision.svg"}]};
+
+  const VALUE_MESSAGES = Object.freeze({"productividad": {"title": "PRODUCTIVIDAD", "summary": "Menos tareas repetitivas. Más tiempo para decidir.", "phrases": ["Menos tareas repetitivas. Más tiempo para decidir."]}, "datos": {"title": "DATOS", "summary": "Convierte información en decisiones con contexto.", "phrases": ["Convierte información en decisiones con contexto."]}, "roi": {"title": "VALOR Y ROI", "summary": "Prioriza impacto, viabilidad y riesgo antes de escalar.", "phrases": ["Prioriza impacto, viabilidad y riesgo antes de escalar."]}, "seguridad": {"title": "SEGURIDAD", "summary": "Protege información sensible y usa entornos autorizados.", "phrases": ["Protege información sensible y usa entornos autorizados."]}, "supervision": {"title": "SUPERVISIÓN", "summary": "Revisa las respuestas antes de actuar.", "phrases": ["Revisa las respuestas antes de actuar."]}});
+
+  const state = { deck:[], first:null, second:null, locked:false, moves:0, pairs:0, points:0 };
+  const $ = (id) => document.getElementById(id);
+  const dom = {
+    menu:$("menu"), game:$("game"), board:$("board"), start:$("start"), restart:$("restart"),
+    pairs:$("pairs"), moves:$("moves"), points:$("points"), win:$("win"), summary:$("summary"),
+    again:$("again"), menuBtn:$("menuBtn"), playPanel:$("playPanel"), valueMessage:$("valueMessage"),
+    valueTitle:$("valueTitle"), valuePhrase:$("valuePhrase"), valueFlash:$("valueFlash"),
+    valueFlashTitle:$("valueFlashTitle"), valueFlashPhrase:$("valueFlashPhrase"),
+    valueFlashSkip:$("valueFlashSkip")
+  };
+
+  let valueFlashTimer=null;
+  let valueFlashShownAt=0;
+  let winTimer=null;
+  let mismatchTimer=null;
+
+  function shuffle(input) {
+    const arr=[...input];
+    for(let i=arr.length-1;i>0;i--) {
+      const j=Math.floor(Math.random()*(i+1));
+      [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+    return arr;
+  }
+
+  function buildDeck() {
+    return shuffle(CONFIG.cards.flatMap((c,i)=>[
+      {...c, uid:`${c.id}-a`, pair:`pair-${i}`},
+      {...c, uid:`${c.id}-b`, pair:`pair-${i}`}
+    ]));
+  }
+
+  function resetState() {
+    state.deck=[]; state.first=null; state.second=null; state.locked=false;
+    state.moves=0; state.pairs=0; state.points=0;
+  }
+
+  function updateStats() {
+    dom.pairs.textContent=`${state.pairs}/${CONFIG.totalPairs}`;
+    dom.moves.textContent=String(state.moves);
+    dom.points.textContent=String(state.points);
+  }
+
+  function hideValueFlash(immediate=false) {
+    clearTimeout(valueFlashTimer);
+    dom.valueFlash.classList.remove("show");
+    dom.playPanel.classList.remove("flash-active");
+    if(immediate) return;
+    valueFlashTimer=setTimeout(()=>{},240);
+  }
+
+  function requestFastFlashClose() {
+    const elapsed=Date.now()-valueFlashShownAt;
+    const wait=Math.max(0,1000-elapsed);
+    clearTimeout(valueFlashTimer);
+    valueFlashTimer=setTimeout(()=>{
+      hideValueFlash();
+      if(state.pairs===CONFIG.totalPairs && dom.win.hidden) {
+        clearTimeout(winTimer);
+        winTimer=setTimeout(showWin,260);
+      }
+    },wait);
+  }
+
+  function showValueFlash(title,phrase) {
+    clearTimeout(valueFlashTimer);
+    valueFlashShownAt=Date.now();
+    dom.valueFlashTitle.textContent=title;
+    dom.valueFlashPhrase.textContent=phrase;
+    dom.playPanel.classList.add("flash-active");
+    dom.valueFlash.classList.remove("show");
+    void dom.valueFlash.offsetWidth;
+    dom.valueFlash.classList.add("show");
+    valueFlashTimer=setTimeout(()=>{
+      hideValueFlash();
+    },2600);
+  }
+
+  function showTopValue(valueId=null) {
+    const value=valueId ? VALUE_MESSAGES[valueId] : null;
+    dom.valueTitle.hidden=!value;
+    dom.valueTitle.textContent=value ? value.title : "";
+    dom.valuePhrase.textContent=value ? value.summary : "Voltea una carta para descubrir una idea";
+    dom.valueMessage.classList.toggle("initial",!value);
+    dom.valueMessage.classList.remove("animate");
+    void dom.valueMessage.offsetWidth;
+    dom.valueMessage.classList.add("animate");
+    if(!value) hideValueFlash(true);
+  }
+
+  function showMatchExample(valueId) {
+    const value=VALUE_MESSAGES[valueId];
+    if(!value) return;
+    const phrase=Array.isArray(value.phrases) && value.phrases.length
+      ? value.phrases[Math.floor(Math.random()*value.phrases.length)]
+      : value.summary;
+    showValueFlash(value.title,phrase);
+  }
+
+  function showScreen(el) {
+    [dom.menu,dom.game].forEach(s=>s.classList.remove("active"));
+    el.classList.add("active");
+  }
+
+  function createCard(data) {
+    const b=document.createElement("button");
+    b.type="button"; b.className="card"; b.dataset.pair=data.pair; b.dataset.uid=data.uid; b.dataset.valueId=data.id;
+    b.setAttribute("role","gridcell"); b.setAttribute("aria-label","Carta boca abajo");
+
+    const inner=document.createElement("span"); inner.className="inner";
+    const back=document.createElement("span"); back.className="face back";
+    const backImg=document.createElement("img"); backImg.src=CONFIG.back; backImg.alt=""; back.appendChild(backImg);
+    const front=document.createElement("span"); front.className="face front";
+    const frontImg=document.createElement("img"); frontImg.src=data.image; frontImg.alt=data.name; front.appendChild(frontImg);
+    inner.append(back,front); b.appendChild(inner);
+    b.addEventListener("click",()=>pick(b));
+    return b;
+  }
+
+  function render() {
+    dom.board.innerHTML="";
+    state.deck.forEach(c=>dom.board.appendChild(createCard(c)));
+    requestAnimationFrame(fitBoard);
+  }
+
+  function fitBoard() {
+    const total=state.deck.length || 10;
+    const r=dom.board.getBoundingClientRect();
+    const cs=getComputedStyle(dom.board);
+    const padX=parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight);
+    const padY=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom);
+    const gap=parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--gap")) || 12;
+    const w=Math.max(0,r.width-padX), h=Math.max(0,r.height-padY);
+    let best=null;
+    const isPortrait=document.body.classList.contains("portrait-layout");
+    const candidateCols=isPortrait ? [2] : Array.from({length:total},(_,i)=>i+1);
+    for(const cols of candidateCols) {
+      const rows=Math.ceil(total/cols);
+      const cellW=(w-gap*(cols-1))/cols;
+      const cellH=(h-gap*(rows-1))/rows;
+      if(cellW<=0||cellH<=0) continue;
+      const maxCardWidth=isPortrait ? Number.POSITIVE_INFINITY : CONFIG.maxCardWidth;
+      const itemW=Math.min(cellW,cellH*CONFIG.cardAspectRatio,maxCardWidth);
+      const itemH=itemW/CONFIG.cardAspectRatio;
+      if(!best || itemW>best.itemW) best={cols,rows,itemW,itemH};
+    }
+    if(best) {
+      dom.board.style.setProperty("--cols",best.cols);
+      dom.board.style.setProperty("--rows",best.rows);
+      dom.board.style.setProperty("--card-w",`${best.itemW}px`);
+      dom.board.style.setProperty("--card-h",`${best.itemH}px`);
+
+      const cards=[...dom.board.children];
+      cards.forEach(card=>{ card.style.left="0px"; });
+
+      const remainder=total % best.cols;
+      if(remainder>0) {
+        const lastRowStart=total-remainder;
+        const offset=((best.cols-remainder)*(best.itemW+gap))/2;
+        cards.slice(lastRowStart).forEach(card=>{
+          card.style.left=`${offset}px`;
+        });
+      }
+    }
+  }
+
+  function flip(card,on=true) {
+    card.classList.toggle("flipped",on);
+    card.setAttribute("aria-label",on?"Carta volteada":"Carta boca abajo");
+  }
+
+  function resetSelection() {
+    state.first=null; state.second=null; state.locked=false;
+  }
+
+  function pick(card) {
+    if(state.locked || card.disabled || card.classList.contains("flipped")) return;
+    flip(card,true);
+    if(!state.first) {
+      state.first=card;
+      showTopValue(card.dataset.valueId);
+      return;
+    }
+    state.second=card; state.locked=true; state.moves++; updateStats();
+
+    if(state.first.dataset.pair===state.second.dataset.pair) {
+      state.points+=CONFIG.pointsPerMatch;
+      [state.first,state.second].forEach(c=>{c.classList.add("matched");c.disabled=true;c.setAttribute("aria-label","Carta emparejada");});
+      showMatchExample(state.first.dataset.valueId);
+      state.pairs++; updateStats(); resetSelection();
+      if(state.pairs===CONFIG.totalPairs) {
+        clearTimeout(winTimer);
+        winTimer=setTimeout(showWin,2850);
+      }
+    } else {
+      state.points=Math.max(0,state.points-CONFIG.penaltyPerMiss); updateStats();
+      mismatchTimer=setTimeout(()=>{ if(state.first) flip(state.first,false); if(state.second) flip(state.second,false); resetSelection(); },CONFIG.mismatchDelay);
+    }
+  }
+
+  function startGame() {
+    clearTimeout(winTimer); clearTimeout(mismatchTimer); resetState(); state.deck=buildDeck(); updateStats(); showTopValue(null); dom.win.hidden=true; showScreen(dom.game); render();
+  }
+
+  function showWin() {
+    dom.summary.textContent=`Lo lograste en ${state.moves} movimientos y obtuviste ${state.points} puntos.`;
+    dom.win.hidden=false;
+  }
+
+  function goMenu() {
+    clearTimeout(mismatchTimer); clearTimeout(winTimer);
+    dom.win.hidden=true;
+    state.locked=true;
+    if(HUB_MODE && window.parent!==window) {
+      window.parent.postMessage({type:"ATTACH_CHOOSE_GAME"},"*");
+      return;
+    }
+    showScreen(dom.menu);
+  }
+
+  dom.start.addEventListener("click",startGame);
+  dom.restart.addEventListener("click",startGame);
+  dom.again.addEventListener("click",startGame);
+  dom.menuBtn.addEventListener("click",goMenu);
+  dom.valueFlashSkip.addEventListener("click",requestFastFlashClose);
+
+  if(HUB_MODE) {
+    dom.menuBtn.textContent="Elegir juego";
+    startGame();
+  }
+
+  let resizeTimer;
+  function onResize() {
+    clearTimeout(resizeTimer);
+    resizeTimer=setTimeout(()=>{if(dom.game.classList.contains("active")) fitBoard();},100);
+  }
+  addEventListener("resize",onResize);
+  addEventListener("orientationchange",onResize);
+
+  [CONFIG.back,...CONFIG.cards.map(c=>c.image)].forEach(src=>{const im=new Image();im.src=src;});
+  updateStats();
+
+  function applyOptSettings(settings){
+    if(!settings) return;
+    const root=document.documentElement;
+    root.style.setProperty("--opt-ui-scale",settings.uiScale || 1);
+    root.style.setProperty("--opt-memory-font",settings.memoryText || 1);
+    root.style.setProperty("--opt-card-scale",settings.cardScale || 1);
+    document.body.classList.toggle("opt-performance",settings.performance!==false);
+    if(dom.game.classList.contains("active")) requestAnimationFrame(fitBoard);
+  }
+  addEventListener("message",function(event){
+    if(event && event.data && event.data.type==="ATTACH_OPT_SETTINGS") applyOptSettings(event.data.settings);
+  });
+  try{ applyOptSettings(JSON.parse(localStorage.getItem("attachMemorySettingsV1")||"null")); }catch(e){}
+
+})();
+</script>
+</body>
+</html>
