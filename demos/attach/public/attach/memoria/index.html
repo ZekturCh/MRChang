@@ -328,7 +328,7 @@ body.portrait-layout .card{transform:scale(var(--opt-card-scale,1));transform-or
 </style>
 <style>
 body{background:radial-gradient(ellipse at 80% 10%,#322369,transparent 60%),#080e29!important;font-family:Arial,sans-serif!important}.screen{background:transparent!important}.header,.play-panel,.modal{background:#0e1839!important;color:white!important;border-color:#344579!important}.value-message,.value-flash-card{background:#18275a!important;color:white!important}.value-title,.value-flash-title{color:#74e4e7!important}.value-phrase,.value-flash-phrase,.menu-subtitle{color:#e5ebff!important}.btn,.play{background:#1840e2!important;color:white!important;border-color:#6583ff!important}.stat b{color:#7ee4e5!important}.stat span{color:#c4d0fb!important}.menu-logo{width:300px!important}.brand-mini img{width:160px!important}.menu-subtitle{font-size:28px!important}.value-message{border:1px solid #3f5188!important}.value-flash-found{color:#74e4e7!important}
-</style><link rel="stylesheet" href="../../assets/memory-brand.css?v=2"></head>
+</style><link rel="stylesheet" href="../../assets/memory-brand.css?v=3"></head>
 <body>
 <div id="app">
   <section id="menu" class="screen active" aria-label="Menú principal">
@@ -400,7 +400,7 @@ body{background:radial-gradient(ellipse at 80% 10%,#322369,transparent 60%),#080
   addEventListener("resize",applyLayoutProfile);
   addEventListener("orientationchange",applyLayoutProfile);
 
-  const CONFIG = {"totalPairs": 5, "mismatchDelay": 720, "pointsPerMatch": 200, "penaltyPerMiss": 10, "cardAspectRatio": 0.75, "maxCardWidth": 260, "back": "../../assets/back.svg?v=2", "cards": [{"name": "PRODUCTIVIDAD", "id": "productividad", "image": "../../assets/productividad.svg?v=2"}, {"name": "DATOS", "id": "datos", "image": "../../assets/datos.svg?v=2"}, {"name": "VALOR Y ROI", "id": "roi", "image": "../../assets/roi.svg?v=2"}, {"name": "SEGURIDAD", "id": "seguridad", "image": "../../assets/seguridad.svg?v=2"}, {"name": "SUPERVISIÓN", "id": "supervision", "image": "../../assets/supervision.svg?v=2"}]};
+  const CONFIG = {"totalPairs": 5, "mismatchDelay": 720, "pointsPerMatch": 200, "penaltyPerMiss": 10, "cardAspectRatio": 0.75, "maxCardWidth": 260, "back": "../../assets/back.svg?v=3", "cards": [{"name": "PRODUCTIVIDAD", "id": "productividad", "image": "../../assets/productividad.svg?v=3"}, {"name": "DATOS", "id": "datos", "image": "../../assets/datos.svg?v=3"}, {"name": "VALOR Y ROI", "id": "roi", "image": "../../assets/roi.svg?v=3"}, {"name": "SEGURIDAD", "id": "seguridad", "image": "../../assets/seguridad.svg?v=3"}, {"name": "SUPERVISIÓN", "id": "supervision", "image": "../../assets/supervision.svg?v=3"}]};
 
   const VALUE_MESSAGES = Object.freeze({"productividad": {"title": "PRODUCTIVIDAD", "summary": "Menos tareas repetitivas. Más tiempo para decidir.", "phrases": ["Menos tareas repetitivas. Más tiempo para decidir."]}, "datos": {"title": "DATOS", "summary": "Convierte información en decisiones con contexto.", "phrases": ["Convierte información en decisiones con contexto."]}, "roi": {"title": "VALOR Y ROI", "summary": "Prioriza impacto, viabilidad y riesgo antes de escalar.", "phrases": ["Prioriza impacto, viabilidad y riesgo antes de escalar."]}, "seguridad": {"title": "SEGURIDAD", "summary": "Protege información sensible y usa entornos autorizados.", "phrases": ["Protege información sensible y usa entornos autorizados."]}, "supervision": {"title": "SUPERVISIÓN", "summary": "Revisa las respuestas antes de actuar.", "phrases": ["Revisa las respuestas antes de actuar."]}});
 

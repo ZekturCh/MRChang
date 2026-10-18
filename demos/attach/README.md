@@ -12,7 +12,9 @@ Contenido educativo basado en el curso IA para ejecutivos proporcionado por Atta
 
 ## Dirección visual
 
-Escenas oscuras con azul/violeta y tipografía Graphik, tarjetas SVG ilustradas, esferas con volumen y una red tridimensional dibujada en Canvas 2D. Animación limitada a 25 cuadros por segundo, densidad de píxel limitada y suspensión al ocultar la pestaña. Se respeta la preferencia de movimiento reducido.
+Escenas oscuras con azul/violeta y tipografía Graphik, tarjetas SVG con composición corporativa y fotografía, esferas con volumen y una red tridimensional dibujada en Canvas 2D. Animación limitada a 25 cuadros por segundo, densidad de píxel limitada y suspensión al ocultar la pestaña. Se respeta la preferencia de movimiento reducido.
+
+Memoria: reverso tipográfico y cinco frentes con fotografías tomadas de las páginas 18 y 23 del manual suministrado. Azul principal, degradado azul/violeta, bloque de fotografía con esquina redondeada y signo +, siguiendo las composiciones de las páginas 21 y 22. Logo oficial sin alterar y textos Graphik convertidos a trazados para conservar la tipografía dentro de las imágenes SVG. Fotografías optimizadas e incrustadas; no se publica el manual.
 
 Los aciertos generan ondas y partículas; en oportunidades también iluminan la escena y muestran +100. Los microcasos presentan el tema y la decisión en dos paneles. Sonido sintetizado opcional, desactivado al iniciar, en oportunidades y trivia. Sin bibliotecas gráficas ni dependencias externas en ejecución.
 

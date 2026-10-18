@@ -5,3 +5,7 @@ body{font-family:Graphik,Arial,sans-serif!important;background:radial-gradient(e
 @media(max-width:650px){body.portrait-layout .value-message{min-height:68px!important}.board{gap:10px!important}body.portrait-layout .value-message.initial .value-phrase{font-size:12px!important}}
 
 .value-flash-phrase{font-style:normal!important}.value-flash-skip{font-family:Graphik,Arial,sans-serif!important;text-transform:none!important;font-weight:500!important;letter-spacing:0!important;padding:12px 22px!important}
+
+/* Card artwork follows Attach's corporate compositions and photographic treatment. */
+.card{border-radius:10px!important;box-shadow:0 8px 22px #0003!important}.card .face{border:0!important;border-radius:10px!important;background:#1840e2!important;box-shadow:none!important}.card.matched{filter:none!important;box-shadow:0 0 0 2px #bac4f0,0 9px 25px #1840e233!important}.card.matched .face{box-shadow:none!important}.card:hover{box-shadow:0 10px 26px #1840e233!important}
+@media(max-width:650px){.card,.card .face{border-radius:7px!important}}
