@@ -1,23 +1,283 @@
-(()=>{'use strict';
-const stage=document.getElementById('stage'),mode=document.body.dataset.game,FX=window.AttachFX;
-let timer=null,spawnTimer=null,deadline=0,remaining=35000,playing=false,paused=false,points=0,hits=0,risks=0,misses=0,questionIndex=0,correct=0,answered=false,targets=new Map(),timeouts=new Set(),sequence=0;
-const q=[{title:'Productividad ejecutiva',question:'Tu equipo dedica horas a resumir reportes. ¿Cómo empezarías con IA?',answers:['Automatizar todas las decisiones del área.','Probar un piloto con datos autorizados y revisión humana.','Comprar la herramienta más popular.'],correct:1,why:'Un piloto acotado permite medir tiempo ahorrado y calidad antes de escalar.'},{title:'Supervisión humana',question:'Un asistente entrega una cifra importante sin citar su fuente. ¿Qué haces?',answers:['La usas porque parece precisa.','La verificas con una fuente confiable antes de decidir.','La incluyes si coincide con tu intuición.'],correct:1,why:'Una respuesta convincente puede contener errores. Verificar fuentes mantiene el criterio en manos de las personas.'},{title:'Seguridad y datos',question:'Quieres analizar una base de clientes con IA. ¿Qué validas primero?',answers:['Que el entorno esté autorizado y proteja los datos.','Que la respuesta llegue en pocos segundos.','Que la herramienta genere gráficos atractivos.'],correct:0,why:'Antes de usar información sensible, valida el entorno y los controles de tu organización.'},{title:'Priorizar oportunidades',question:'Tienes tres ideas de IA. ¿Cuál conviene priorizar?',answers:['La que tenga la presentación más novedosa.','La que prometa automatizar más tareas sin pruebas.','La que tenga valor medible, viabilidad y riesgo controlado.'],correct:2,why:'Impacto, viabilidad y riesgo ayudan a elegir un caso que pueda producir resultados útiles.'},{title:'Pilotos y resultados',question:'Un piloto funciona bien en una demostración. ¿Cuál es el siguiente paso?',answers:['Extenderlo de inmediato a toda la empresa.','Medirlo con casos reales y criterios de éxito.','Eliminar la revisión humana para ganar velocidad.'],correct:1,why:'Valida calidad, costos e impacto en condiciones reales antes de ampliar su uso.'}];
-const opportunities=[{name:'Resumir reportes',symbol:'≡',why:'La IA ayuda a sintetizar información; tu equipo revisa el resultado.'},{name:'Analizar datos',symbol:'◎',why:'Usa los datos para encontrar patrones y apoyar decisiones con contexto.'},{name:'Probar un piloto',symbol:'↗',why:'Empieza con un caso acotado y mide el impacto antes de escalar.'},{name:'Revisar respuestas',symbol:'✓',why:'La supervisión humana mejora la calidad de las decisiones.'},{name:'Priorizar valor',symbol:'+',why:'Elige casos con impacto medible, viabilidad y riesgo controlado.'},{name:'Apoyar al equipo',symbol:'⇄',why:'Automatiza tareas repetitivas para liberar tiempo de trabajo de valor.'}];
-const danger=[{name:'Datos sin proteger',symbol:'!',why:'Protege la información sensible y usa entornos autorizados.'},{name:'Decidir sin revisar',symbol:'!',why:'Verifica resultados antes de tomar decisiones relevantes.'},{name:'Sesgos sin evaluar',symbol:'!',why:'Evalúa sesgos y posibles impactos del caso de uso.'},{name:'Escalar sin medir',symbol:'!',why:'Comprueba resultados y costos antes de extender una solución.'}];
-const later=(fn,ms)=>{const id=setTimeout(()=>{timeouts.delete(id);fn()},ms);timeouts.add(id);return id};
-function cleanup(){clearInterval(timer);clearInterval(spawnTimer);timer=spawnTimer=null;for(const id of timeouts)clearTimeout(id);timeouts.clear();targets.clear();playing=false;paused=false;}
-function top(text,tag){return `<div class="stage-top"><span class="eyebrow">${text}</span><span class="stage-tag">${tag}</span></div>`}
-function intro(){cleanup();stage.innerHTML=top(mode==='active'?'Activa las oportunidades':'Decide con IA',mode==='active'?'35 segundos':'5 microcasos')+`<div class="intro-view"><div class="intro-art" aria-hidden="true"><canvas data-core></canvas><span class="core-glyph">${FX.icon(mode==='active'?'bolt':'brain')}</span></div><h1>${mode==='active'?'Activa lo que<br>crea valor.':'Elige con criterio.<br>Decide con IA.'}</h1><p>${mode==='active'?'Activa las oportunidades de IA y evita los riesgos señalados con una alerta. Cada acierto enciende una nueva posibilidad.':'Cinco situaciones de trabajo, tres alternativas y una idea útil detrás de cada decisión. Sin límite de tiempo.'}</p><div class="actions"><button class="primary" id="start">Iniciar experiencia <span aria-hidden="true">↗</span></button></div><p class="result-info">${mode==='active'?'35 segundos · +100 por oportunidad · Un toque para activar':'No necesitas conocimientos técnicos.'}</p></div>`;}
-function start(){cleanup();points=hits=risks=misses=questionIndex=correct=sequence=0;remaining=35000;playing=true;if(mode==='active'){renderActive();deadline=performance.now()+remaining;spawn();timer=setInterval(tick,100);spawnTimer=setInterval(spawn,650);}else renderQuestion();}
-function renderActive(){stage.innerHTML=top('Activa las oportunidades','Ronda en curso')+`<h1 class="game-heading">Encuentra oportunidades. Evita los riesgos.</h1><div class="stats"><span><strong id="score">0</strong> puntos</span><span><strong id="clock">35</strong> s</span><span id="hit-count">0 oportunidades</span></div><div id="arena" class="arena" aria-label="Objetivos interactivos"></div><div id="feedback" class="feedback" role="status">Activa los objetivos azules. Deja pasar los riesgos violetas con el símbolo de alerta.</div><div class="next-row"><span>+100 por oportunidad · Los riesgos no suman</span><button class="secondary" id="pause">Pausar</button></div>`;}
-function tick(){if(!playing||paused)return;remaining=Math.max(0,deadline-performance.now());document.getElementById('clock').textContent=Math.ceil(remaining/1000);const now=performance.now();for(const [slot,t]of targets)if(now>=t.expiry){t.element.remove();targets.delete(slot);if(!t.risk)misses++;}if(remaining<=0)finish();}
-function spawn(){if(!playing||paused)return;const now=performance.now();const positions=[{left:'6%',top:'12%'},{left:'calc(50% - 60px)',top:'56%'},{right:'6%',top:'12%'}];for(let slot=0;slot<3;slot++){if(targets.has(slot))continue;const risk=(sequence++%4===2);const pool=risk?danger:opportunities;const item=pool[Math.floor(Math.random()*pool.length)];const el=document.createElement('button');el.type='button';el.className='target'+(risk?' risk':'');el.dataset.slot=slot;el.setAttribute('aria-label',(risk?'Riesgo: ':'Oportunidad: ')+item.name);el.innerHTML=`<strong aria-hidden="true">${FX.icon(risk?'alert':({"≡":'flow',"◎":'data',"↗":'target',"✓":'eye',"+":'bolt',"⇄":'brain'}[item.symbol]||'brain'))}</strong><span>${item.name}</span>`;Object.assign(el.style,positions[slot]);document.getElementById('arena').append(el);targets.set(slot,{element:el,item,risk,expiry:now+4000});}}
-function hit(slot){if(!playing||paused)return;if(performance.now()>=deadline){finish();return}const t=targets.get(slot);if(!t||t.element.disabled)return;t.element.disabled=true;FX.burst(t.element,!t.risk);t.element.classList.add('hit');const arena=document.getElementById('arena'),r=t.element.getBoundingClientRect(),ar=arena.getBoundingClientRect(),float=document.createElement('span');float.className='score-float'+(t.risk?' caution':'');float.textContent=t.risk?'Revisa el riesgo':'+100';float.style.left=(r.left-ar.left+r.width/2)+'px';float.style.top=(r.top-ar.top+r.height/2)+'px';float.setAttribute('aria-hidden','true');arena.append(float);later(()=>float.remove(),950);if(!t.risk){const light=document.createElement('i');light.className='arena-pulse';arena.append(light);later(()=>light.remove(),850)}const fb=document.getElementById('feedback');if(t.risk){risks++;fb.className='feedback risk-feedback';fb.textContent='! Este es un riesgo. '+t.item.why;}else{points+=100;hits++;document.getElementById('score').textContent=points;document.getElementById('hit-count').textContent=hits+' oportunidades';fb.className='feedback success';fb.textContent='✓ +100 · '+t.item.why;}later(()=>{if(targets.get(slot)===t){t.element.remove();targets.delete(slot)}},260);}
-function pause(){if(!playing||paused)return;paused=true;remaining=Math.max(0,deadline-performance.now());const overlay=document.createElement('div');overlay.id='pause-layer';overlay.className='pause';overlay.innerHTML='<div><h2>Tu ronda está en pausa</h2><p>Continúa cuando estés listo.</p><button id="resume" class="primary">Continuar</button><div class="actions"><button class="secondary" id="restart">Volver a empezar</button></div></div>';stage.append(overlay);}
-function resume(){if(!paused)return;paused=false;deadline=performance.now()+remaining;for(const t of targets.values())t.expiry=performance.now()+4000;document.getElementById('pause-layer')?.remove();}
-function renderQuestion(){answered=false;const item=q[questionIndex],icons=['flow','eye','shield','target','data'];stage.innerHTML=top('Decide con IA',`Caso ${questionIndex+1} de ${q.length}`)+`<div class="round-progress" aria-label="Caso ${questionIndex+1} de ${q.length}">${q.map((_,i)=>`<i class="${i<=questionIndex?'done':''}"></i>`).join('')}</div><div class="decision-layout"><aside class="case-visual"><span class="case-number">MICROCASO / 0${questionIndex+1}</span><div class="intro-art" aria-hidden="true"><canvas data-core></canvas><span class="core-glyph">${FX.icon(icons[questionIndex])}</span></div><div class="case-topic">${item.title}</div><p class="case-caption">Una situación cotidiana.<br>Una decisión con impacto.</p></aside><div class="case-content"><h1 class="question">${item.question}</h1><div class="answers">${item.answers.map((text,i)=>`<button class="answer" data-answer="${i}"><b>${String.fromCharCode(65+i)}</b><span>${text}</span></button>`).join('')}</div></div></div><div class="feedback" id="feedback" role="status">Toca la alternativa que elegirías.</div><div class="next-row"><span>Evalúa las opciones. Descubre el criterio detrás de cada decisión.</span><button id="next" class="primary" hidden>${questionIndex===q.length-1?'Ver resultado':'Siguiente caso →'}</button></div>`;}
-function answer(i){if(answered||!playing)return;answered=true;const item=q[questionIndex];const good=i===item.correct;FX.burst(stage.querySelector(`[data-answer="${i}"]`),good);if(good)correct++;stage.querySelectorAll('[data-answer]').forEach((b,index)=>{b.disabled=true;if(index===item.correct)b.classList.add('correct');else if(index===i)b.classList.add('wrong')});const fb=document.getElementById('feedback');fb.className='feedback '+(good?'success':'risk-feedback');fb.textContent=(good?'✓ Buena decisión. ':'↗ Revisa esta idea. ')+item.why;document.getElementById('next').hidden=false;}
-function finish(){const total=points,count=hits,wrong=risks,result=correct;cleanup();stage.innerHTML=top(mode==='active'?'Activa las oportunidades':'Decide con IA','Ronda completada')+`<div class="intro-view"><span class="eyebrow">Criterio en acción</span><h1>${mode==='active'?'Oportunidades activadas.':'El siguiente paso es aplicarlo.'}</h1><strong class="result-number">${mode==='active'?total:result+'/5'}</strong><p class="result-info">${mode==='active'?count+' oportunidades · '+wrong+' riesgos tocados · puntos':result+' decisiones recomendadas de 5'}</p><p>${mode==='active'?'La IA crea valor cuando identificas una oportunidad, proteges los datos y mantienes el criterio humano.':'Elige una oportunidad para tu equipo. Prueba en pequeño, mide el resultado y decide con contexto.'}</p><div class="actions"><button class="primary" id="start">Jugar de nuevo</button><a class="secondary" href="../../?v=20261020-rectangulares">Elegir otro juego</a></div></div>`;}
-stage.addEventListener('click',e=>{const target=e.target.closest('[data-slot]');if(target)hit(Number(target.dataset.slot));const a=e.target.closest('[data-answer]');if(a)answer(Number(a.dataset.answer));const id=e.target.closest('button')?.id;if(id==='start'||id==='restart')start();if(id==='pause')pause();if(id==='resume')resume();if(id==='next'&&answered){if(++questionIndex<q.length)renderQuestion();else finish();}});
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&mode==='active')pause()});window.addEventListener('pagehide',cleanup);document.getElementById('fullscreen').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch{}});intro();
+(() => {
+  'use strict';
+
+  const stage = document.getElementById('stage');
+  const mode = document.body.dataset.game;
+  const timed = mode === 'active';
+  const FX = window.AttachFX;
+  const content = window.AttachGameContent;
+  const ROUND_SIZE = 5;
+  const ANSWER_MS = 10000;
+  const HOME = '../../?v=20261020-juegos-v7';
+  const title = timed ? 'Elige la IA' : 'Decide con IA';
+  const effects = new Set();
+
+  let round = [];
+  let options = [];
+  let index = 0;
+  let points = 0;
+  let correct = 0;
+  let ideal = 0;
+  let partial = 0;
+  let wrong = 0;
+  let expired = 0;
+  let playing = false;
+  let answered = false;
+  let paused = false;
+  let timer = null;
+  let deadline = 0;
+  let remaining = ANSWER_MS;
+
+  const escape = value => String(value).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[c]);
+
+  function shuffle(input) {
+    const items = [...input];
+    for (let i = items.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [items[i], items[j]] = [items[j], items[i]];
+    }
+    return items;
+  }
+
+  function later(fn, ms) {
+    const id = setTimeout(() => { effects.delete(id); fn(); }, ms);
+    effects.add(id);
+  }
+
+  function stopClock() {
+    clearInterval(timer);
+    timer = null;
+  }
+
+  function cleanup() {
+    stopClock();
+    effects.forEach(clearTimeout);
+    effects.clear();
+    playing = false;
+    answered = false;
+    paused = false;
+    delete stage.dataset.questionId;
+  }
+
+  function top(tag) {
+    return `<div class="stage-top"><span class="eyebrow">${title}</span><span class="stage-tag">${escape(tag)}</span></div>`;
+  }
+
+  function progress() {
+    return `<div class="round-progress" aria-label="Caso ${index + 1} de ${ROUND_SIZE}">${round.map((_, i) => `<i class="${i <= index ? 'done' : ''}"></i>`).join('')}</div>`;
+  }
+
+  function sourceNote() {
+    const url = timed ? content.sources.map : content.sources.trivia;
+    const label = timed ? 'Basado en el Mapa de IAs de Attach Group' : 'Situaciones adaptadas del Test Ejecutivo de Attach Group';
+    return `<a class="source-note" href="${escape(url)}" target="_blank" rel="noopener noreferrer">${label} ↗</a>`;
+  }
+
+  function intro() {
+    cleanup();
+    stage.innerHTML = top(timed ? '10 segundos por caso' : '5 casos al azar') + `
+      <div class="intro-view">
+        <div class="intro-art" aria-hidden="true"><canvas data-core></canvas><span class="core-glyph">${FX.icon(timed ? 'bolt' : 'brain')}</span></div>
+        <h1>${timed ? 'Una tarea concreta.<br>La IA que mejor encaja.' : 'Elige con criterio.<br>Decide con IA.'}</h1>
+        <p>${timed ? 'Lee el encargo y toca la herramienta que mejor cumple el entregable y el entorno indicado. Cinco casos de nivel medio, con diez segundos para elegir en cada uno.' : 'Cinco situaciones de liderazgo elegidas al azar de un banco de doce. Elige la decisión recomendada y descubre el criterio detrás de cada respuesta.'}</p>
+        ${timed ? '<div class="score-legend"><span><b>+100</b> Ajuste ideal</span><span><b>+50</b> Ajuste parcial</span><span><b>−5</b> Respuesta errónea</span></div>' : ''}
+        <div class="actions"><button class="primary" id="start">Iniciar experiencia <span aria-hidden="true">↗</span></button></div>
+        <p class="result-info">${timed ? 'Cinco casos por ronda · Sin respuesta: 0 puntos.' : 'Sin límite de tiempo · Cinco preguntas distintas en cada partida.'}</p>
+        ${sourceNote()}
+      </div>`;
+  }
+
+  function start() {
+    cleanup();
+    round = shuffle(timed ? content.activeCases : content.triviaCases).slice(0, ROUND_SIZE);
+    index = points = correct = ideal = partial = wrong = expired = 0;
+    playing = true;
+    renderRound();
+  }
+
+  function renderRound() {
+    stopClock();
+    answered = false;
+    paused = false;
+    const item = round[index];
+    stage.dataset.questionId = item.id;
+    options = shuffle(timed ? item.options : item.answers);
+    if (timed) renderTimed(item);
+    else renderTrivia(item);
+  }
+
+  function renderTimed(item) {
+    stage.innerHTML = top(`Caso ${index + 1} de ${ROUND_SIZE}`) + progress() + `
+      <div class="timed-toolbar">
+        <div class="stats"><span><strong id="score">${points}</strong> puntos</span><span>Nivel medio</span></div>
+        <button class="small-button" id="pause">Pausar</button>
+      </div>
+      <div class="task-heading"><span class="task-category">${escape(item.title)}</span><h1 class="question timed-question" id="case-question">${escape(item.question)}</h1></div>
+      <div class="countdown-row"><span>Tiempo para elegir</span><span class="countdown"><strong id="clock" role="timer" aria-live="off">10</strong> s</span></div>
+      <div class="time-track" id="time-track" role="progressbar" aria-label="Tiempo disponible" aria-valuemin="0" aria-valuemax="10" aria-valuenow="10"><i id="time-fill"></i></div>
+      <div id="arena" class="arena choice-arena" role="group" aria-labelledby="case-question">
+        ${options.map((option, i) => `<button type="button" class="ia-orb" data-choice="${i}" aria-label="${escape(option.label)}"><span class="orb-name">${escape(option.label)}</span><span class="orb-status" aria-hidden="true"></span></button>`).join('')}
+      </div>
+      <div id="feedback" class="feedback round-feedback" role="status"><span>Mejor ajuste: +100 · Parcial: +50 · Error: −5</span></div>
+      <div class="next-row"><span>Elige según el entregable y el entorno indicados.</span><button class="primary" id="next" hidden>${index === ROUND_SIZE - 1 ? 'Ver resultado' : 'Siguiente caso →'}</button></div>`;
+    remaining = ANSWER_MS;
+    deadline = performance.now() + remaining;
+    tick();
+    timer = setInterval(tick, 50);
+  }
+
+  function tick() {
+    if (!playing || !timed || paused || answered) return;
+    remaining = Math.max(0, deadline - performance.now());
+    document.getElementById('clock').textContent = Math.ceil(remaining / 1000);
+    document.getElementById('time-fill').style.width = `${remaining / ANSWER_MS * 100}%`;
+    document.getElementById('time-track').setAttribute('aria-valuenow', (remaining / 1000).toFixed(1));
+    if (remaining === 0) resolveTimed(null);
+  }
+
+  function resolveTimed(choice) {
+    if (!playing || paused || answered) return;
+    // A click arriving after the deadline must not earn points between timer ticks.
+    if (performance.now() >= deadline) choice = null;
+    if (choice !== null && !options[choice]) return;
+    answered = true;
+    stopClock();
+    const selected = choice === null ? null : options[choice];
+    const best = options.find(option => option.score === 100);
+    const score = selected?.score ?? 0;
+    if (!selected) expired++;
+    else if (score === 100) ideal++;
+    else if (score === 50) partial++;
+    else wrong++;
+    points += score;
+    document.getElementById('score').textContent = points;
+    stage.querySelectorAll('[data-choice]').forEach((button, i) => {
+      button.disabled = true;
+      if (i === choice) button.classList.add('is-selected');
+      if (options[i].score === 100) {
+        button.classList.add('is-best');
+        button.querySelector('.orb-status').textContent = 'Recomendada';
+      }
+    });
+    const feedback = document.getElementById('feedback');
+    feedback.className = `feedback round-feedback ${score > 0 ? 'success' : 'risk-feedback'}`;
+    let headline;
+    let detail;
+    if (!selected) {
+      headline = 'Tiempo agotado · 0 puntos';
+      detail = `${best.label} es el mejor ajuste. ${best.why}`;
+      document.getElementById('clock').textContent = '0';
+      document.getElementById('time-fill').style.width = '0%';
+      document.getElementById('time-track').setAttribute('aria-valuenow', '0');
+    } else {
+      headline = score === 100 ? '+100 · Ajuste ideal' : score === 50 ? '+50 · Ajuste parcial' : '−5 · No corresponde al encargo';
+      detail = `${selected.why}${score === 100 ? '' : ` Mejor ajuste: ${best.label}.`}`;
+      FX.burst(stage.querySelector(`[data-choice="${choice}"]`), score > 0);
+      if (score > 0) {
+        const pulse = document.createElement('i');
+        pulse.className = 'arena-pulse';
+        document.getElementById('arena').append(pulse);
+        later(() => pulse.remove(), 850);
+      }
+    }
+    feedback.innerHTML = `<strong>${escape(headline)}</strong><span>${escape(detail)}</span>`;
+    document.getElementById('pause').hidden = true;
+    document.getElementById('next').hidden = false;
+  }
+
+  function renderTrivia(item) {
+    stage.innerHTML = top(`Caso ${index + 1} de ${ROUND_SIZE}`) + progress() + `
+      <div class="decision-layout">
+        <aside class="case-visual"><span class="case-number">MICROCASO / 0${index + 1}</span><div class="intro-art" aria-hidden="true"><canvas data-core></canvas><span class="core-glyph">${FX.icon(item.icon)}</span></div><div class="case-topic">${escape(item.title)}</div><p class="case-caption">Una decisión de liderazgo.<br>Un criterio para aplicar.</p></aside>
+        <div class="case-content"><h1 class="question">${escape(item.question)}</h1><div class="answers">${options.map((answer, i) => `<button type="button" class="answer" data-answer="${i}"><b>${String.fromCharCode(65 + i)}</b><span>${escape(answer.text)}</span></button>`).join('')}</div></div>
+      </div>
+      <div class="feedback round-feedback" id="feedback" role="status">Toca la decisión que tomarías.</div>
+      <div class="next-row"><span>Cinco casos distintos por partida · Sin límite de tiempo</span><button id="next" class="primary" hidden>${index === ROUND_SIZE - 1 ? 'Ver resultado' : 'Siguiente caso →'}</button></div>`;
+  }
+
+  function resolveTrivia(choice) {
+    if (!playing || answered || !options[choice]) return;
+    answered = true;
+    const good = options[choice].correct;
+    if (good) correct++;
+    stage.querySelectorAll('[data-answer]').forEach((button, i) => {
+      button.disabled = true;
+      if (options[i].correct) button.classList.add('correct');
+      else if (i === choice) button.classList.add('wrong');
+    });
+    FX.burst(stage.querySelector(`[data-answer="${choice}"]`), good);
+    const feedback = document.getElementById('feedback');
+    feedback.className = `feedback round-feedback ${good ? 'success' : 'risk-feedback'}`;
+    feedback.innerHTML = `<strong>${good ? 'Buena decisión.' : 'Revisa este criterio.'}</strong><span>${escape(round[index].why)}</span>`;
+    document.getElementById('next').hidden = false;
+  }
+
+  function next() {
+    if (!playing || !answered) return;
+    index++;
+    if (index === round.length) finish();
+    else renderRound();
+  }
+
+  function pause() {
+    if (!timed || !playing || paused || answered) return;
+    remaining = Math.max(0, deadline - performance.now());
+    if (!remaining) { resolveTimed(null); return; }
+    paused = true;
+    stopClock();
+    const overlay = document.createElement('div');
+    overlay.id = 'pause-layer';
+    overlay.className = 'pause';
+    overlay.innerHTML = '<div><h2>Tu caso está en pausa</h2><p>El tiempo se ha detenido.</p><button id="resume" class="primary">Continuar</button><div class="actions"><button class="secondary" id="restart">Volver a empezar</button></div></div>';
+    stage.append(overlay);
+    document.getElementById('resume').focus();
+  }
+
+  function resume() {
+    if (!paused || !playing) return;
+    paused = false;
+    deadline = performance.now() + remaining;
+    document.getElementById('pause-layer')?.remove();
+    tick();
+    timer = setInterval(tick, 50);
+  }
+
+  function finish() {
+    cleanup();
+    stage.innerHTML = top('Ronda completada') + `
+      <div class="intro-view result-view"><span class="eyebrow">Criterio en acción</span>
+        <h1>${timed ? 'Cada tarea tiene<br>su mejor herramienta.' : 'Decisiones para llevar<br>a la práctica.'}</h1>
+        <strong class="result-number">${timed ? points : `${correct}/${ROUND_SIZE}`}</strong>
+        <p class="result-info">${timed ? 'puntos · máximo posible: 500' : 'decisiones recomendadas de cinco'}</p>
+        ${timed ? `<div class="result-breakdown"><span><b>${ideal}</b> ideales</span><span><b>${partial}</b> parciales</span><span><b>${wrong}</b> errores</span><span><b>${expired}</b> sin respuesta</span></div>` : ''}
+        <p>${timed ? 'Elige por el entregable, el contexto y la integración que necesitas. Después, revisa lo que produce la herramienta.' : 'Contrasta la evidencia, protege los datos y asigna responsables. La tecnología acompaña el criterio del líder.'}</p>
+        <div class="actions"><button class="primary" id="start">Jugar de nuevo</button><a class="secondary" href="${HOME}">Elegir otro juego</a></div>
+        ${sourceNote()}
+      </div>`;
+  }
+
+  stage.addEventListener('click', event => {
+    const choice = event.target.closest('[data-choice]');
+    if (choice) resolveTimed(Number(choice.dataset.choice));
+    const answer = event.target.closest('[data-answer]');
+    if (answer) resolveTrivia(Number(answer.dataset.answer));
+    const id = event.target.closest('button')?.id;
+    if (id === 'start' || id === 'restart') start();
+    else if (id === 'next') next();
+    else if (id === 'pause') pause();
+    else if (id === 'resume') resume();
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && timed) pause();
+  });
+  window.addEventListener('pagehide', cleanup);
+  document.getElementById('fullscreen').addEventListener('click', async () => {
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else await document.documentElement.requestFullscreen();
+    } catch { /* A browser may decline fullscreen; the game remains usable. */ }
+  });
+  intro();
 })();

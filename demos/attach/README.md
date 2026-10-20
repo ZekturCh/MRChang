@@ -3,8 +3,8 @@
 Sitio: https://paralelvr-demos.web.app/
 
 - Memoria IA: `/attach/memoria/`. Adaptación del motor de `ZekturCh/MEMORYGAME/orica-opt.html`, ocho pares / dieciséis tarjetas. Se conservan barajado, selección, +200 por par, penalización de 10 por error, reinicio y resultado. Máximo sin errores: 1600 puntos.
-- Activa las oportunidades: `/attach/oportunidades/`. Ronda de 35 segundos, objetivos con aparición/caducidad, +100 por oportunidad, riesgos sin puntos, pausa y reinicio.
-- Decide con IA: `/attach/decide/`. Cinco microcasos, tres alternativas, explicación y resultado.
+- Elige la IA: `/attach/oportunidades/`. Cinco casos al azar de un banco de diez, con diez segundos por caso. Tres herramientas para un encargo concreto: ajuste ideal +100, ajuste parcial +50, respuesta errónea −5; tiempo agotado 0. El marcador admite negativos y el máximo es 500. Tres esferas del mismo color y tamaño, sin pistas visuales antes de responder; posiciones mezcladas, explicación y avance manual. Pausa, pausa al ocultar la pestaña y reinicio.
+- Decide con IA: `/attach/decide/`. Cinco preguntas distintas al azar de un banco de doce, con tres respuestas barajadas y una decisión recomendada. Sin límite de tiempo. Bloqueo tras responder, explicación breve, avance manual y resultado sobre cinco; nuevo sorteo al volver a jugar.
 
 Demos para validar contenido y experiencia; no implican contratación conjunta de los tres juegos.
 
@@ -25,7 +25,16 @@ Fuentes de recursos:
 - ChatGPT y Claude: trazados de Simple Icons v13, https://github.com/simple-icons/simple-icons/tree/13.0.0/icons · identificadores `openai.svg` y `claude.svg`; Simple Icons distribuye sus trazados bajo CC0. Marcas pertenecientes a sus respectivos titulares.
 - Grok y reverso Attach: imágenes facilitadas por el cliente en esta conversación.
 
-Animación decorativa Canvas 2D limitada a 25 cuadros por segundo y densidad de píxel limitada; suspensión al ocultar la pestaña. Se respeta la preferencia de movimiento reducido. Aciertos con ondas y partículas, y luz/+100 en oportunidades. Sonido opcional desactivado al iniciar en oportunidades y trivia.
+Animación decorativa Canvas 2D limitada a 25 cuadros por segundo y densidad de píxel limitada; suspensión al ocultar la pestaña. Se respeta la preferencia de movimiento reducido. Aciertos con ondas, partículas y un pulso de luz. Sonido opcional desactivado al iniciar en Elige la IA y trivia.
+
+## Contenido de los juegos 2 y 3
+
+`public/assets/game-content.js` separa el banco de preguntas de la mecánica. No requiere servicios de IA en ejecución.
+
+- Mapa de IAs: https://mapadeias.netlify.app/. Los casos toman sus herramientas como referencia, con requisitos concretos de entregable e integración. Cada caso conserva un enlace a documentación oficial que respalda el ajuste ideal. Los puntajes son criterios editoriales para estos encargos; no son un ranking general de capacidades. Se evitan versiones, precios y benchmarks.
+- Test Ejecutivo de Attach: https://programaia.attach.group/test-de-ia/. El original es una autoevaluación. Se adaptaron doce situaciones a decisiones con una respuesta recomendada y explicación, sin reproducir sus formularios ni su clasificación de participantes. Referencias originales: E12, E13, E14, G3, G12, G7, E6, E7, E2, E8, E10 y E11; guardadas como `sourceId`. Temas: contraste de evidencia, evaluación de agentes, datos, prioridades, autonomía, adopción, supervisión, experimentación, hoja de ruta, resistencia, resultados y escalamiento.
+
+Las preguntas se mezclan sin reemplazo dentro de cada partida, igual que las tres posiciones de respuesta. Puede repetirse una pregunta entre partidas independientes. No se solicitan datos personales ni se incorporan formularios, CRM o seguimiento del sitio de referencia.
 
 ## Hosting
 
@@ -39,6 +48,6 @@ firebase deploy --only hosting --project dbdosparax
 
 `public/` contiene únicamente archivos de la aplicación. Sin credenciales, capturas, pruebas ni manuales. No requiere base de datos ni servicios de IA; no registra participantes ni resultados en la nube.
 
-Validación: ocho pares completos y 1600 puntos, victoria, mezcla, reinicio y errores; cinco microcasos y bloqueo de respuesta; puntuación oportunidad/riesgo, pausa, fin de ronda y reinicio. Se comprueba que las 16 tarjetas caben en escritorio, tótem vertical y móvil, con objetivos táctiles de al menos 44 px.
+Validación: memoria conserva ocho pares completos y 1600 puntos, victoria, mezcla, reinicio y errores. Para Elige la IA se verifican +100/+50/−5, marcador negativo, caducidad a diez segundos, bloqueo de doble respuesta, pausa/reanudación, pausa al ocultar pestaña, reinicio y resultado de cinco casos. Para Decide con IA se verifican doce preguntas válidas, cinco distintas por ronda, mezcla de respuestas, bloqueo de doble respuesta y resultados 5/5 y 0/5. Revisión visual en escritorio y móvil de 390 y 320 px, sin desplazamiento horizontal ni errores de JavaScript o recursos.
 
 Caché: todas las rutas, incluidas las URLs limpias sin `.html`, usan `Cache-Control: no-cache, max-age=0, must-revalidate`. El navegador puede reutilizar recursos tras validar su ETag, pero debe comprobar la versión del servidor.
