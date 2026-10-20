@@ -2,21 +2,30 @@
 
 Sitio: https://paralelvr-demos.web.app/
 
-- Memoria IA: `/attach/memoria/`. Adaptación del motor de `ZekturCh/MEMORYGAME/orica-opt.html`, cinco pares y mensajes propios. Se conservan barajado, selección, puntaje y resultado.
+- Memoria IA: `/attach/memoria/`. Adaptación del motor de `ZekturCh/MEMORYGAME/orica-opt.html`, ocho pares / dieciséis tarjetas. Se conservan barajado, selección, +200 por par, penalización de 10 por error, reinicio y resultado. Máximo sin errores: 1600 puntos.
 - Activa las oportunidades: `/attach/oportunidades/`. Ronda de 35 segundos, objetivos con aparición/caducidad, +100 por oportunidad, riesgos sin puntos, pausa y reinicio.
 - Decide con IA: `/attach/decide/`. Cinco microcasos, tres alternativas, explicación y resultado.
 
-Marca: manual Attach Group 2025 enviado por el cliente, azul #1840E2, violeta #5E2F84 y lavanda #BAC4F0. Logo y fuentes Graphik de los recursos oficiales públicos de Attach.group. El manual completo no forma parte del despliegue.
-
-Contenido educativo basado en el curso IA para ejecutivos proporcionado por Attach. Demos para validar contenido y experiencia; no implican contratación conjunta de los tres juegos.
+Demos para validar contenido y experiencia; no implican contratación conjunta de los tres juegos.
 
 ## Dirección visual
 
-Escenas oscuras con azul/violeta y tipografía Graphik, tarjetas SVG con composición corporativa y fotografía, esferas con volumen y una red tridimensional dibujada en Canvas 2D. Animación limitada a 25 cuadros por segundo, densidad de píxel limitada y suspensión al ocultar la pestaña. Se respeta la preferencia de movimiento reducido.
+Degradado azul #1840E2 a violeta #5E2F84 en el catálogo y las tres experiencias, siguiendo la referencia suministrada. `brand-theme.css` centraliza el tema compartido. Logo y fuentes Graphik de los recursos oficiales públicos de Attach.group.
 
-Memoria: reverso tipográfico y cinco frentes con fotografías tomadas de las páginas 18 y 23 del manual suministrado. Azul principal, degradado azul/violeta, bloque de fotografía con esquina redondeada y signo +, siguiendo las composiciones de las páginas 21 y 22. Logo oficial sin alterar y textos Graphik convertidos a trazados para conservar la tipografía dentro de las imágenes SVG. Fotografías optimizadas e incrustadas; no se publica el manual.
+Memoria: tarjetas cuadradas con marco blanco; reverso con la imagen Attach entregada por el cliente. Frente blanco con isotipo negro centrado, sin nombre de producto ni letras en el centro. Marca Attach azul en la esquina superior izquierda y, girada 180 grados, en la esquina inferior derecha, en ambas caras. Distribución 4x4 o 8x2 según el espacio disponible. Las imágenes se incrustan en los SVG para evitar dependencias externas en ejecución.
 
-Los aciertos generan ondas y partículas; en oportunidades también iluminan la escena y muestran +100. Los microcasos presentan el tema y la decisión en dos paneles. Sonido sintetizado opcional, desactivado al iniciar, en oportunidades y trivia. Sin bibliotecas gráficas ni dependencias externas en ejecución.
+Isotipos: ChatGPT, Claude, Copilot, ProspectIA, AthenaAds, Galileo IA, Grok y Gemini. Los nombres solo se usan en etiquetas accesibles y en la interfaz de mensajes; no se imprimen junto al símbolo en la tarjeta.
+
+Fuentes de recursos:
+
+- Attach Group, logo y sub-marcas: https://attach.group/ · recursos publicados bajo `/images/menu/`. Isotipos de AthenaAds y Galileo IA aislados mediante ventanas SVG de sus logos completos, conservando geometría.
+- ProspectIA: https://prospectia.ai/favicon.png · símbolo del favicon oficial, aislado del fondo mediante filtro SVG y presentado en negro.
+- Copilot: https://copilot.microsoft.com/static/cmc/favicon.svg · trazados del logo oficial con tratamiento monocromático.
+- Gemini: https://gemini.google.com/ · recurso oficial de icono servido por gstatic.com, presentado en negro mediante filtro SVG.
+- ChatGPT y Claude: trazados de Simple Icons v13, https://github.com/simple-icons/simple-icons/tree/13.0.0/icons · identificadores `openai.svg` y `claude.svg`; Simple Icons distribuye sus trazados bajo CC0. Marcas pertenecientes a sus respectivos titulares.
+- Grok y reverso Attach: imágenes facilitadas por el cliente en esta conversación.
+
+Animación decorativa Canvas 2D limitada a 25 cuadros por segundo y densidad de píxel limitada; suspensión al ocultar la pestaña. Se respeta la preferencia de movimiento reducido. Aciertos con ondas y partículas, y luz/+100 en oportunidades. Sonido opcional desactivado al iniciar en oportunidades y trivia.
 
 ## Hosting
 
@@ -28,6 +37,6 @@ Desde esta carpeta:
 firebase deploy --only hosting --project dbdosparax
 ```
 
-`public/` contiene únicamente archivos de la aplicación. Sin datos personales, credenciales, capturas, pruebas ni manuales. No requiere base de datos ni servicios de IA; no registra participantes ni resultados en la nube.
+`public/` contiene únicamente archivos de la aplicación. Sin credenciales, capturas, pruebas ni manuales. No requiere base de datos ni servicios de IA; no registra participantes ni resultados en la nube.
 
-Validado: victoria de los cinco pares, cinco microcasos y bloqueo de respuesta, puntuación oportunidad/riesgo, pausa, fin de ronda, reinicio y carga en escritorio/móvil.
+Validación: ocho pares completos y 1600 puntos, victoria, mezcla, reinicio y errores; cinco microcasos y bloqueo de respuesta; puntuación oportunidad/riesgo, pausa, fin de ronda y reinicio. Se comprueba que las 16 tarjetas caben en escritorio, tótem vertical y móvil, con objetivos táctiles de al menos 44 px.

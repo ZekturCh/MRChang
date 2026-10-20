@@ -1,0 +1,59 @@
+/* Shared Attach palette, sampled from the supplied blue-to-violet reverse. */
+:root{--blue:#1840e2;--purple:#5e2f84;--lavender:#bac4f0;--muted:#edf0ff;--line:#ffffff40;--attach-gradient:linear-gradient(110deg,#1840e2 0%,#353ac0 48%,#5e2f84 100%)}
+html{background:#1840e2}
+body{background:var(--attach-gradient)!important;background-attachment:scroll!important;color:#fff!important}
+body:before{background-image:radial-gradient(#ffffff25 .7px,transparent .7px)!important;opacity:.28!important}
+header{border-color:#ffffff38}
+.hero h1 em{background:none;color:#fff}
+.hero p,.hero-notes,.meta,.eyebrow,.hero-marker,.core-label,.section-heading span,.section-heading b,.footer,.art-index,.card-copy small,.card-copy p,.go,.result-info,.intro-view p,.stage-tag,.stats,.hint,.next-row>span,.case-number,.case-caption{color:#eff1ff!important}
+.game-card{background:linear-gradient(115deg,#1840e2b8,#5e2f84bd);border-color:#ffffff45;box-shadow:0 15px 45px #29126c15}
+.game-card:hover{border-color:#fff9;box-shadow:0 16px 45px #2e176638}
+.card-art{background:linear-gradient(115deg,#1840e28c,#5e2f8466);border-color:#ffffff30}
+.mini-cards img{background:white;border-color:white;border-radius:8px}
+.mini-orbs span{background:radial-gradient(circle at 30% 22%,#fff9,#5478edb3 45%,#1840e2);box-shadow:inset -6px -8px 15px #292da344,0 0 25px #ffffff20}
+.mini-orbs span:nth-child(3){background:radial-gradient(circle at 30% 22%,#ffffff99,#9360b8 45%,#5e2f84)}
+.mini-answer span{background:linear-gradient(110deg,#1840e2aa,#5e2f84aa);color:white;border-color:#ffffff60}
+.mini-answer span:nth-child(2){background:linear-gradient(110deg,#4267f2,#7e4da2);border-color:white}
+.game-stage{background:linear-gradient(112deg,#1840e2b8,#5e2f84c4);border-color:#ffffff45;box-shadow:0 24px 70px #321b7526}
+.stage-top{border-color:#ffffff35}.stage-tag{border-color:#ffffff45}
+.small-button,.secondary{background:#ffffff0c;border-color:#ffffff5c;color:#fff}
+.small-button:hover,.sound-on{background:#ffffff20;border-color:#fff9}
+.primary{background:linear-gradient(115deg,#fff,#f0ecff);color:#1840e2;border-color:white;box-shadow:0 7px 24px #36157425}
+.primary:hover{box-shadow:0 7px 28px #36157440;border-color:white}
+.stats strong,.result-number{color:white}
+.arena{background:linear-gradient(110deg,#1840e2a8,#5e2f84bf);border-color:#ffffff45}
+.arena:before{background-image:linear-gradient(#ffffff17 1px,transparent 1px),linear-gradient(90deg,#ffffff17 1px,transparent 1px)}
+.arena:after{background:linear-gradient(90deg,transparent,#ffffff55,transparent)}
+.target{background:radial-gradient(circle at 32% 22%,#cdd8ff99,#4565e4cc 44%,#2247cc);border-color:#d5dfff;box-shadow:inset -7px -10px 20px #33329b55,inset 2px 3px 10px #fff4,0 0 25px #ffffff20}
+.target.risk{background:radial-gradient(circle at 32% 22%,#e0baf799,#9156b9 44%,#5e2f84);border-color:#e3c6f3;box-shadow:inset -7px -10px 20px #55227e55,0 0 25px #ffffff20}
+.target:before{border-color:#ffffff30;border-top-color:#fff9}
+.feedback{background:linear-gradient(110deg,#1840e273,#5e2f8480);color:white;border-color:#ffffff50}
+.feedback.success{background:#ffffffee;color:#173ab1;border-color:white}
+.feedback.risk-feedback{background:#ffffffee;color:#5e2f84;border-color:white}
+.case-visual{background:linear-gradient(130deg,#1840e299,#5e2f84a8);border-color:#ffffff40}
+.answer{background:linear-gradient(110deg,#1840e280,#5e2f8480);color:white;border-color:#ffffff68}
+.answer b{border-color:#ffffff70;color:white;background:#ffffff0a}
+.answer:not(:disabled):hover{background:#ffffff1c;border-color:white}
+.answer.correct{background:white;color:#173ab1;border-color:white;box-shadow:0 10px 30px #3615742b}
+.answer.correct b{color:white;background:#1840e2;border-color:#1840e2}
+.answer.wrong{background:#5e2f84a8;color:white;border-color:#fff9}
+.round-progress i{background:#ffffff30}.round-progress i.done{background:white;box-shadow:none}
+.pause{background:linear-gradient(110deg,#1840e2f5,#5e2f84fa)}.pause p{color:white}
+/* Memory keeps its existing engine and flips; both faces use the new white card frame. */
+body .header{background:linear-gradient(110deg,#1840e280,#5e2f8480)!important;border-color:#ffffff50!important}
+body .play-panel{background:linear-gradient(112deg,#1840e28c,#5e2f8499)!important;border-color:#ffffff40!important}
+body .value-message{background:linear-gradient(110deg,#1840e280,#5e2f847a)!important;border-color:#ffffff3b!important}
+body .stat b,body .stat span,body .value-message .value-title,body .value-message .value-phrase,body.portrait-layout .value-message.initial .value-phrase{color:white!important}
+body .memory-instruction,body .memory-eyebrow,body .memory-intro-notes,body .back-link,body .memory-intro-visual>span{color:#f4f4ff!important}
+body .btn{background:#ffffff0e!important;border-color:#ffffff68!important;color:white!important}
+body .play,body .btn.primary{background:white!important;color:#1840e2!important;border-color:white!important;box-shadow:0 7px 25px #36157426!important}
+body .card,body .card .face{border-radius:10px!important;background:white!important;border:0!important}
+body .card .face img{object-fit:contain}
+body .card.matched{filter:none!important;box-shadow:0 0 0 2px #bac4f0,0 0 24px #ffffff38!important}
+body .value-flash{background:linear-gradient(110deg,#1840e2ba,#5e2f84d1)!important}
+body .value-flash-card,body .modal{background:linear-gradient(110deg,#1840e2,#5e2f84)!important;color:white!important;border-color:#ffffff88!important;box-shadow:0 20px 65px #36157440!important}
+body .value-flash-title,body .value-flash-phrase,body .value-flash-kicker,body .value-flash-found{color:white!important}
+body .value-flash-skip{background:white!important;color:#1840e2!important;border-color:white!important}
+body .overlay{background:linear-gradient(110deg,#1840e2dc,#5e2f84eb)!important}
+@media(max-width:650px){body .card,body .card .face{border-radius:7px!important}.memory-intro-visual{opacity:.45}.hero-visual{opacity:.5}}
+

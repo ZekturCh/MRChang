@@ -328,13 +328,13 @@ body.portrait-layout .card{transform:scale(var(--opt-card-scale,1));transform-or
 </style>
 <style>
 body{background:radial-gradient(ellipse at 80% 10%,#322369,transparent 60%),#080e29!important;font-family:Arial,sans-serif!important}.screen{background:transparent!important}.header,.play-panel,.modal{background:#0e1839!important;color:white!important;border-color:#344579!important}.value-message,.value-flash-card{background:#18275a!important;color:white!important}.value-title,.value-flash-title{color:#74e4e7!important}.value-phrase,.value-flash-phrase,.menu-subtitle{color:#e5ebff!important}.btn,.play{background:#1840e2!important;color:white!important;border-color:#6583ff!important}.stat b{color:#7ee4e5!important}.stat span{color:#c4d0fb!important}.menu-logo{width:300px!important}.brand-mini img{width:160px!important}.menu-subtitle{font-size:28px!important}.value-message{border:1px solid #3f5188!important}.value-flash-found{color:#74e4e7!important}
-</style><link rel="stylesheet" href="../../assets/memory-brand.css?v=3"></head>
+</style><link rel="stylesheet" href="../../assets/memory-brand.css?v=4"><link rel="stylesheet" href="../../assets/brand-theme.css?v=4"></head>
 <body>
 <div id="app">
   <section id="menu" class="screen active" aria-label="Menú principal">
     <img class="menu-logo" src="../../assets/attach-logo.svg" alt="Attach Group">
     <a class="back-link" href="../../">← Todas las experiencias</a>
-    <div class="memory-intro-copy"><span class="memory-eyebrow">01 / MEMORIA IA</span><h1 class="menu-subtitle">Conecta ideas.<br>Descubre posibilidades.</h1><p class="memory-instruction">Cinco pares para activar tu criterio ejecutivo. Toca dos tarjetas y descubre qué puede aportar la IA a tu organización.</p><button id="start" class="play" type="button">Iniciar experiencia <span aria-hidden="true">↗</span></button><div class="memory-intro-notes">5 pares · Un toque para conectar</div></div>
+    <div class="memory-intro-copy"><span class="memory-eyebrow">01 / MEMORIA IA</span><h1 class="menu-subtitle">Conecta ideas.<br>Descubre posibilidades.</h1><p class="memory-instruction">Ocho logos, dieciséis tarjetas. Toca dos cartas y encuentra cada pareja.</p><button id="start" class="play" type="button">Iniciar experiencia <span aria-hidden="true">↗</span></button><div class="memory-intro-notes">8 pares · 16 tarjetas · Un toque para conectar</div></div>
     <div class="memory-intro-visual" aria-hidden="true"><canvas data-core></canvas><span>CONECTA EL POTENCIAL</span></div>
   </section>
 
@@ -342,7 +342,7 @@ body{background:radial-gradient(ellipse at 80% 10%,#322369,transparent 60%),#080
     <header class="header">
       <div class="brand-mini"><img src="../../assets/attach-logo.svg" alt="ATTACH"></div>
       <div class="stats" aria-live="polite">
-        <div class="stat"><b id="pairs">0/5</b><span>Pares</span></div>
+        <div class="stat"><b id="pairs">0/8</b><span>Pares</span></div>
         <div class="stat"><b id="moves">0</b><span>Movimientos</span></div>
         <div class="stat"><b id="points">0</b><span>Puntos</span></div>
       </div>
@@ -400,9 +400,9 @@ body{background:radial-gradient(ellipse at 80% 10%,#322369,transparent 60%),#080
   addEventListener("resize",applyLayoutProfile);
   addEventListener("orientationchange",applyLayoutProfile);
 
-  const CONFIG = {"totalPairs": 5, "mismatchDelay": 720, "pointsPerMatch": 200, "penaltyPerMiss": 10, "cardAspectRatio": 0.75, "maxCardWidth": 260, "back": "../../assets/back.svg?v=3", "cards": [{"name": "PRODUCTIVIDAD", "id": "productividad", "image": "../../assets/productividad.svg?v=3"}, {"name": "DATOS", "id": "datos", "image": "../../assets/datos.svg?v=3"}, {"name": "VALOR Y ROI", "id": "roi", "image": "../../assets/roi.svg?v=3"}, {"name": "SEGURIDAD", "id": "seguridad", "image": "../../assets/seguridad.svg?v=3"}, {"name": "SUPERVISIÓN", "id": "supervision", "image": "../../assets/supervision.svg?v=3"}]};
+  const CONFIG = {"totalPairs": 8, "mismatchDelay": 720, "pointsPerMatch": 200, "penaltyPerMiss": 10, "cardAspectRatio": 1, "maxCardWidth": 260, "back": "../../assets/back.svg?v=4", "cards": [{"name": "ChatGPT", "id": "chatgpt", "image": "../../assets/chatgpt.svg?v=4"}, {"name": "Claude", "id": "claude", "image": "../../assets/claude.svg?v=4"}, {"name": "Copilot", "id": "copilot", "image": "../../assets/copilot.svg?v=4"}, {"name": "ProspectIA", "id": "prospectia", "image": "../../assets/prospectia.svg?v=4"}, {"name": "AthenaAds", "id": "athenaads", "image": "../../assets/athenaads.svg?v=4"}, {"name": "Galileo IA", "id": "galileoai", "image": "../../assets/galileoai.svg?v=4"}, {"name": "Grok", "id": "grok", "image": "../../assets/grok.svg?v=4"}, {"name": "Gemini", "id": "gemini", "image": "../../assets/gemini.svg?v=4"}]};
 
-  const VALUE_MESSAGES = Object.freeze({"productividad": {"title": "PRODUCTIVIDAD", "summary": "Menos tareas repetitivas. Más tiempo para decidir.", "phrases": ["Menos tareas repetitivas. Más tiempo para decidir."]}, "datos": {"title": "DATOS", "summary": "Convierte información en decisiones con contexto.", "phrases": ["Convierte información en decisiones con contexto."]}, "roi": {"title": "VALOR Y ROI", "summary": "Prioriza impacto, viabilidad y riesgo antes de escalar.", "phrases": ["Prioriza impacto, viabilidad y riesgo antes de escalar."]}, "seguridad": {"title": "SEGURIDAD", "summary": "Protege información sensible y usa entornos autorizados.", "phrases": ["Protege información sensible y usa entornos autorizados."]}, "supervision": {"title": "SUPERVISIÓN", "summary": "Revisa las respuestas antes de actuar.", "phrases": ["Revisa las respuestas antes de actuar."]}});
+  const VALUE_MESSAGES = Object.freeze({"chatgpt": {"title": "ChatGPT", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de ChatGPT!"]}, "claude": {"title": "Claude", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de Claude!"]}, "copilot": {"title": "Copilot", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de Copilot!"]}, "prospectia": {"title": "ProspectIA", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de ProspectIA!"]}, "athenaads": {"title": "AthenaAds", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de AthenaAds!"]}, "galileoai": {"title": "Galileo IA", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de Galileo IA!"]}, "grok": {"title": "Grok", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de Grok!"]}, "gemini": {"title": "Gemini", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de Gemini!"]}});
 
   const state = { deck:[], first:null, second:null, locked:false, moves:0, pairs:0, points:0 };
   const $ = (id) => document.getElementById(id);
@@ -486,7 +486,7 @@ body{background:radial-gradient(ellipse at 80% 10%,#322369,transparent 60%),#080
     const value=valueId ? VALUE_MESSAGES[valueId] : null;
     dom.valueTitle.hidden=!value;
     dom.valueTitle.textContent=value ? value.title : "";
-    dom.valuePhrase.textContent=value ? value.summary : "Voltea una carta para descubrir una idea";
+    dom.valuePhrase.textContent=value ? value.summary : "Voltea una tarjeta y encuentra su pareja";
     dom.valueMessage.classList.toggle("initial",!value);
     dom.valueMessage.classList.remove("animate");
     void dom.valueMessage.offsetWidth;
@@ -530,16 +530,16 @@ body{background:radial-gradient(ellipse at 80% 10%,#322369,transparent 60%),#080
   }
 
   function fitBoard() {
-    const total=state.deck.length || 10;
+    const total=state.deck.length || CONFIG.totalPairs*2;
     const r=dom.board.getBoundingClientRect();
     const cs=getComputedStyle(dom.board);
     const padX=parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight);
     const padY=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom);
-    const gap=parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--gap")) || 12;
+    const gap=parseFloat(cs.columnGap) || 12;
     const w=Math.max(0,r.width-padX), h=Math.max(0,r.height-padY);
     let best=null;
     const isPortrait=document.body.classList.contains("portrait-layout");
-    const candidateCols=isPortrait ? (innerWidth<650 ? [2,3] : [2]) : Array.from({length:total},(_,i)=>i+1);
+    const candidateCols=isPortrait ? [4] : [4,8];
     for(const cols of candidateCols) {
       const rows=Math.ceil(total/cols);
       const cellW=(w-gap*(cols-1))/cols;
