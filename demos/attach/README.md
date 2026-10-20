@@ -40,3 +40,5 @@ firebase deploy --only hosting --project dbdosparax
 `public/` contiene únicamente archivos de la aplicación. Sin credenciales, capturas, pruebas ni manuales. No requiere base de datos ni servicios de IA; no registra participantes ni resultados en la nube.
 
 Validación: ocho pares completos y 1600 puntos, victoria, mezcla, reinicio y errores; cinco microcasos y bloqueo de respuesta; puntuación oportunidad/riesgo, pausa, fin de ronda y reinicio. Se comprueba que las 16 tarjetas caben en escritorio, tótem vertical y móvil, con objetivos táctiles de al menos 44 px.
+
+Caché: todas las rutas, incluidas las URLs limpias sin `.html`, usan `Cache-Control: no-cache, max-age=0, must-revalidate`. El navegador puede reutilizar recursos tras validar su ETag, pero debe comprobar la versión del servidor.
