@@ -12,18 +12,18 @@ Demos para validar contenido y experiencia; no implican contratación conjunta d
 
 Degradado azul #1840E2 a violeta #5E2F84 en el catálogo y las tres experiencias, siguiendo la referencia suministrada. `brand-theme.css` centraliza el tema compartido. Logo y fuentes Graphik de los recursos oficiales públicos de Attach.group.
 
-`round-games.css` adapta las vistas a la estación touch vertical. Menú, inicio, preguntas, explicaciones y resultado ocupan una sola pantalla. Usa la altura disponible y unidades de contenedor para escalar texto, opciones y controles, con espacio reservado para la explicación y el siguiente paso. No desplaza las respuestas al mostrar el resultado. Sin paneles decorativos anidados ni enlaces externos en la partida; fuentes conservadas en este documento y en el banco de contenido. En Memoria simplifica la entrada y la cabecera sin alterar el motor ni las tarjetas.
+`round-games.css` y `ranking.css` adaptan las vistas a la estación touch vertical. Menú, inicio, registro, preguntas, explicaciones y resultado ocupan una sola pantalla. Usa la altura disponible y unidades de contenedor para escalar texto, opciones y controles, con espacio reservado para la explicación y el siguiente paso. No desplaza las respuestas al mostrar el resultado. Las opciones del menú tienen fondos blanco, azul claro y lila para distinguir las experiencias. El tiempo de Elige la IA se representa con un reloj circular y un pulso durante los tres últimos segundos, respetando movimiento reducido.
 
-Memoria: tarjetas rectangulares verticales de proporción 5:7, con esquinas redondeadas; reverso con la referencia rectangular completa entregada por el cliente, degradado azul/violeta y borde interior blanco fino. Frente blanco con borde interior degradado azul/violeta e isotipo negro grande centrado, sin nombre de producto ni letras en el centro. Marca Attach azul en la esquina superior izquierda y en la esquina inferior derecha del frente, ambas en posición de lectura normal. El reverso conserva únicamente el logo central de la referencia. Distribución 4x4 o 8x2 según el espacio disponible. Las imágenes se incrustan en los SVG para evitar dependencias externas en ejecución.
+Memoria: tarjetas rectangulares verticales de proporción 5:7, con esquinas redondeadas; reverso con la referencia rectangular completa entregada por el cliente, degradado azul/violeta y borde interior blanco fino. Frente blanco con borde interior degradado y el isotipo en sus colores de marca, sobre una placa de color. Se conservan el contorno, las esquinas Attach azules y la ausencia de nombres de producto en el centro. ChatGPT verde/blanco, Claude terracota/crema; Copilot, Gemini, ProspectIA, AthenaAds y Galileo IA recuperan los colores de los recursos originales; Grok conserva su referencia negra y blanca. Distribución 4x4 o 8x2 según el espacio disponible. Las imágenes se incrustan en los SVG para evitar dependencias externas en ejecución.
 
 Isotipos: ChatGPT, Claude, Copilot, ProspectIA, AthenaAds, Galileo IA, Grok y Gemini. Los nombres solo se usan en etiquetas accesibles y en la interfaz de mensajes; no se imprimen junto al símbolo en la tarjeta.
 
 Fuentes de recursos:
 
 - Attach Group, logo y sub-marcas: https://attach.group/ · recursos publicados bajo `/images/menu/`. Isotipos de AthenaAds y Galileo IA aislados mediante ventanas SVG de sus logos completos, conservando geometría.
-- ProspectIA: https://prospectia.ai/favicon.png · símbolo del favicon oficial, aislado del fondo mediante filtro SVG y presentado en negro.
-- Copilot: https://copilot.microsoft.com/static/cmc/favicon.svg · trazados del logo oficial con tratamiento monocromático.
-- Gemini: https://gemini.google.com/ · recurso oficial de icono servido por gstatic.com, presentado en negro mediante filtro SVG.
+- ProspectIA: https://prospectia.ai/favicon.png · favicon oficial completo con su degradado original.
+- Copilot: https://copilot.microsoft.com/static/cmc/favicon.svg · trazados y degradados del logo oficial.
+- Gemini: https://gemini.google.com/ · recurso oficial de icono servido por gstatic.com, conservando sus colores.
 - ChatGPT y Claude: trazados de Simple Icons v13, https://github.com/simple-icons/simple-icons/tree/13.0.0/icons · identificadores `openai.svg` y `claude.svg`; Simple Icons distribuye sus trazados bajo CC0. Marcas pertenecientes a sus respectivos titulares.
 - Grok y reverso Attach: imágenes facilitadas por el cliente en esta conversación.
 
@@ -36,22 +36,46 @@ Animación decorativa Canvas 2D limitada a 25 cuadros por segundo y densidad de 
 - Mapa de IAs: https://mapadeias.netlify.app/. Los casos toman sus herramientas como referencia, con requisitos concretos de entregable e integración. Cada caso conserva un enlace a documentación oficial que respalda el ajuste ideal. Los puntajes son criterios editoriales para estos encargos; no son un ranking general de capacidades. Se evitan versiones, precios y benchmarks.
 - Test Ejecutivo de Attach: https://programaia.attach.group/test-de-ia/. El original es una autoevaluación. Se adaptaron doce situaciones a decisiones con una respuesta recomendada y explicación, sin reproducir sus formularios ni su clasificación de participantes. Referencias originales: E12, E13, E14, G3, G12, G7, E6, E7, E2, E8, E10 y E11; guardadas como `sourceId`. Temas: contraste de evidencia, evaluación de agentes, datos, prioridades, autonomía, adopción, supervisión, experimentación, hoja de ruta, resistencia, resultados y escalamiento.
 
-Las preguntas se mezclan sin reemplazo dentro de cada partida, igual que las tres posiciones de respuesta. Puede repetirse una pregunta entre partidas independientes. No se solicitan datos personales ni se incorporan formularios, CRM o seguimiento del sitio de referencia.
+Las preguntas se mezclan sin reemplazo dentro de cada partida, igual que las tres posiciones de respuesta. Puede repetirse una pregunta entre partidas independientes. No se incorporan formularios, CRM o seguimiento del sitio de referencia. El registro opcional del ranking es propio de esta aplicación y solo solicita nombre o alias.
+
+## Ranking y funcionamiento sin internet
+
+- Registro antes de cada partida con teclado touch local. Se informa que el nombre y puntaje aparecerán en el ranking; también se puede jugar sin ranking. Reiniciar una partida conserva el alias, mientras que volver a jugar abre un registro nuevo para el siguiente participante.
+- Un Top 5 por juego, accesible desde el inicio y desde el resultado. `/ranking/?game=memoria`, `?game=elige` y `?game=decide`. El botón de imagen genera un PNG local de 1080×1500: abre la función de compartir cuando existe y, en otros navegadores, descarga el archivo.
+- Se ordena por puntaje descendente, luego movimientos de Memoria y tiempo activo de respuesta ascendente. Elige la IA y Decide con IA excluyen del desempate el tiempo empleado en leer las explicaciones; Elige también excluye las pausas. Los últimos desempates usan fecha e identificador. Cada resultado es una partida independiente.
+- IndexedDB `paralelvr-attach-ranking-v1` conserva todos los resultados del equipo, con estado pendiente/sincronizado. Se confirma el guardado local antes de intentar subir. Cada partida tiene un UUID; Firestore solo admite creación, y la reconciliación de un envío repetido comprueba que el resultado existente coincida. No se borran pendientes ante errores de red.
+- Sincroniza al abrir, reconectar, volver a la pestaña y mediante reintentos. Background Sync añade recuperación con la pestaña cerrada en navegadores que lo admiten; en los demás, basta reabrir la web con internet. El ranking de otro dispositivo se actualiza después de que el equipo de juego sincronice.
+- Service worker y Cache Storage conservan todas las pantallas, preguntas, logos, tipografías y scripts. Una versión completa del sitio se sirve de forma coherente; al actualizar, se sustituyen solo las cachés de esta aplicación. IndexedDB queda intacto. Una actualización en espera se activa en el menú, evitando interrumpir una partida.
+
+Preparación del evento: abrir el menú una vez con internet y esperar **«Listo sin conexión»**. Después se puede navegar a cualquiera de los juegos y al ranking sin red, incluso tras cerrar y abrir el navegador. Usar el mismo perfil, fuera de incógnito. Antes de borrar datos del navegador o cambiar de equipo, reconectar y comprobar **«Sin pendientes»**. El indicador nunca confirma que todo esté preparado si falta algún archivo del paquete offline.
+
+Firestore usa la base existente `(default)` de `dbdosparax`, exclusivamente en:
+
+```text
+paralelvr_attach_events/attach-ia-ejecutivos-v1/games/{memoria|elige|decide}/paralelvr_attach_scores/{uuid}
+```
+
+Campos: versión del esquema, juego, alias, puntaje, movimientos, tiempo activo, fecha local y fecha de recepción del servidor. Sin teléfono, correo, documento ni analítica de participantes. Las reglas permiten listar hasta cinco resultados y crear registros con formato y rangos válidos; no permiten editarlos ni borrarlos desde el cliente. La lógica de partida permanece en el dispositivo. El identificador de evento separa estos resultados de otras experiencias y futuras ediciones.
+
+`scripts/deploy-rankings.cjs` incorpora únicamente el bloque de `infra/attach-ranking.rules` a las reglas activas, conservando las reglas previas. Compila antes de publicar, guarda un respaldo fuera del repositorio y vuelve a comprobar la versión activa. Crea solo el índice específico de `paralelvr_attach_scores`; no sustituye índices existentes. No habilita facturación ni altera otras colecciones o sitios. `ranking-config.js` contiene la configuración web pública de Firebase, sin credenciales privadas.
 
 ## Hosting
 
-Proyecto Firebase existente: `dbdosparax`. Sitio separado: `paralelvr-demos`. Solo se despliega Hosting; no modifica Firestore, reglas, datos ni otros sitios.
+Proyecto Firebase existente: `dbdosparax`. Sitio separado: `paralelvr-demos`. El despliegue habitual publica únicamente Hosting; la configuración aislada del ranking se realiza con el script anterior.
 
 Desde esta carpeta:
 
 ```sh
+node scripts/build-offline.cjs
 firebase deploy --only hosting --project dbdosparax
 ```
 
-`public/` contiene únicamente archivos de la aplicación. Sin credenciales, capturas, pruebas ni manuales. No requiere base de datos ni servicios de IA; no registra participantes ni resultados en la nube.
+Ejecutar `build-offline.cjs` después de cualquier cambio en `public/`: calcula la versión de la caché a partir del contenido completo. `public/` contiene únicamente archivos de aplicación, sin credenciales privadas, capturas, pruebas, audios ni manuales. Los juegos no requieren servicios de IA; Firebase recibe únicamente los resultados que el participante decide guardar.
 
 Validación: memoria conserva ocho pares completos y 1600 puntos, victoria, mezcla, reinicio y errores. Para Elige la IA se verifican +100/+50/−5, marcador negativo, caducidad a diez segundos, bloqueo de doble respuesta, pausa/reanudación, pausa al ocultar pestaña, reinicio y resultado de cinco casos. Para Decide con IA se verifican doce preguntas válidas, cinco distintas por ronda, mezcla de respuestas, bloqueo de doble respuesta y resultados 5/5 y 0/5. Revisión visual en escritorio y móvil de 390 y 320 px, sin desplazamiento horizontal ni errores de JavaScript o recursos.
 
 Revisión de la vista vertical: todas las preguntas y sus explicaciones en 1080×1920, 768×1366, 540×960, 390×844 y 360×640; también escritorio 1440×900 y 1280×720. Se comprueban límites de pantalla, ausencia de scroll y de superposición entre pregunta, opciones y explicación. Se revisan inicio y resultado, y se completa Memoria con sus ocho pares en cuatro tamaños verticales. Validación por navegador, pendiente de probar en el hardware físico del evento.
 
-Caché: todas las rutas, incluidas las URLs limpias sin `.html`, usan `Cache-Control: no-cache, max-age=0, must-revalidate`. El navegador puede reutilizar recursos tras validar su ETag, pero debe comprobar la versión del servidor.
+Validación offline y de ranking: las tres partidas completas se ejecutan sin internet; los pendientes sobreviven a cerrar y reabrir Chrome desconectado. Nueve resultados se sincronizan al reconectar y un navegador independiente recupera el Top 5 desde Firestore, con desempates y separación entre juegos. Se genera el PNG sin red. Se comprueban creación válida, rechazo de edición, rechazo de puntaje fuera de rango, límite de cinco lecturas, reconciliación de envíos duplicados y conservación exacta de las reglas preexistentes. Los registros y perfiles de prueba se eliminan antes de publicar.
+
+Caché HTTP: todas las rutas, incluidas las URLs limpias sin `.html`, usan `Cache-Control: no-cache, max-age=0, must-revalidate`. La caché offline es independiente y se administra por el service worker con una versión derivada del contenido.

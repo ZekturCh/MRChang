@@ -1,0 +1,26 @@
+// BEGIN PARALELVR_ATTACH_RANKING
+match /paralelvr_attach_events/attach-ia-ejecutivos-v1/games/{game}/paralelvr_attach_scores/{runId} {
+  function attachValidScore(d) {
+    return (game == 'memoria' && d.score >= 0 && d.score <= 1600 && d.score % 10 == 0 && d.moves >= 8 && d.moves <= 10000)
+      || (game == 'elige' && d.score >= -25 && d.score <= 500 && d.score % 5 == 0 && d.moves == 0)
+      || (game == 'decide' && d.score >= 0 && d.score <= 5 && d.moves == 0);
+  }
+  allow get: if true;
+  allow list: if request.query.limit != null && request.query.limit <= 5;
+  allow create: if runId.matches('^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$')
+    && request.resource.data.keys().hasOnly(['schema','game','name','score','moves','durationMs','completedAt','receivedAt'])
+    && request.resource.data.keys().hasAll(['schema','game','name','score','moves','durationMs','completedAt','receivedAt'])
+    && request.resource.data.schema == 1
+    && request.resource.data.game == game
+    && request.resource.data.name is string
+    && request.resource.data.name.size() >= 2 && request.resource.data.name.size() <= 24
+    && request.resource.data.name.matches('^[^<>\n\r\t]+$')
+    && request.resource.data.score is int
+    && request.resource.data.moves is int
+    && request.resource.data.durationMs is int && request.resource.data.durationMs >= 1 && request.resource.data.durationMs <= 14400000
+    && request.resource.data.completedAt is int && request.resource.data.completedAt >= 1767225600000 && request.resource.data.completedAt <= 4102444800000
+    && request.resource.data.receivedAt == request.time
+    && attachValidScore(request.resource.data);
+  allow update, delete: if false;
+}
+// END PARALELVR_ATTACH_RANKING

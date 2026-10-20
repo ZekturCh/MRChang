@@ -8,7 +8,7 @@
   const content = window.AttachGameContent;
   const ROUND_SIZE = 5;
   const ANSWER_MS = 10000;
-  const HOME = '../../?v=20261020-vertical-v8';
+  const HOME = '../../?v=20261020-ranking-v9';
   const title = timed ? 'Elige la IA' : 'Decide con IA';
   const effects = new Set();
 
@@ -27,6 +27,9 @@
   let timer = null;
   let deadline = 0;
   let remaining = ANSWER_MS;
+  let responseTime = 0;
+  let triviaStarted = 0;
+  let starting = false;
 
   const escape = value => String(value).replace(/[&<>"']/g, c => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -83,12 +86,18 @@
       </div>`;
   }
 
-  function start() {
-    cleanup();
-    round = shuffle(timed ? content.activeCases : content.triviaCases).slice(0, ROUND_SIZE);
-    index = points = correct = ideal = partial = wrong = expired = 0;
-    playing = true;
-    renderRound();
+  async function start(reuse = false) {
+    if (starting) return;
+    starting = true;
+    try {
+      const participant = window.AttachSession ? await window.AttachSession.begin(timed ? 'elige' : 'decide', reuse) : {};
+      if (!participant) return;
+      cleanup();
+      round = shuffle(timed ? content.activeCases : content.triviaCases).slice(0, ROUND_SIZE);
+      index = points = correct = ideal = partial = wrong = expired = responseTime = 0;
+      playing = true;
+      renderRound();
+    } finally { starting = false; }
   }
 
   function renderRound() {
@@ -107,9 +116,8 @@
     stage.innerHTML = top(`Caso ${index + 1} de ${ROUND_SIZE}`) + progress() + `
       <div class="timed-toolbar">
         <div class="stats"><span><strong id="score">${points}</strong> puntos</span></div>
-        <div class="timer-controls"><span class="countdown" aria-label="Tiempo para elegir"><strong id="clock" role="timer" aria-live="off">10</strong> s</span><button class="small-button" id="pause">Pausar</button></div>
+        <div class="timer-controls"><span class="timer-clock" id="timer-clock" role="progressbar" aria-label="Tiempo para elegir" aria-valuemin="0" aria-valuemax="10" aria-valuenow="10"><strong id="clock" role="timer" aria-live="off">10</strong><span aria-hidden="true">s</span></span><button class="small-button" id="pause">Pausar</button></div>
       </div>
-      <div class="time-track" id="time-track" role="progressbar" aria-label="Tiempo disponible" aria-valuemin="0" aria-valuemax="10" aria-valuenow="10"><i id="time-fill"></i></div>
       <div class="play-body">
       <div class="task-heading"><span class="task-category">${escape(item.title)}</span><h1 class="question timed-question" id="case-question">${escape(item.question)}</h1></div>
       <div id="arena" class="arena choice-arena" role="group" aria-labelledby="case-question">
@@ -127,10 +135,16 @@
   function tick() {
     if (!playing || !timed || paused || answered) return;
     remaining = Math.max(0, deadline - performance.now());
-    document.getElementById('clock').textContent = Math.ceil(remaining / 1000);
-    document.getElementById('time-fill').style.width = `${remaining / ANSWER_MS * 100}%`;
-    document.getElementById('time-track').setAttribute('aria-valuenow', (remaining / 1000).toFixed(1));
+    paintClock();
     if (remaining === 0) resolveTimed(null);
+  }
+
+  function paintClock() {
+    document.getElementById('clock').textContent = Math.ceil(remaining / 1000);
+    const clock = document.getElementById('timer-clock');
+    clock.style.setProperty('--timer-angle', `${remaining / ANSWER_MS * 360}deg`);
+    clock.setAttribute('aria-valuenow', (remaining / 1000).toFixed(1));
+    clock.classList.toggle('is-urgent', remaining > 0 && remaining <= 3000 && !answered);
   }
 
   function resolveTimed(choice) {
@@ -138,8 +152,11 @@
     // A click arriving after the deadline must not earn points between timer ticks.
     if (performance.now() >= deadline) choice = null;
     if (choice !== null && !options[choice]) return;
+    remaining = Math.max(0, deadline - performance.now());
+    responseTime += ANSWER_MS - remaining;
     answered = true;
     stopClock();
+    paintClock();
     const selected = choice === null ? null : options[choice];
     const best = options.find(option => option.score === 100);
     const score = selected?.score ?? 0;
@@ -164,9 +181,8 @@
     if (!selected) {
       headline = 'Tiempo agotado · 0 puntos';
       detail = `${best.label} es el mejor ajuste. ${best.why}`;
-      document.getElementById('clock').textContent = '0';
-      document.getElementById('time-fill').style.width = '0%';
-      document.getElementById('time-track').setAttribute('aria-valuenow', '0');
+      remaining = 0;
+      paintClock();
     } else {
       headline = score === 100 ? '+100 · Ajuste ideal' : score === 50 ? '+50 · Ajuste parcial' : '−5 · No corresponde al encargo';
       detail = `${selected.why}${score === 100 ? '' : ` Mejor ajuste: ${best.label}.`}`;
@@ -184,6 +200,7 @@
   }
 
   function renderTrivia(item) {
+    triviaStarted = performance.now();
     stage.dataset.view = 'trivia';
     stage.innerHTML = top(`Caso ${index + 1} de ${ROUND_SIZE}`) + progress() + `
       <div class="play-body trivia-body">
@@ -197,6 +214,7 @@
   function resolveTrivia(choice) {
     if (!playing || answered || !options[choice]) return;
     answered = true;
+    responseTime += performance.now() - triviaStarted;
     const good = options[choice].correct;
     if (good) correct++;
     stage.querySelectorAll('[data-answer]').forEach((button, i) => {
@@ -249,9 +267,11 @@
         <h1>${timed ? 'Cada tarea tiene<br>su mejor herramienta.' : 'Decisiones para llevar<br>a la práctica.'}</h1>
         <strong class="result-number">${timed ? points : `${correct}/${ROUND_SIZE}`}</strong>
         <p class="result-info">${timed ? 'puntos · máximo posible: 500' : 'decisiones recomendadas de cinco'}</p>
+        <p class="ranking-result" id="ranking-result" role="status"></p>
         ${timed ? `<div class="result-breakdown"><span><b>${ideal}</b> ideales</span><span><b>${partial}</b> parciales</span><span><b>${wrong}</b> errores</span><span><b>${expired}</b> sin respuesta</span></div>` : ''}
-        <div class="actions"><button class="primary" id="start">Jugar de nuevo</button><a class="secondary" href="${HOME}">Elegir otro juego</a></div>
+        <div class="actions"><button class="primary" id="start">Jugar de nuevo</button><a class="secondary" href="/ranking/?game=${timed ? 'elige' : 'decide'}&v=20261020-ranking-v9">Ver Top 5</a><a class="secondary" href="${HOME}">Elegir otro juego</a></div>
       </div>`;
+    window.AttachSession?.complete(timed ? 'elige' : 'decide', { score: timed ? points : correct, moves: 0, durationMs: Math.round(responseTime) });
   }
 
   stage.addEventListener('click', event => {
@@ -260,7 +280,7 @@
     const answer = event.target.closest('[data-answer]');
     if (answer) resolveTrivia(Number(answer.dataset.answer));
     const id = event.target.closest('button')?.id;
-    if (id === 'start' || id === 'restart') start();
+    if (id === 'start' || id === 'restart') start(id === 'restart');
     else if (id === 'next') next();
     else if (id === 'pause') pause();
     else if (id === 'resume') resume();
