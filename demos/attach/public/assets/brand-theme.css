@@ -47,7 +47,7 @@ body .stat b,body .stat span,body .value-message .value-title,body .value-messag
 body .memory-instruction,body .memory-eyebrow,body .memory-intro-notes,body .back-link,body .memory-intro-visual>span{color:#f4f4ff!important}
 body .btn{background:#ffffff0e!important;border-color:#ffffff68!important;color:white!important}
 body .play,body .btn.primary{background:white!important;color:#1840e2!important;border-color:white!important;box-shadow:0 7px 25px #36157426!important}
-body .card,body .card .face{border-radius:10px!important;background:white!important;border:0!important}
+body .card,body .card .face{border-radius:3% / 2.142857%!important;background:transparent!important;border:0!important}
 body .card .face img{object-fit:contain}
 body .card.matched{filter:none!important;box-shadow:0 0 0 2px #bac4f0,0 0 24px #ffffff38!important}
 body .value-flash{background:linear-gradient(110deg,#1840e2ba,#5e2f84d1)!important}
@@ -55,5 +55,7 @@ body .value-flash-card,body .modal{background:linear-gradient(110deg,#1840e2,#5e
 body .value-flash-title,body .value-flash-phrase,body .value-flash-kicker,body .value-flash-found{color:white!important}
 body .value-flash-skip{background:white!important;color:#1840e2!important;border-color:white!important}
 body .overlay{background:linear-gradient(110deg,#1840e2dc,#5e2f84eb)!important}
-@media(max-width:650px){body .card,body .card .face{border-radius:7px!important}.memory-intro-visual{opacity:.45}.hero-visual{opacity:.5}}
+@media(max-width:650px){body .card,body .card .face{border-radius:3% / 2.142857%!important}.memory-intro-visual{opacity:.45}.hero-visual{opacity:.5}}
 
+
+.mini-cards img{background:transparent}

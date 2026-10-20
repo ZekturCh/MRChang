@@ -328,12 +328,12 @@ body.portrait-layout .card{transform:scale(var(--opt-card-scale,1));transform-or
 </style>
 <style>
 body{background:radial-gradient(ellipse at 80% 10%,#322369,transparent 60%),#080e29!important;font-family:Arial,sans-serif!important}.screen{background:transparent!important}.header,.play-panel,.modal{background:#0e1839!important;color:white!important;border-color:#344579!important}.value-message,.value-flash-card{background:#18275a!important;color:white!important}.value-title,.value-flash-title{color:#74e4e7!important}.value-phrase,.value-flash-phrase,.menu-subtitle{color:#e5ebff!important}.btn,.play{background:#1840e2!important;color:white!important;border-color:#6583ff!important}.stat b{color:#7ee4e5!important}.stat span{color:#c4d0fb!important}.menu-logo{width:300px!important}.brand-mini img{width:160px!important}.menu-subtitle{font-size:28px!important}.value-message{border:1px solid #3f5188!important}.value-flash-found{color:#74e4e7!important}
-</style><link rel="stylesheet" href="../../assets/memory-brand.css?v=4"><link rel="stylesheet" href="../../assets/brand-theme.css?v=4"></head>
+</style><link rel="stylesheet" href="../../assets/memory-brand.css?v=6"><link rel="stylesheet" href="../../assets/brand-theme.css?v=6"></head>
 <body>
 <div id="app">
   <section id="menu" class="screen active" aria-label="Menú principal">
     <img class="menu-logo" src="../../assets/attach-logo.svg" alt="Attach Group">
-    <a class="back-link" href="../../?v=20261020-8pares">← Todas las experiencias</a>
+    <a class="back-link" href="../../?v=20261020-rectangulares">← Todas las experiencias</a>
     <div class="memory-intro-copy"><span class="memory-eyebrow">01 / MEMORIA IA</span><h1 class="menu-subtitle">Conecta ideas.<br>Descubre posibilidades.</h1><p class="memory-instruction">Ocho logos, dieciséis tarjetas. Toca dos cartas y encuentra cada pareja.</p><button id="start" class="play" type="button">Iniciar experiencia <span aria-hidden="true">↗</span></button><div class="memory-intro-notes">8 pares · 16 tarjetas · Un toque para conectar</div></div>
     <div class="memory-intro-visual" aria-hidden="true"><canvas data-core></canvas><span>CONECTA EL POTENCIAL</span></div>
   </section>
@@ -346,7 +346,7 @@ body{background:radial-gradient(ellipse at 80% 10%,#322369,transparent 60%),#080
         <div class="stat"><b id="moves">0</b><span>Movimientos</span></div>
         <div class="stat"><b id="points">0</b><span>Puntos</span></div>
       </div>
-      <div class="actions"><a class="btn back-game" href="../../?v=20261020-8pares" aria-label="Elegir otro juego">← Juegos</a>
+      <div class="actions"><a class="btn back-game" href="../../?v=20261020-rectangulares" aria-label="Elegir otro juego">← Juegos</a>
         <button id="restart" class="btn" type="button" aria-label="Reiniciar"><span>↻</span><span class="label"> Reiniciar</span></button>
       </div>
     </header>
@@ -400,7 +400,7 @@ body{background:radial-gradient(ellipse at 80% 10%,#322369,transparent 60%),#080
   addEventListener("resize",applyLayoutProfile);
   addEventListener("orientationchange",applyLayoutProfile);
 
-  const CONFIG = {"totalPairs": 8, "mismatchDelay": 720, "pointsPerMatch": 200, "penaltyPerMiss": 10, "cardAspectRatio": 1, "maxCardWidth": 260, "back": "../../assets/back.svg?v=4", "cards": [{"name": "ChatGPT", "id": "chatgpt", "image": "../../assets/chatgpt.svg?v=4"}, {"name": "Claude", "id": "claude", "image": "../../assets/claude.svg?v=4"}, {"name": "Copilot", "id": "copilot", "image": "../../assets/copilot.svg?v=4"}, {"name": "ProspectIA", "id": "prospectia", "image": "../../assets/prospectia.svg?v=4"}, {"name": "AthenaAds", "id": "athenaads", "image": "../../assets/athenaads.svg?v=4"}, {"name": "Galileo IA", "id": "galileoai", "image": "../../assets/galileoai.svg?v=4"}, {"name": "Grok", "id": "grok", "image": "../../assets/grok.svg?v=4"}, {"name": "Gemini", "id": "gemini", "image": "../../assets/gemini.svg?v=4"}]};
+  const CONFIG = {"totalPairs": 8, "mismatchDelay": 720, "pointsPerMatch": 200, "penaltyPerMiss": 10, "cardAspectRatio": 0.7142857142857143, "maxCardWidth": 260, "back": "../../assets/back.svg?v=6", "cards": [{"name": "ChatGPT", "id": "chatgpt", "image": "../../assets/chatgpt.svg?v=6"}, {"name": "Claude", "id": "claude", "image": "../../assets/claude.svg?v=6"}, {"name": "Copilot", "id": "copilot", "image": "../../assets/copilot.svg?v=6"}, {"name": "ProspectIA", "id": "prospectia", "image": "../../assets/prospectia.svg?v=6"}, {"name": "AthenaAds", "id": "athenaads", "image": "../../assets/athenaads.svg?v=6"}, {"name": "Galileo IA", "id": "galileoai", "image": "../../assets/galileoai.svg?v=6"}, {"name": "Grok", "id": "grok", "image": "../../assets/grok.svg?v=6"}, {"name": "Gemini", "id": "gemini", "image": "../../assets/gemini.svg?v=6"}]};
 
   const VALUE_MESSAGES = Object.freeze({"chatgpt": {"title": "ChatGPT", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de ChatGPT!"]}, "claude": {"title": "Claude", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de Claude!"]}, "copilot": {"title": "Copilot", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de Copilot!"]}, "prospectia": {"title": "ProspectIA", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de ProspectIA!"]}, "athenaads": {"title": "AthenaAds", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de AthenaAds!"]}, "galileoai": {"title": "Galileo IA", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de Galileo IA!"]}, "grok": {"title": "Grok", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de Grok!"]}, "gemini": {"title": "Gemini", "summary": "Reconoce el logo y encuentra su pareja.", "phrases": ["¡Encontraste el par de Gemini!"]}});
 

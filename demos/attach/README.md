@@ -12,7 +12,7 @@ Demos para validar contenido y experiencia; no implican contratación conjunta d
 
 Degradado azul #1840E2 a violeta #5E2F84 en el catálogo y las tres experiencias, siguiendo la referencia suministrada. `brand-theme.css` centraliza el tema compartido. Logo y fuentes Graphik de los recursos oficiales públicos de Attach.group.
 
-Memoria: tarjetas cuadradas con marco blanco; reverso con la imagen Attach entregada por el cliente. Frente blanco con isotipo negro centrado, sin nombre de producto ni letras en el centro. Marca Attach azul en la esquina superior izquierda y, girada 180 grados, en la esquina inferior derecha, en ambas caras. Distribución 4x4 o 8x2 según el espacio disponible. Las imágenes se incrustan en los SVG para evitar dependencias externas en ejecución.
+Memoria: tarjetas rectangulares verticales de proporción 5:7, con esquinas redondeadas; reverso con la referencia rectangular completa entregada por el cliente, degradado azul/violeta y borde interior blanco fino. Frente blanco con borde interior degradado azul/violeta e isotipo negro grande centrado, sin nombre de producto ni letras en el centro. Marca Attach azul en la esquina superior izquierda y en la esquina inferior derecha del frente, ambas en posición de lectura normal. El reverso conserva únicamente el logo central de la referencia. Distribución 4x4 o 8x2 según el espacio disponible. Las imágenes se incrustan en los SVG para evitar dependencias externas en ejecución.
 
 Isotipos: ChatGPT, Claude, Copilot, ProspectIA, AthenaAds, Galileo IA, Grok y Gemini. Los nombres solo se usan en etiquetas accesibles y en la interfaz de mensajes; no se imprimen junto al símbolo en la tarjeta.
 
