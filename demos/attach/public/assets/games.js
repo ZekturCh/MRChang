@@ -8,7 +8,7 @@
   const content = window.AttachGameContent;
   const ROUND_SIZE = 5;
   const ANSWER_MS = 10000;
-  const HOME = '../../?v=20261020-juegos-v7';
+  const HOME = '../../?v=20261020-vertical-v8';
   const title = timed ? 'Elige la IA' : 'Decide con IA';
   const effects = new Set();
 
@@ -69,23 +69,17 @@
     return `<div class="round-progress" aria-label="Caso ${index + 1} de ${ROUND_SIZE}">${round.map((_, i) => `<i class="${i <= index ? 'done' : ''}"></i>`).join('')}</div>`;
   }
 
-  function sourceNote() {
-    const url = timed ? content.sources.map : content.sources.trivia;
-    const label = timed ? 'Basado en el Mapa de IAs de Attach Group' : 'Situaciones adaptadas del Test Ejecutivo de Attach Group';
-    return `<a class="source-note" href="${escape(url)}" target="_blank" rel="noopener noreferrer">${label} ↗</a>`;
-  }
-
   function intro() {
     cleanup();
+    stage.dataset.view = 'intro';
     stage.innerHTML = top(timed ? '10 segundos por caso' : '5 casos al azar') + `
       <div class="intro-view">
         <div class="intro-art" aria-hidden="true"><canvas data-core></canvas><span class="core-glyph">${FX.icon(timed ? 'bolt' : 'brain')}</span></div>
         <h1>${timed ? 'Una tarea concreta.<br>La IA que mejor encaja.' : 'Elige con criterio.<br>Decide con IA.'}</h1>
-        <p>${timed ? 'Lee el encargo y toca la herramienta que mejor cumple el entregable y el entorno indicado. Cinco casos de nivel medio, con diez segundos para elegir en cada uno.' : 'Cinco situaciones de liderazgo elegidas al azar de un banco de doce. Elige la decisión recomendada y descubre el criterio detrás de cada respuesta.'}</p>
+        <p>${timed ? 'Toca la herramienta que mejor resuelve cada encargo. Tienes diez segundos para elegir.' : 'Cinco situaciones de liderazgo. Toca la decisión que tomarías y descubre el criterio detrás de cada respuesta.'}</p>
         ${timed ? '<div class="score-legend"><span><b>+100</b> Ajuste ideal</span><span><b>+50</b> Ajuste parcial</span><span><b>−5</b> Respuesta errónea</span></div>' : ''}
         <div class="actions"><button class="primary" id="start">Iniciar experiencia <span aria-hidden="true">↗</span></button></div>
         <p class="result-info">${timed ? 'Cinco casos por ronda · Sin respuesta: 0 puntos.' : 'Sin límite de tiempo · Cinco preguntas distintas en cada partida.'}</p>
-        ${sourceNote()}
       </div>`;
   }
 
@@ -109,19 +103,21 @@
   }
 
   function renderTimed(item) {
+    stage.dataset.view = 'timed';
     stage.innerHTML = top(`Caso ${index + 1} de ${ROUND_SIZE}`) + progress() + `
       <div class="timed-toolbar">
-        <div class="stats"><span><strong id="score">${points}</strong> puntos</span><span>Nivel medio</span></div>
-        <button class="small-button" id="pause">Pausar</button>
+        <div class="stats"><span><strong id="score">${points}</strong> puntos</span></div>
+        <div class="timer-controls"><span class="countdown" aria-label="Tiempo para elegir"><strong id="clock" role="timer" aria-live="off">10</strong> s</span><button class="small-button" id="pause">Pausar</button></div>
       </div>
-      <div class="task-heading"><span class="task-category">${escape(item.title)}</span><h1 class="question timed-question" id="case-question">${escape(item.question)}</h1></div>
-      <div class="countdown-row"><span>Tiempo para elegir</span><span class="countdown"><strong id="clock" role="timer" aria-live="off">10</strong> s</span></div>
       <div class="time-track" id="time-track" role="progressbar" aria-label="Tiempo disponible" aria-valuemin="0" aria-valuemax="10" aria-valuenow="10"><i id="time-fill"></i></div>
+      <div class="play-body">
+      <div class="task-heading"><span class="task-category">${escape(item.title)}</span><h1 class="question timed-question" id="case-question">${escape(item.question)}</h1></div>
       <div id="arena" class="arena choice-arena" role="group" aria-labelledby="case-question">
         ${options.map((option, i) => `<button type="button" class="ia-orb" data-choice="${i}" aria-label="${escape(option.label)}"><span class="orb-name">${escape(option.label)}</span><span class="orb-status" aria-hidden="true"></span></button>`).join('')}
       </div>
-      <div id="feedback" class="feedback round-feedback" role="status"><span>Mejor ajuste: +100 · Parcial: +50 · Error: −5</span></div>
-      <div class="next-row"><span>Elige según el entregable y el entorno indicados.</span><button class="primary" id="next" hidden>${index === ROUND_SIZE - 1 ? 'Ver resultado' : 'Siguiente caso →'}</button></div>`;
+      </div>
+      <div class="response-area"><div id="feedback" class="feedback round-feedback" role="status"><span>Toca la IA que mejor encaja.</span></div>
+      <div class="next-row"><button class="primary" id="next" hidden>${index === ROUND_SIZE - 1 ? 'Ver resultado' : 'Siguiente caso →'}</button></div></div>`;
     remaining = ANSWER_MS;
     deadline = performance.now() + remaining;
     tick();
@@ -183,18 +179,19 @@
       }
     }
     feedback.innerHTML = `<strong>${escape(headline)}</strong><span>${escape(detail)}</span>`;
-    document.getElementById('pause').hidden = true;
+    document.getElementById('pause').disabled = true;
     document.getElementById('next').hidden = false;
   }
 
   function renderTrivia(item) {
+    stage.dataset.view = 'trivia';
     stage.innerHTML = top(`Caso ${index + 1} de ${ROUND_SIZE}`) + progress() + `
-      <div class="decision-layout">
-        <aside class="case-visual"><span class="case-number">MICROCASO / 0${index + 1}</span><div class="intro-art" aria-hidden="true"><canvas data-core></canvas><span class="core-glyph">${FX.icon(item.icon)}</span></div><div class="case-topic">${escape(item.title)}</div><p class="case-caption">Una decisión de liderazgo.<br>Un criterio para aplicar.</p></aside>
-        <div class="case-content"><h1 class="question">${escape(item.question)}</h1><div class="answers">${options.map((answer, i) => `<button type="button" class="answer" data-answer="${i}"><b>${String.fromCharCode(65 + i)}</b><span>${escape(answer.text)}</span></button>`).join('')}</div></div>
+      <div class="play-body trivia-body">
+        <div class="task-heading"><span class="task-category">${escape(item.title)}</span><h1 class="question" id="case-question">${escape(item.question)}</h1></div>
+        <div class="answers" role="group" aria-labelledby="case-question">${options.map((answer, i) => `<button type="button" class="answer" data-answer="${i}"><b>${String.fromCharCode(65 + i)}</b><span>${escape(answer.text)}</span></button>`).join('')}</div>
       </div>
-      <div class="feedback round-feedback" id="feedback" role="status">Toca la decisión que tomarías.</div>
-      <div class="next-row"><span>Cinco casos distintos por partida · Sin límite de tiempo</span><button id="next" class="primary" hidden>${index === ROUND_SIZE - 1 ? 'Ver resultado' : 'Siguiente caso →'}</button></div>`;
+      <div class="response-area"><div class="feedback round-feedback" id="feedback" role="status">Toca la decisión que tomarías.</div>
+      <div class="next-row"><button id="next" class="primary" hidden>${index === ROUND_SIZE - 1 ? 'Ver resultado' : 'Siguiente caso →'}</button></div></div>`;
   }
 
   function resolveTrivia(choice) {
@@ -246,15 +243,14 @@
 
   function finish() {
     cleanup();
+    stage.dataset.view = 'result';
     stage.innerHTML = top('Ronda completada') + `
       <div class="intro-view result-view"><span class="eyebrow">Criterio en acción</span>
         <h1>${timed ? 'Cada tarea tiene<br>su mejor herramienta.' : 'Decisiones para llevar<br>a la práctica.'}</h1>
         <strong class="result-number">${timed ? points : `${correct}/${ROUND_SIZE}`}</strong>
         <p class="result-info">${timed ? 'puntos · máximo posible: 500' : 'decisiones recomendadas de cinco'}</p>
         ${timed ? `<div class="result-breakdown"><span><b>${ideal}</b> ideales</span><span><b>${partial}</b> parciales</span><span><b>${wrong}</b> errores</span><span><b>${expired}</b> sin respuesta</span></div>` : ''}
-        <p>${timed ? 'Elige por el entregable, el contexto y la integración que necesitas. Después, revisa lo que produce la herramienta.' : 'Contrasta la evidencia, protege los datos y asigna responsables. La tecnología acompaña el criterio del líder.'}</p>
         <div class="actions"><button class="primary" id="start">Jugar de nuevo</button><a class="secondary" href="${HOME}">Elegir otro juego</a></div>
-        ${sourceNote()}
       </div>`;
   }
 

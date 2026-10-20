@@ -12,6 +12,8 @@ Demos para validar contenido y experiencia; no implican contratación conjunta d
 
 Degradado azul #1840E2 a violeta #5E2F84 en el catálogo y las tres experiencias, siguiendo la referencia suministrada. `brand-theme.css` centraliza el tema compartido. Logo y fuentes Graphik de los recursos oficiales públicos de Attach.group.
 
+`round-games.css` adapta las vistas a la estación touch vertical. Menú, inicio, preguntas, explicaciones y resultado ocupan una sola pantalla. Usa la altura disponible y unidades de contenedor para escalar texto, opciones y controles, con espacio reservado para la explicación y el siguiente paso. No desplaza las respuestas al mostrar el resultado. Sin paneles decorativos anidados ni enlaces externos en la partida; fuentes conservadas en este documento y en el banco de contenido. En Memoria simplifica la entrada y la cabecera sin alterar el motor ni las tarjetas.
+
 Memoria: tarjetas rectangulares verticales de proporción 5:7, con esquinas redondeadas; reverso con la referencia rectangular completa entregada por el cliente, degradado azul/violeta y borde interior blanco fino. Frente blanco con borde interior degradado azul/violeta e isotipo negro grande centrado, sin nombre de producto ni letras en el centro. Marca Attach azul en la esquina superior izquierda y en la esquina inferior derecha del frente, ambas en posición de lectura normal. El reverso conserva únicamente el logo central de la referencia. Distribución 4x4 o 8x2 según el espacio disponible. Las imágenes se incrustan en los SVG para evitar dependencias externas en ejecución.
 
 Isotipos: ChatGPT, Claude, Copilot, ProspectIA, AthenaAds, Galileo IA, Grok y Gemini. Los nombres solo se usan en etiquetas accesibles y en la interfaz de mensajes; no se imprimen junto al símbolo en la tarjeta.
@@ -49,5 +51,7 @@ firebase deploy --only hosting --project dbdosparax
 `public/` contiene únicamente archivos de la aplicación. Sin credenciales, capturas, pruebas ni manuales. No requiere base de datos ni servicios de IA; no registra participantes ni resultados en la nube.
 
 Validación: memoria conserva ocho pares completos y 1600 puntos, victoria, mezcla, reinicio y errores. Para Elige la IA se verifican +100/+50/−5, marcador negativo, caducidad a diez segundos, bloqueo de doble respuesta, pausa/reanudación, pausa al ocultar pestaña, reinicio y resultado de cinco casos. Para Decide con IA se verifican doce preguntas válidas, cinco distintas por ronda, mezcla de respuestas, bloqueo de doble respuesta y resultados 5/5 y 0/5. Revisión visual en escritorio y móvil de 390 y 320 px, sin desplazamiento horizontal ni errores de JavaScript o recursos.
+
+Revisión de la vista vertical: todas las preguntas y sus explicaciones en 1080×1920, 768×1366, 540×960, 390×844 y 360×640; también escritorio 1440×900 y 1280×720. Se comprueban límites de pantalla, ausencia de scroll y de superposición entre pregunta, opciones y explicación. Se revisan inicio y resultado, y se completa Memoria con sus ocho pares en cuatro tamaños verticales. Validación por navegador, pendiente de probar en el hardware físico del evento.
 
 Caché: todas las rutas, incluidas las URLs limpias sin `.html`, usan `Cache-Control: no-cache, max-age=0, must-revalidate`. El navegador puede reutilizar recursos tras validar su ETag, pero debe comprobar la versión del servidor.
