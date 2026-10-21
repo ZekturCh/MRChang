@@ -142,3 +142,23 @@ body.memory-kiosk .card.matched{animation:attach-pair .48s ease-in-out!important
 body.memory-kiosk .card.matched .face{box-shadow:none!important}
 @keyframes attach-pair{0%,100%{transform:scale(1)}40%{transform:scale(1.035)}72%{transform:scale(.985)}}
 @media(prefers-reduced-motion:reduce){body.memory-kiosk .card.matched{animation:none!important}}
+
+/* Compact, aligned game selectors with one cool Attach surface palette. */
+.catalog-body .game-card[data-gamecard=memoria]{background:#f5f7ff;border-color:#e5ebff}
+.catalog-body .game-card[data-gamecard=elige]{background:#e8eeff;border-color:#dbe4ff}
+.catalog-body .game-card[data-gamecard=decide]{background:#e3e5f8;border-color:#d8dcf3}
+.catalog-body .game-card .card-copy{display:grid;grid-template-rows:repeat(4,auto);align-content:center;align-items:start;min-width:0}
+.catalog-body .card-copy small{white-space:nowrap;letter-spacing:.035em}
+.catalog-body .card-copy p{min-height:2.8em}
+.catalog-body .card-controls{margin-top:4px;align-self:start}
+/* Silent connection indicator: details are available to assistive tech and on hover. */
+.app-status{left:auto;right:12px;bottom:10px;transform:none;width:8px;height:8px;min-width:8px;max-width:8px;padding:0;border:0;border-radius:50%;background:#bac4f0;opacity:.75;pointer-events:auto;animation:none;box-shadow:none;font-size:0}
+.app-status[data-state=online]{background:#6bdb9e}
+.app-status[data-state=offline]{background:#bac4f0}
+.app-status[data-state=pending],.app-status[data-state=waiting]{background:#e4bc75}
+.app-status[data-state=error]{background:#e6a0af}
+@media(max-height:740px) and (max-width:620px){
+ .catalog-body .card-copy small{display:block;font-size:8px}
+ .catalog-body .hero p{display:none}
+ .catalog-body .card-copy{padding:9px 10px;gap:3px}
+}

@@ -18,16 +18,26 @@
   const initiallyControlled = Boolean(navigator.serviceWorker?.controller);
   const badge = document.createElement('div');
   badge.className = 'app-status';
-  badge.setAttribute('role', 'status');
+  badge.setAttribute('role', 'img');
   document.body.append(badge);
 
   async function updateStatus() {
     try {
       const { pending } = await store.status();
-      badge.textContent = `${offlineReady ? 'Listo sin conexión' : preparing ? 'Preparando modo sin conexión…' : 'Modo sin conexión no preparado'}${pending ? ` · ${pending} por sincronizar` : navigator.onLine && !syncError ? ' · Sin pendientes' : ' · Ranking guardado en este equipo'}`;
+      const detail = `${offlineReady ? 'Listo sin conexión' : preparing ? 'Preparando modo sin conexión' : 'Modo sin conexión no preparado'}${pending ? ` · ${pending} por sincronizar` : navigator.onLine && !syncError ? ' · Sin pendientes' : ' · Ranking guardado en este equipo'}`;
+      badge.textContent = '';
+      badge.title = detail;
+      badge.setAttribute('aria-label', detail);
       badge.dataset.ready = String(offlineReady);
-    } catch { badge.textContent = 'El guardado local no está disponible en este navegador.'; }
+      badge.dataset.state = !offlineReady || syncError ? 'waiting' : navigator.onLine && !pending ? 'online' : pending ? 'pending' : 'offline';
+    } catch {
+      badge.textContent = '';
+      badge.title = 'El guardado local no está disponible en este navegador.';
+      badge.setAttribute('aria-label', badge.title);
+      badge.dataset.state = 'error';
+    }
   }
+
   async function synchronize() {
     clearTimeout(retry);
     try {
