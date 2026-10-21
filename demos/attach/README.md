@@ -97,3 +97,7 @@ El estado global es un punto fijo de 8 px, sin texto visible, parpadeo ni regió
 ## Referencias finales de las tres marcas propias · 21/10/2026
 
 Los dos audios suministrados aclaran que ProspectIA se incluyó por confusión y debe reemplazarse por la marca Attach Group, manteniendo ocho pares. Las referencias son: Attach (símbolo blanco sobre azul/cian), AthenaAds (casco blanco sobre verde/cian) y Galileo IA (nodos y estrella blancos sobre coral/naranja). Los JPEG originales se incorporan sin recolorear ni regenerar sus símbolos. Los ocho frentes llevan marco blanco y marcas Attach blancas; los cinco isotipos externos conservan sus recursos originales. Se retira el SVG de ProspectIA que ya no se usa en memoria. Partida completa offline verificada: ocho pares, dieciséis cartas y 1600 puntos sin errores; sin cambios en ranking, preguntas o mecánicas.
+
+## Color de borde a borde en todos los frentes · 21/10/2026
+
+Se quitan las placas cuadradas interiores de las cinco IA externas. ChatGPT ocupa todo el frente en verde #10a37f con símbolo blanco; Claude en naranja #d97757 con símbolo blanco; Gemini en gris oscuro #43464b con su símbolo multicolor; Grok en negro con símbolo blanco (filtro SVG sobre la referencia existente); Copilot en azul oscuro #182b44 conservando el isotipo multicolor. Todos mantienen marco y marcas Attach blancos. Las tres imágenes propias de Attach, AthenaAds y Galileo IA permanecen intactas.
