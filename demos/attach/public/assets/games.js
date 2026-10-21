@@ -81,7 +81,7 @@
         <h1>${timed ? 'Una tarea concreta.<br>La IA que mejor encaja.' : 'Elige con criterio.<br>Decide con IA.'}</h1>
         <p>${timed ? 'Toca la herramienta que mejor resuelve cada encargo. Tienes diez segundos para elegir.' : 'Cinco situaciones de liderazgo. Toca la decisión que tomarías y descubre el criterio detrás de cada respuesta.'}</p>
         ${timed ? '<div class="score-legend"><span><b>+100</b> Ajuste ideal</span><span><b>+50</b> Ajuste parcial</span><span><b>−5</b> Respuesta errónea</span></div>' : ''}
-        <div class="actions"><button class="primary" id="start">Iniciar experiencia <span aria-hidden="true">↗</span></button></div>
+        <div class="actions"><button class="primary" id="start">Iniciar experiencia</button></div>
         <p class="result-info">${timed ? 'Cinco casos por ronda · Sin respuesta: 0 puntos.' : 'Sin límite de tiempo · Cinco preguntas distintas en cada partida.'}</p>
       </div>`;
   }
@@ -125,7 +125,7 @@
       </div>
       </div>
       <div class="response-area"><div id="feedback" class="feedback round-feedback" role="status"><span>Toca la IA que mejor encaja.</span></div>
-      <div class="next-row"><button class="primary" id="next" hidden>${index === ROUND_SIZE - 1 ? 'Ver resultado' : 'Siguiente caso →'}</button></div></div>`;
+      <div class="next-row"><button class="primary" id="next" hidden>${index === ROUND_SIZE - 1 ? 'Ver resultado' : 'Siguiente caso'}</button></div></div>`;
     remaining = ANSWER_MS;
     deadline = performance.now() + remaining;
     tick();
@@ -211,7 +211,7 @@
         <div class="answers" role="group" aria-labelledby="case-question">${options.map((answer, i) => `<button type="button" class="answer" data-answer="${i}"><b>${String.fromCharCode(65 + i)}</b><span>${escape(answer.text)}</span></button>`).join('')}</div>
       </div>
       <div class="response-area"><div class="feedback round-feedback" id="feedback" role="status">Toca la decisión que tomarías.</div>
-      <div class="next-row"><button id="next" class="primary" hidden>${index === ROUND_SIZE - 1 ? 'Ver resultado' : 'Siguiente caso →'}</button></div></div>`;
+      <div class="next-row"><button id="next" class="primary" hidden>${index === ROUND_SIZE - 1 ? 'Ver resultado' : 'Siguiente caso'}</button></div></div>`;
   }
 
   function resolveTrivia(choice) {

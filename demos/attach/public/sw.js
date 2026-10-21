@@ -1,6 +1,6 @@
 /* Template filled by build-offline.cjs; the cache version hashes the complete app shell. */
 importScripts('/assets/ranking-config.js?v=9','/assets/ranking-store.js?v=9');
-const CACHE = 'paralelvr-attach-shell-de7d078da1a43968';
+const CACHE = 'paralelvr-attach-shell-754b8574bc903b39';
 const SHELL = [
   "/",
   "/assets/athenaads.svg",
