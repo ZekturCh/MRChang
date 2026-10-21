@@ -1,6 +1,6 @@
 /* Template filled by build-offline.cjs; the cache version hashes the complete app shell. */
 importScripts('/assets/ranking-config.js?v=9','/assets/ranking-store.js?v=9');
-const CACHE = 'paralelvr-attach-shell-a154ff06e6ead40d';
+const CACHE = 'paralelvr-attach-shell-335e5c2a8e3681f3';
 const SHELL = [
   "/",
   "/assets/athenaads.svg",
@@ -19,6 +19,8 @@ const SHELL = [
   "/assets/graphik-medium.woff2",
   "/assets/graphik-regular.woff2",
   "/assets/grok.svg",
+  "/assets/kiosk-entry.js",
+  "/assets/kiosk.js",
   "/assets/memory-brand.css",
   "/assets/prospectia.svg",
   "/assets/pwa-icon.svg",
@@ -31,10 +33,11 @@ const SHELL = [
   "/attach/decide/",
   "/attach/memoria/",
   "/attach/oportunidades/",
+  "/kiosk/",
   "/manifest.webmanifest",
   "/ranking/"
 ];
-const PAGES = ['/', '/attach/memoria/', '/attach/oportunidades/', '/attach/decide/', '/ranking/'];
+const PAGES = ['/kiosk/', '/', '/attach/memoria/', '/attach/oportunidades/', '/attach/decide/', '/ranking/'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL.map(url => new Request(url, { cache: 'reload' })))));
 });

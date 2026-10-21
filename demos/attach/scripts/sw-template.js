@@ -2,7 +2,7 @@
 importScripts('/assets/ranking-config.js?v=9','/assets/ranking-store.js?v=9');
 const CACHE = '__CACHE__';
 const SHELL = __SHELL__;
-const PAGES = ['/', '/attach/memoria/', '/attach/oportunidades/', '/attach/decide/', '/ranking/'];
+const PAGES = ['/kiosk/', '/', '/attach/memoria/', '/attach/oportunidades/', '/attach/decide/', '/ranking/'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL.map(url => new Request(url, { cache: 'reload' })))));
 });

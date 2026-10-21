@@ -168,7 +168,10 @@
     document.getElementById('score').textContent = points;
     stage.querySelectorAll('[data-choice]').forEach((button, i) => {
       button.disabled = true;
-      if (i === choice) button.classList.add('is-selected');
+      if (i === choice) {
+        button.classList.add('is-selected');
+        button.querySelector('.orb-status').textContent = 'Tu elección';
+      }
       if (options[i].score === 100) {
         button.classList.add('is-best');
         button.querySelector('.orb-status').textContent = 'Recomendada';
@@ -289,11 +292,5 @@
     if (document.hidden && timed) pause();
   });
   window.addEventListener('pagehide', cleanup);
-  document.getElementById('fullscreen').addEventListener('click', async () => {
-    try {
-      if (document.fullscreenElement) await document.exitFullscreen();
-      else await document.documentElement.requestFullscreen();
-    } catch { /* A browser may decline fullscreen; the game remains usable. */ }
-  });
   intro();
 })();

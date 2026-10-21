@@ -123,3 +123,22 @@ body.touch-kiosk .game-stage[data-view=trivia]{grid-template-rows:auto 3px minma
  body.touch-kiosk .result-view .actions{max-width:950px;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
  body.touch-kiosk .result-view .actions .primary,body.touch-kiosk .result-view .actions .secondary{font-size:16px;width:100%}
 }
+/* Solid surfaces separate touch targets from the Attach gradient. */
+body.touch-kiosk .ia-orb{background:#fff;color:#17347b;border:3px solid #fff;box-shadow:0 5px 14px #18246624;transition:transform .15s;outline:none}
+body.touch-kiosk .ia-orb:not(:disabled):hover{background:#edf1ff;box-shadow:0 5px 14px #18246624}
+body.touch-kiosk .orb-status{color:inherit;font-weight:500}
+body.touch-kiosk .ia-orb.is-selected:not(.is-best){background:#eee5ff;color:#502575;border-color:#502575;box-shadow:none}
+body.touch-kiosk .ia-orb.is-best{background:#17347b;color:white;border-color:white;outline:none;box-shadow:0 0 0 3px #17347b}
+body.touch-kiosk .answer{background:white;color:#17347b;border:2px solid white;box-shadow:none}
+body.touch-kiosk .answer b{color:#17347b;background:#edf1ff;border-radius:50%}
+body.touch-kiosk .answer:not(:disabled):hover{background:#edf1ff}
+body.touch-kiosk .answer.correct{background:#17347b;color:white;border-color:white}
+body.touch-kiosk .answer.correct b{background:white;color:#17347b}
+body.touch-kiosk .answer.wrong{background:#eee5ff;color:#502575;border-color:#502575}
+body.touch-kiosk .answer.wrong b{background:#502575;color:white}
+body.touch-kiosk .next-row .primary{background:#17347b;color:white;border:2px solid white}
+body.touch-kiosk .small-button,body.touch-kiosk .secondary{background:#17347b;color:white;border-color:#fff9}
+body.memory-kiosk .card.matched{animation:attach-pair .48s ease-in-out!important;box-shadow:none!important;filter:none!important;z-index:2}
+body.memory-kiosk .card.matched .face{box-shadow:none!important}
+@keyframes attach-pair{0%,100%{transform:scale(1)}40%{transform:scale(1.035)}72%{transform:scale(.985)}}
+@media(prefers-reduced-motion:reduce){body.memory-kiosk .card.matched{animation:none!important}}

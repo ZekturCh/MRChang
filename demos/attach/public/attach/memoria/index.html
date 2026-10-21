@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
+<head><script src="/assets/kiosk-entry.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#003f76">
@@ -333,7 +333,7 @@ body{background:radial-gradient(ellipse at 80% 10%,#322369,transparent 60%),#080
 <div id="app">
   <section id="menu" class="screen active" aria-label="Menú principal">
     <img class="menu-logo" src="../../assets/attach-logo.svg" alt="Attach Group">
-    <a class="back-link" href="../../?v=20261020-ranking-v9">← Todas las experiencias</a>
+    <a class="back-link" href="../../?v=20261021-touch-v10">← Todas las experiencias</a>
     <div class="memory-intro-copy"><span class="memory-eyebrow">01 / MEMORIA IA</span><h1 class="menu-subtitle">Conecta ideas.<br>Descubre posibilidades.</h1><p class="memory-instruction">Ocho logos, dieciséis tarjetas. Toca dos cartas y encuentra cada pareja.</p><button id="start" class="play" type="button">Iniciar experiencia <span aria-hidden="true">↗</span></button><div class="memory-intro-notes">8 pares · 16 tarjetas · Un toque para conectar</div></div>
     <div class="memory-intro-visual" aria-hidden="true"><canvas data-core></canvas><span>CONECTA EL POTENCIAL</span></div>
   </section>
@@ -346,7 +346,7 @@ body{background:radial-gradient(ellipse at 80% 10%,#322369,transparent 60%),#080
         <div class="stat"><b id="moves">0</b><span>Movimientos</span></div>
         <div class="stat"><b id="points">0</b><span>Puntos</span></div>
       </div>
-      <div class="actions"><a class="btn back-game" href="../../?v=20261020-ranking-v9" aria-label="Elegir otro juego">← Juegos</a>
+      <div class="actions"><a class="btn back-game" href="../../?v=20261021-touch-v10" aria-label="Elegir otro juego">← Juegos</a>
         <button id="restart" class="btn" type="button" aria-label="Reiniciar"><span>↻</span><span class="label"> Reiniciar</span></button>
       </div>
     </header>
@@ -378,7 +378,7 @@ body{background:radial-gradient(ellipse at 80% 10%,#322369,transparent 60%),#080
       <p id="summary"></p><p class="ranking-result" id="ranking-result" role="status"></p>
       <div class="modal-actions">
         <button id="again" class="btn primary" type="button">Jugar de nuevo</button>
-        <button id="menuBtn" class="btn" type="button">Volver al menú</button><a class="btn ranking-result-link" href="/ranking/?game=memoria&v=20261020-ranking-v9">Ver Top 5</a>
+        <button id="menuBtn" class="btn" type="button">Volver al menú</button><a class="btn ranking-result-link" href="/ranking/?game=memoria&v=20261021-touch-v10">Ver Top 5</a>
       </div>
     </div>
   </div>
@@ -591,14 +591,12 @@ body{background:radial-gradient(ellipse at 80% 10%,#322369,transparent 60%),#080
     state.second=card; state.locked=true; state.moves++; updateStats();
 
     if(state.first.dataset.pair===state.second.dataset.pair) {
-      window.AttachFX?.burst(card,true);
       state.points+=CONFIG.pointsPerMatch;
       [state.first,state.second].forEach(c=>{c.classList.add("matched");c.disabled=true;c.setAttribute("aria-label","Carta emparejada");});
-      showMatchExample(state.first.dataset.valueId);
       state.pairs++; updateStats(); resetSelection();
       if(state.pairs===CONFIG.totalPairs) {
         clearTimeout(winTimer);
-        winTimer=setTimeout(showWin,2850);
+        winTimer=setTimeout(showWin,650);
       }
     } else {
       state.points=Math.max(0,state.points-CONFIG.penaltyPerMiss); updateStats();

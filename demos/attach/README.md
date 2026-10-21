@@ -79,3 +79,9 @@ Revisión de la vista vertical: todas las preguntas y sus explicaciones en 1080�
 Validación offline y de ranking: las tres partidas completas se ejecutan sin internet; los pendientes sobreviven a cerrar y reabrir Chrome desconectado. Nueve resultados se sincronizan al reconectar y un navegador independiente recupera el Top 5 desde Firestore, con desempates y separación entre juegos. Se genera el PNG sin red. Se comprueban creación válida, rechazo de edición, rechazo de puntaje fuera de rango, límite de cinco lecturas, reconciliación de envíos duplicados y conservación exacta de las reglas preexistentes. Los registros y perfiles de prueba se eliminan antes de publicar.
 
 Caché HTTP: todas las rutas, incluidas las URLs limpias sin `.html`, usan `Cache-Control: no-cache, max-age=0, must-revalidate`. La caché offline es independiente y se administra por el service worker con una versión derivada del contenido.
+
+## Ajustes de operación touch · 21/10/2026
+
+Las opciones tienen superficies blancas y texto azul oscuro. Al responder, la recomendada es azul sólida con texto blanco; una selección distinta usa lila con texto morado y el rótulo «Tu elección». Las tres opciones comparten el mismo estilo antes de responder. Memoria usa únicamente un pulso de escala por par, sin aviso emergente ni partículas.
+
+`/kiosk/` mantiene un único documento exterior mientras los juegos y rankings navegan en un iframe del mismo origen. Todas las entradas directas se abren en este contenedor; no hay controles fullscreen dentro de los juegos. El único control ocupa 44×44 px en la esquina inferior izquierda, invisible en uso normal y accesible por teclado. Tocar esa zona activa o desactiva la pantalla completa; Esc también permite salir. La navegación interna conserva fullscreen sin volver a solicitarlo ni impedir la salida del usuario. El contenedor y sus scripts forman parte del paquete offline.

@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const store = window.AttachStore;
-  const VERSION = '20261020-ranking-v9';
+  const VERSION = '20261021-touch-v10';
   const names = { memoria: 'Memoria IA', elige: 'Elige la IA', decide: 'Decide con IA' };
   const escape = text => String(text).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const time = ms => `${Math.floor(ms / 60000)}:${String(Math.floor(ms / 1000) % 60).padStart(2, '0')}`;
