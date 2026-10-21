@@ -3,7 +3,7 @@
 Sitio: https://paralelvr-demos.web.app/
 
 - Memoria IA: `/attach/memoria/`. Adaptación del motor de `ZekturCh/MEMORYGAME/orica-opt.html`, ocho pares / dieciséis tarjetas. Se conservan barajado, selección, +200 por par, penalización de 10 por error, reinicio y resultado. Máximo sin errores: 1600 puntos.
-- Elige la IA: `/attach/oportunidades/`. Cinco casos al azar de un banco de diez, con diez segundos por caso. Tres herramientas para un encargo concreto: ajuste ideal +100, ajuste parcial +50, respuesta errónea −5; tiempo agotado 0. El marcador admite negativos y el máximo es 500. Tres esferas del mismo color y tamaño, sin pistas visuales antes de responder; posiciones mezcladas, explicación y avance manual. Pausa, pausa al ocultar la pestaña y reinicio.
+- Elige la IA: `/attach/oportunidades/`. Cinco casos al azar de un banco de diez, con veinte segundos por caso. Tres herramientas para un encargo concreto: ajuste ideal +100, ajuste parcial +50, respuesta errónea −5; tiempo agotado 0. El marcador admite negativos y el máximo es 500. Tres esferas del mismo color y tamaño, sin pistas visuales antes de responder; posiciones mezcladas, explicación y avance manual. Pausa, pausa al ocultar la pestaña y reinicio.
 - Decide con IA: `/attach/decide/`. Cinco preguntas distintas al azar de un banco de doce, con tres respuestas barajadas y una decisión recomendada. Sin límite de tiempo. Bloqueo tras responder, explicación breve, avance manual y resultado sobre cinco; nuevo sorteo al volver a jugar.
 
 Demos para validar contenido y experiencia; no implican contratación conjunta de los tres juegos.
@@ -105,3 +105,5 @@ Se quitan las placas cuadradas interiores de las cinco IA externas. ChatGPT ocup
 ## Navegación touch dentro de una sola sesión · 21/10/2026
 
 Los enlaces internos se interceptan antes de la navegación del navegador y se pasan al contenedor mediante mensajes de mismo origen. El contenedor valida origen, ventana emisora y ruta, y reemplaza únicamente el documento del iframe existente. No abre ventanas ni pestañas y bloquea transiciones duplicadas durante la carga. Las descargas conservan su comportamiento. La URL de inicio del manifiesto se normaliza a la raíz. Validación con Chrome y entrada touch emulada: 48 cambios entre los tres juegos, menú y ranking, online y offline; una sola pestaña, cero ventanas emergentes, cero errores y fullscreen conservado. Pendiente confirmar en el equipo físico reportado por el cliente.
+
+Tiempo final de Elige la IA: 20 segundos en cada caso, incluyendo reinicio y nueva partida. Menú, instrucciones y reloj accesible actualizados.

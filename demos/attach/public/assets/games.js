@@ -7,7 +7,7 @@
   const FX = window.AttachFX;
   const content = window.AttachGameContent;
   const ROUND_SIZE = 5;
-  const ANSWER_MS = 10000;
+  const ANSWER_MS = 20000;
   const HOME = '../../?v=20261020-ranking-v9';
   const title = timed ? 'Elige la IA' : 'Decide con IA';
   const effects = new Set();
@@ -75,11 +75,11 @@
   function intro() {
     cleanup();
     stage.dataset.view = 'intro';
-    stage.innerHTML = top(timed ? '10 segundos por caso' : '5 casos al azar') + `
+    stage.innerHTML = top(timed ? '20 segundos por caso' : '5 casos al azar') + `
       <div class="intro-view">
         <div class="intro-art" aria-hidden="true"><canvas data-core></canvas><span class="core-glyph">${FX.icon(timed ? 'bolt' : 'brain')}</span></div>
         <h1>${timed ? 'Una tarea concreta.<br>La IA que mejor encaja.' : 'Elige con criterio.<br>Decide con IA.'}</h1>
-        <p>${timed ? 'Toca la herramienta que mejor resuelve cada encargo. Tienes diez segundos para elegir.' : 'Cinco situaciones de liderazgo. Toca la decisión que tomarías y descubre el criterio detrás de cada respuesta.'}</p>
+        <p>${timed ? 'Toca la herramienta que mejor resuelve cada encargo. Tienes veinte segundos para elegir.' : 'Cinco situaciones de liderazgo. Toca la decisión que tomarías y descubre el criterio detrás de cada respuesta.'}</p>
         ${timed ? '<div class="score-legend"><span><b>+100</b> Ajuste ideal</span><span><b>+50</b> Ajuste parcial</span><span><b>−5</b> Respuesta errónea</span></div>' : ''}
         <div class="actions"><button class="primary" id="start">Iniciar experiencia</button></div>
         <p class="result-info">${timed ? 'Cinco casos por ronda · Sin respuesta: 0 puntos.' : 'Sin límite de tiempo · Cinco preguntas distintas en cada partida.'}</p>
@@ -116,7 +116,7 @@
     stage.innerHTML = top(`Caso ${index + 1} de ${ROUND_SIZE}`) + progress() + `
       <div class="timed-toolbar">
         <div class="stats"><span><strong id="score">${points}</strong> puntos</span></div>
-        <div class="timer-controls"><span class="timer-clock" id="timer-clock" role="progressbar" aria-label="Tiempo para elegir" aria-valuemin="0" aria-valuemax="10" aria-valuenow="10"><strong id="clock" role="timer" aria-live="off">10</strong><span aria-hidden="true">s</span></span><button class="small-button" id="pause">Pausar</button></div>
+        <div class="timer-controls"><span class="timer-clock" id="timer-clock" role="progressbar" aria-label="Tiempo para elegir" aria-valuemin="0" aria-valuemax="20" aria-valuenow="20"><strong id="clock" role="timer" aria-live="off">20</strong><span aria-hidden="true">s</span></span><button class="small-button" id="pause">Pausar</button></div>
       </div>
       <div class="play-body">
       <div class="task-heading"><span class="task-category">${escape(item.title)}</span><h1 class="question timed-question" id="case-question">${escape(item.question)}</h1></div>
