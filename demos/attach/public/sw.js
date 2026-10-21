@@ -1,10 +1,11 @@
 /* Template filled by build-offline.cjs; the cache version hashes the complete app shell. */
 importScripts('/assets/ranking-config.js?v=9','/assets/ranking-store.js?v=9');
-const CACHE = 'paralelvr-attach-shell-754b8574bc903b39';
+const CACHE = 'paralelvr-attach-shell-bb223c2e1723be36';
 const SHELL = [
   "/",
   "/assets/athenaads.svg",
   "/assets/attach-logo.svg",
+  "/assets/attach-pair.svg",
   "/assets/back.svg",
   "/assets/brand-theme.css",
   "/assets/chatgpt.svg",
@@ -22,7 +23,6 @@ const SHELL = [
   "/assets/kiosk-entry.js",
   "/assets/kiosk.js",
   "/assets/memory-brand.css",
-  "/assets/prospectia.svg",
   "/assets/pwa-icon.svg",
   "/assets/ranking-config.js",
   "/assets/ranking-store.js",
