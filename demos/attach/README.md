@@ -101,3 +101,7 @@ Los dos audios suministrados aclaran que ProspectIA se incluyó por confusión y
 ## Color de borde a borde en todos los frentes · 21/10/2026
 
 Se quitan las placas cuadradas interiores de las cinco IA externas. ChatGPT ocupa todo el frente en verde #10a37f con símbolo blanco; Claude en naranja #d97757 con símbolo blanco; Gemini en gris oscuro #43464b con su símbolo multicolor; Grok en negro con símbolo blanco (filtro SVG sobre la referencia existente); Copilot en azul oscuro #182b44 conservando el isotipo multicolor. Todos mantienen marco y marcas Attach blancos. Las tres imágenes propias de Attach, AthenaAds y Galileo IA permanecen intactas.
+
+## Navegación touch dentro de una sola sesión · 21/10/2026
+
+Los enlaces internos se interceptan antes de la navegación del navegador y se pasan al contenedor mediante mensajes de mismo origen. El contenedor valida origen, ventana emisora y ruta, y reemplaza únicamente el documento del iframe existente. No abre ventanas ni pestañas y bloquea transiciones duplicadas durante la carga. Las descargas conservan su comportamiento. La URL de inicio del manifiesto se normaliza a la raíz. Validación con Chrome y entrada touch emulada: 48 cambios entre los tres juegos, menú y ranking, online y offline; una sola pestaña, cero ventanas emergentes, cero errores y fullscreen conservado. Pendiente confirmar en el equipo físico reportado por el cliente.
